@@ -15,28 +15,10 @@ class Geom_Geo_masala {
 	const PLUGIN_PREFIX = 'taskRunner_set_funcPrefix';
 	protected $deactivate_notice = '';
 	protected $deps = array(
-		'plugins' => array(
-			/*
-			'woocommerce' => array(
-				'name'				=> 'WooCommerce',				// full name
-				'link'				=> 'https://woocommerce.com/',	// link
-				'ver_at_least'		=> '3.0.0',						// min version of required plugin
-				'ver_tested_up_to'	=> '3.2.1',						// tested with required plugin up to
-				'class'				=> 'WooCommerce',				// test by class
-				//'function'		=> 'WooCommerce',				// test by function
-			),
-			*/
-		),
+		'plugins' => array(),
 		'php_version' => 'taskRunner_set_phpRequiresAtLeast',		// required php version
 		'wp_version' => 'taskRunner_set_wpRequiresAtLeast',			// required wp version
-		'php_ext' => array(
-			/*
-			'xml' => array(
-				'name'				=> 'Xml',											// full name
-				'link'				=> 'http://php.net/manual/en/xml.installation.php',	// link
-			),
-			*/
-		),
+		'php_ext' => array(),
 	);
 	protected $dependencies_ok = false;
 

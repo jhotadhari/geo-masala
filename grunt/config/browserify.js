@@ -8,6 +8,7 @@ module.exports = {
 			cwd: 'src/commonJS',
 			src: [
 				'*.js',
+				'*.jsx',
 			],
 			dest: '<%= dest_path %>/js',
 			rename: function (dst, src) {
@@ -16,12 +17,21 @@ module.exports = {
 		}],
 
         options: {
-           transform: [
-           	   [ 'babelify', {presets: ['es2015']}],
-           	   [ 'jstify' ],
-           	   [ 'uglifyify' ],
-           	   [ 'browserify-shim', {global: true}]
-           ],
+        	transform: [
+        		[ 'babelify', {
+        				plugins: [
+        					'transform-object-rest-spread',
+        					'babel-plugin-transform-class-properties',
+        				],
+        				presets: [
+							'es2015',
+							'react',
+						]
+        		}],
+        		[ 'jstify' ],
+        		[ 'browserify-shim', {global: true}],
+        		[ 'uglifyify' ]
+        	],
            browserifyOptions: {
            	   debug: false,
            }
@@ -34,6 +44,7 @@ module.exports = {
 			cwd: 'src/commonJS',
 			src: [
 				'*.js',
+				'*.jsx',
 			],
 			dest: '<%= dest_path %>/js',
 			rename: function (dst, src) {
@@ -42,12 +53,20 @@ module.exports = {
 		}],
 
         options: {
-           transform: [
-           	   [ 'babelify', {presets: ['es2015']}],
-           	   [ 'jstify' ],
-           	   [ 'uglifyify' ],
-           	   [ 'browserify-shim', {global: true}]
-           ],
+        	transform: [
+        		[ 'babelify', {
+        				plugins: [
+        					'transform-object-rest-spread',
+        					'babel-plugin-transform-class-properties',
+        				],
+        				presets: [
+							'es2015',
+							'react'
+						]
+        		}],
+        		[ 'jstify' ],
+        		[ 'browserify-shim', {global: true}]
+        	],
            browserifyOptions: {
            	   debug: true,
            }

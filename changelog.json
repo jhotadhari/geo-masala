@@ -1,5 +1,6 @@
 {
-	"next":[
-	""
-	]
+  "next": [
+    "added custom_post_type geom_feature and started block geom/map",
+    "block not finished"
+  ]
 }

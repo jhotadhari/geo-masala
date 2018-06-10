@@ -1,0 +1,104 @@
+
+$grid: 8px;
+
+// .editor-block-list__block[data-type="geom/map"] {
+//     .components-panel__body,
+//     .components-panel__body.is-opened {
+//         padding: $grid/2;
+//     }
+// }
+
+
+.geom-panel {
+    border: none;
+    padding: $grid/2;
+}
+
+.geom-components-settings-panel {
+    // padding: $grid;
+    .components-button:not(:disabled):not([aria-disabled="true"]):focus {
+        box-shadow:none;
+    }
+
+
+    &-controls {
+
+        // &-layers,
+        // &-view-zoom{
+            select {
+                min-height: 100px;
+            }
+        // }
+
+    }
+}
+
+.geom-components-features-list-container-panel {
+
+    width: 48%;
+    float:left;
+
+    .geom-features-list-container {
+        min-height: 68px;
+        padding: $grid;
+
+
+        & > div {
+            padding: $grid $grid/2;
+            margin-bottom: $grid;
+
+            &:last-child {
+
+                margin-bottom: 0;
+            }
+        }
+    }
+
+}
+
+
+.geom-components-custom-panel {
+
+    & > .components-panel__body-title {
+        padding: 0;
+        font-size: inherit;
+        margin-top: 0;
+        margin-bottom: 0;
+
+        display: flex;
+
+        & > * {
+            vertical-align: middle;
+            flex-shrink: 1;
+            &:first-child {
+                flex-grow: 1;
+            }
+            &:last-child {
+                align-self: flex-end;
+                @include transform( translateY(-40%) );
+            }
+        }
+
+        .components-panel__body-toggle {
+            width: auto;
+        }
+
+        // .geom-components-custom-panel-button {
+        //     position: relative;
+        //     padding: 0;
+        //     margin: 0;
+        //     height: 20px;
+        //     @include transform( translateY(50%) );
+
+        //     .dashicon {
+        //         top: auto;
+        //         right: auto;
+        //         vertical-align: middle;
+        //     }
+        // }
+
+    }
+}
+
+
+

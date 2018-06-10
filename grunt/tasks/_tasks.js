@@ -34,16 +34,17 @@ module.exports = function(grunt){
 		// add sass and js tasks
 		if ( process === 'build' ) {
 			tasks = tasks.concat([
-				'jshint',
+				'eslint',
 				'uglify:debug',
 				'browserify:debug',
 				'sass:debug',
 			] );
 		} else {
 			tasks = tasks.concat([
-				'jshint',
+				'eslint',
 				'uglify:dist',
 				'browserify:dist',
+				'uglify:distCommonJs',
 				'sass:dist',
 			] );
 		}

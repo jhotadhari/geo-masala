@@ -19,6 +19,21 @@ module.exports = {
 			}
 		}]
 	},
+	distCommonJs: {
+		options: {
+			mangle: true,
+			compress: true,
+			beautify: false,
+		},
+		files: [{
+			expand: true,
+			cwd: '<%= dest_path %>/js',
+			src: [
+				'**/*.js',
+			],
+			dest: '<%= dest_path %>/js',
+		}]
+	},
 	debug: {
 		options: {
 			mangle: false,

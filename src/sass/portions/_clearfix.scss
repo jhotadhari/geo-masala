@@ -1,0 +1,5 @@
+.geom-clearfix {
+    width: 100%;
+    @include clearfix();
+    table-layout: unset;
+}

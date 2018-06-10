@@ -95,7 +95,7 @@ module.exports = {
 			'<%= pattern.global_exclude %>',
 		],
 		tasks: [
-			'jshint:js',
+			'eslint:js',
 			'uglify:debug',
 			'local_sync:<%= local_sync.wp_install %>:<%= local_sync.version %>'
 		]
@@ -104,13 +104,17 @@ module.exports = {
 		files: [
 			'src/commonJS/**/*.js',
 			'src/commonJS/**/*.jst',
+			'src/commonJS/**/*.jsx',
 			'<%= pattern.global_exclude %>',
 		],
 		tasks: [
-			'jshint:commonJS',
+			'eslint:commonJS',
 			'browserify:debug',
 			'local_sync:<%= local_sync.wp_install %>:<%= local_sync.version %>'
-		]
+		],
+		options: {
+			spawn: false,
+		},
 	},
 
 	styles: {

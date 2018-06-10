@@ -1,10 +1,14 @@
 module.exports = {
 	options: {
-		// require: [
-		// 	'susy',
-		// 	'breakpoint'
-		// ],
-		// loadPath: require('node-bourbon').includePaths,
+		require: [
+			// 'susy',
+			// 'breakpoint'
+		],
+		loadPath: [
+			require('node-bourbon').includePaths,
+			'node_modules/bootstrap-sass/assets/stylesheets',
+			'node_modules/backgrid/src'
+		]
 	},
 
 	dist: {

@@ -8,6 +8,7 @@
 !.gitignore
 !Gruntfile.js
 !package.json
+!.eslintrc.json
 !bower.json
 !.bowerrc
 !composer.json

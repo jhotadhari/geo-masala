@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: geo-masala 0.0.0\n"
+"Project-Id-Version: geo-masala 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-24 19:59+0530\n"
+"POT-Creation-Date: 2018-06-16 21:09+0545\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,104 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/inc/fun/autoload/class-geom_options_page_geo_masala.php:66
-msgid "Geo Masala"
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:19
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:21
+msgid "Features"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:20
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:47
+msgid "Feature"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:22
+msgid "Feature Attributes"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:23
+msgid "Parent Feature:"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:24
+msgid "All Features"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:25
+msgid "Add New Feature"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:26
+msgid "Add New"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:27
+msgid "New Feature"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:28
+msgid "Edit Feature"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:29
+msgid "Update Feature"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:30
+msgid "View Feature"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:31
+msgid "View Features"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:32
+msgid "Search Feature"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:33
+msgid "Not found"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:34
+msgid "Not found in Trash"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:35
+msgid "Featured Image"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:36
+msgid "Set featured image"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:37
+msgid "Remove featured image"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:38
+msgid "Use as featured image"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:39
+msgid "Insert into Feature"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:40
+msgid "Uploaded to this Feature"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:41
+msgid "Features list"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:42
+msgid "Features list navigation"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:43
+msgid "Filter Features list"
+msgstr ""
+
+#: src/inc/post_types_taxs/autoload/geom_add_post_type_feature.php:48
+msgid "Feature description"
 msgstr ""

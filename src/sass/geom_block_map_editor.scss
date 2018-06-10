@@ -1,0 +1,25 @@
+@import "bourbon";
+@import "mixins/mixins-master";
+
+@import "vendor/leaflet/leaflet-draw";
+@import "vendor/leaflet/leaflet-draw-toolbar";
+@import "vendor/leaflet-custom";
+
+@import "components/editor-components";
+
+@import "portions/clearfix";
+
+.geom-uploader {
+    .image-preview {
+        display: block;
+        height: 100px;
+        max-height: 100px;
+        width: auto;
+        margin: 1em;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+}
+
+
