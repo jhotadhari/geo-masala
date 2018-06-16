@@ -5,7 +5,7 @@
   "uri": "http://example.com/geo-masala",
   "textDomain": "geo-masala",
   "domainPath": "/languages",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Add interactive Leaflet Maps. A new block for gutenberg: 'Geo Masala Map'",
   "main": "index.js",
   "scripts": {
