@@ -5,13 +5,17 @@ const defaults = {
 		fullscreenControl: true,
 		loadingControl: true,
 		layersControl: ['OpenStreetMap.Mapnik','OpenTopoMap'],
-		viewZoomControl: ['FitBoundsAction','ZoomLocationAction'],
+		viewZoomControl: ['FlyToAction','ZoomLocationAction'],
 	},
 	leaflet: {
-		fitBounds: {
+		initMapOptions: {
+			center: [28,80],
+			zoom: 3,
+		},
+		flyToBounds: {
 			maxZoom: 12,
 			animate: true,
-			duration: 0.5,
+			duration: 0.75,
 		},
 	},
 };

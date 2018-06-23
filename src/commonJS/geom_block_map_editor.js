@@ -1,9 +1,10 @@
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-import _ from  'underscore';
+import _ from  'lodash';
 
 import defaults from './geom_block_map/defaults';
 import GeomMap from './geom_block_map_editor/components/GeomMap.jsx';
+
 
 registerBlockType( 'geom/map', {
 	title: __( 'Geo Masala Map' ),
@@ -31,7 +32,20 @@ registerBlockType( 'geom/map', {
 		}
 
 		function onChangeFeatures( newFeatures ) {
-			setAttributes( { featureIds: _.pluck( newFeatures.models, 'id' ) } );
+			let newFeatureIds = [];
+
+
+			if ( newFeatures.length ){
+				if ( newFeatures instanceof Backbone.Collection ){
+					newFeatureIds = newFeatures.pluck('id');
+				} else if ( 'object' === typeof ( newFeatures[0] ) ){
+					newFeatureIds = _.pluck( newFeatures, 'id' );
+				} else if ( 'integer' === typeof ( newFeatures[0] ) ) {
+					newFeatureIds = newFeatures;
+				}
+			}
+
+			setAttributes( { featureIds:newFeatureIds } );
 		}
 
 		function onChangeControls( newControls ) {
@@ -50,9 +64,7 @@ registerBlockType( 'geom/map', {
 
     save( { attributes, className } ) {
         // const { featureIds } = attributes;
-
     	console.log( 'save attributes', attributes );		// ??? debug
-
     	return null;
     },
 

@@ -1,0 +1,29 @@
+
+.geom-popover {
+    .components-popover__content {
+        padding: 1em;
+
+        .components-popover__header {
+            border: none;
+            height: auto;
+            padding: 0;
+            font-weight: bold;
+            font-size: larger;
+
+            .components-button:not(:disabled):not([aria-disabled="true"]):focus {
+                box-shadow: none;
+            }
+
+        }
+
+        .components-base-control__field {
+            & > .components-base-control__label {
+                font-weight: bold;
+            }
+            .components-radio-control__option label {
+                font-weight: normal;
+            }
+        }
+
+    }
+}

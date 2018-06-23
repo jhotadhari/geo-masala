@@ -1,13 +1,16 @@
 import Cocktail from 'backbone.cocktail';
 
-require('backbone-deep-model/distribution/deep-model');
+import DeepModel from 'backbone.deep-model';
 
 let FeatureModel = wp.api.models.Post.extend({
 
 	initialize: function() {
 		wp.api.models.Post.prototype.initialize.apply(this, arguments);
 		// this.listenTo( this, 'change', this.triggerValidate );
-		// AppDetails.instance.channel.on('validate', this.isValid , this );
+
+		_.extend(this, new Backbone.Memento( this, {
+			ignore: ['appearanceActionTab']
+		}));
 	},
 
     urlRoot: function(){
@@ -59,30 +62,40 @@ let FeatureModel = wp.api.models.Post.extend({
 
 	fieldsToSerialize: [
 		'geom_feature_icon',
+		'geom_feature_path_style',
 		'geom_feature_geo_json',
-		// 'geom_feature_test',
+		'geom_feature_share',
 	],
 
 	fieldsWithRendered: [
 		'title',
+		'content',
 	],
 
 	defaults: {
 		type: 'geom_feature',
 
 		title: '',
-		// status: 'draft',
+		content: '',
 		status: 'publish',
 
-		// geom_feature_test: '',
+
+		geom_feature_share: {
+			user: geomData.user.id.toString(),			// userId || 'publicReadOnly'
+			post: geomData.post.id.toString(),			// postId || -1
+			// usedBy:	geomData.post.id,	// array of postIds
+		},
 
 		geom_feature_geo_json: {
 
 		},
 
+		geom_feature_path_style: {
+			weight: 3,
+		},
+
 		geom_feature_icon: {
-			iconUrl: '',
-			iconAttachment: '',
+			iconUrl: geomData.pluginDirUrl + '/images/leaflet/marker-icon.png',
 			iconRetinaUrl: '',
 			iconSize: {
 				x: 25,
@@ -92,8 +105,8 @@ let FeatureModel = wp.api.models.Post.extend({
 				x: 12,
 				y: 41,
 			},
-			shadowUrl: '',
-			shadowAttachment: '',
+
+			shadowUrl: geomData.pluginDirUrl + '/images/leaflet/marker-shadow.png',
 			shadowRetinaUrl: '',
 			shadowSize: {
 				x: 41,
@@ -158,11 +171,10 @@ let FeatureModel = wp.api.models.Post.extend({
 			model.url = model.url() + '?force=true';
 		}
 
-		// if we get an empty string for a field that should be an object, dont use that string
 		let _success = options.success;
 		options.success = function( response, textStatus, jqXHR ){
 
-
+			// if we get an empty string for a field that should be an object, dont use that string
 			_.each( self.fieldsToSerialize, function( key ){
 				if ( typeof response[key] === 'string' ){
 					if ( response[key].length === 0 ) delete response[key];
@@ -170,7 +182,8 @@ let FeatureModel = wp.api.models.Post.extend({
 			});
 
 			_.each( self.fieldsWithRendered, function( key ){
-				response[key] = response[key].rendered || response[key];
+				if ( 'object' === typeof response[key] )
+					response[key] = response[key].rendered || '';
 			});
 
 			if ( typeof _success === 'function' ) { return _success.apply( this, arguments ); }
@@ -192,6 +205,6 @@ let FeatureModel = wp.api.models.Post.extend({
 
 });
 
-Cocktail.mixin( FeatureModel, Backbone.DeepModel.prototype );
+Cocktail.mixin( FeatureModel, DeepModel.prototype );
 
 export default FeatureModel;

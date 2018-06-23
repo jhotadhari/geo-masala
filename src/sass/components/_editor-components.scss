@@ -1,104 +1,201 @@
 
-$grid: 8px;
+.geom-toolbar {
+    display: table;
+    width: 100%;
+    position: relative;
 
-// .editor-block-list__block[data-type="geom/map"] {
-//     .components-panel__body,
-//     .components-panel__body.is-opened {
-//         padding: $grid/2;
-//     }
-// }
+    .geom-inline-editor-toolbar {
 
+        width: 100%;
 
-.geom-panel {
-    border: none;
-    padding: $grid/2;
+        .mce-flow-layout-item {
+            float: left;
+        }
+
+        .mce-widget.mce-btn {
+            float: left;
+            button {
+                padding: 0;
+            }
+        }
+
+    }
 }
 
-.geom-components-settings-panel {
-    // padding: $grid;
+.geom-inline-editor {
+    min-height: 100px;
+
+    .edit-post-visual-editor,
+    .edit-post-visual-editor p {
+        font-size: inherit;
+        font-family: inherit;
+        line-height: inherit;
+    }
+
+    ul {
+        margin-left: 1em;
+    }
+}
+
+
+// ??? stupid fix ...
+.mce-widget.mce-tooltip[role="presentation"] {
+    position: absolute;
+
+    background-color: #111;
+    padding: 0.5em;
+}
+.mce-container.mce-panel.mce-floatpanel.mce-menu.mce-animate.mce-fixed.mce-menu-align.mce-in {
+    position: absolute;
+    max-width: 200px;
+    width: 200px !important;
+    .mce-container-body {
+        width: 100% !important;
+        .mce-menu-item {
+            width: 85%;
+        }
+    }
+}
+
+.geom-panel {
+    .components-panel__body {
+        border: none;
+        &-toggle {
+            font-size: 16px !important;
+        }
+    }
+}
+
+.geom-components-features-panel {
+    font-size: initial;
+
     .components-button:not(:disabled):not([aria-disabled="true"]):focus {
         box-shadow:none;
     }
 
-
     &-controls {
-
-        // &-layers,
-        // &-view-zoom{
-            select {
-                min-height: 100px;
-            }
-        // }
-
-    }
-}
-
-.geom-components-features-list-container-panel {
-
-    width: 48%;
-    float:left;
-
-    .geom-features-list-container {
-        min-height: 68px;
-        padding: $grid;
-
-
-        & > div {
-            padding: $grid $grid/2;
-            margin-bottom: $grid;
-
-            &:last-child {
-
-                margin-bottom: 0;
-            }
+        select {
+            min-height: 100px;
         }
     }
-
 }
 
+.geom-components-features-list {
 
-.geom-components-custom-panel {
+    &-item {
+        background-color: $color_background_light_darken_1;
+        padding: 0 0.5em;
 
-    & > .components-panel__body-title {
-        padding: 0;
-        font-size: inherit;
-        margin-top: 0;
-        margin-bottom: 0;
-
-        display: flex;
+        &.highlight {
+             background-color: transparentize( $color_highlight, 0.8 );
+        }
 
         & > * {
-            vertical-align: middle;
-            flex-shrink: 1;
-            &:first-child {
-                flex-grow: 1;
-            }
+            margin-right: 0.5em;
             &:last-child {
-                align-self: flex-end;
-                @include transform( translateY(-40%) );
+                margin-right: 0;
+                float: right;
             }
         }
 
-        .components-panel__body-toggle {
-            width: auto;
+        &-id {
+
         }
 
-        // .geom-components-custom-panel-button {
-        //     position: relative;
-        //     padding: 0;
-        //     margin: 0;
-        //     height: 20px;
-        //     @include transform( translateY(50%) );
+        &-title {
+            font-weight: bold;
+        }
 
-        //     .dashicon {
-        //         top: auto;
-        //         right: auto;
-        //         vertical-align: middle;
-        //     }
-        // }
+        &-actions {
 
+            & > * {
+                margin-right: 0.1em;
+                float: left;
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+
+            line-height: normal;
+
+            .components-button {
+                padding: 0;
+                svg {
+                    vertical-align: middle;
+                }
+            }
+
+
+        }
     }
 }
 
 
+.geom-components-settings-panel {
+
+}
+
+
+
+
+
+
+
+.backform {
+
+    .control-group {
+        &-tabs {
+            margin-bottom: 1em;
+        }
+
+        &-tab-content {
+            &.titleContent {
+                input[name="title"] {
+                    border: none;
+                }
+            }
+        }
+    }
+
+    .form-group {
+
+        &.control-spacer {
+            @include clearfix();
+            clear: both;
+        }
+
+        &.geom-icon-choose {
+            .icon-preview { // img
+                float: left;
+                height: auto;
+                width: auto;
+                max-height: 70px;
+            }
+            a {
+                float: right;
+                margin-bottom: 5px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        &.geom-coord {
+            max-width: 45%;
+            input {
+                max-width: 100%;
+            }
+
+        }
+
+        &.left {
+            float: left;
+        }
+        &.right {
+            float: right;
+        }
+
+    }
+
+}
 

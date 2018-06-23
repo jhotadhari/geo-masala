@@ -1,25 +1,30 @@
 @import "bourbon";
+@import "variables/variables";
 @import "mixins/mixins-master";
 
 @import "vendor/leaflet/leaflet-draw";
 @import "vendor/leaflet/leaflet-draw-toolbar";
 @import "vendor/leaflet-custom";
 
+@import "portions/clearfix";
+@import "portions/block";
+@import "portions/uploader";
+@import "portions/popover";
+
 @import "components/editor-components";
 
-@import "portions/clearfix";
 
-.geom-uploader {
-    .image-preview {
-        display: block;
-        height: 100px;
-        max-height: 100px;
-        width: auto;
-        margin: 1em;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center center;
-    }
+
+
+// ??? responsive media query ....
+.geom-left {
+    float: left;
 }
 
+.geom-rigth {
+    float: right;
+}
 
+.geom-half-width {
+    width: 45%;
+}

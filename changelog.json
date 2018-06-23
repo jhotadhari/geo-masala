@@ -1,6 +1,7 @@
 {
   "next": [
-    ""
+    "rest request data changed: per_page 100",
+    "edited readme"
   ],
   "0.0.1": [
     "added custom_post_type geom_feature and started block geom/map",

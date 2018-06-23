@@ -3,7 +3,7 @@ require('leaflet-toolbar');
 
 import defaults from '../defaults';
 
-let FitBoundsAction = L.Toolbar2.Action.extend({
+let FlyToAction = L.Toolbar2.Action.extend({
 	options: {
 		toolbarIcon: {
 			className: 'geom-icon-boundingbox geom-icon geom-icon-medium',
@@ -18,9 +18,9 @@ let FitBoundsAction = L.Toolbar2.Action.extend({
 	enable: function (e) {
 		if ( e ) e.preventDefault();
 		if ( this._featureGroup.getLayers().length ){
-			this._map.fitBounds( this._featureGroup.getBounds(), defaults.leaflet.fitBounds );
+			this._map.flyToBounds( this._featureGroup.getBounds(), defaults.leaflet.flyToBounds );
 		}
 	},
 });
 
-export default FitBoundsAction;
+export default FlyToAction;

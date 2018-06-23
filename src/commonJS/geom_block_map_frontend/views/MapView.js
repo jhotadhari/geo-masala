@@ -3,6 +3,7 @@ import Marionette from 'backbone.marionette';
 let L = require('leaflet');
 
 import MapMixin from '../../geom_block_map/MapMixin';
+import defaults from '../../geom_block_map/defaults';
 
 class MapView extends Marionette.View {
 	constructor(...args) {
@@ -42,28 +43,36 @@ class MapView extends Marionette.View {
 			});
 
 			// init map
-			this.map = L.map( mapEl,{
-				center: [51.505, -0.09],
-				zoom: 13,
-			});
+			this.map = L.map( mapEl, defaults.leaflet.initMapOptions );
 
 			this.getBaseLayer().addTo( this.map );
 		}
 	}
 
-	featureAddPopup( layer ) {
-		// ???
+	featureBindPopup( layer, featureModel ) {
+		if ( layer.bindPopup === undefined ) return;
 
-		// let self = this;
-		// layer.on('click', function( event ) {
-		// 	new L.Toolbar2.EditToolbar.Popup( event.latlng, {
-		// 		actions: self.getPopupActions(),
-		// 	}).addTo( self.map, layer ); // , AppDetails.instance.channel.request('featureModel:get') );
-		// });
+		let popupContentTemplate = _.template([
+			'<h2><%=title%></h2>',
+			'<div><%=content%></div>',
+		].join('\n'));
+
+		let popupContent = popupContentTemplate({
+			title: ! _.isUndefined( featureModel.get('title').rendered ) ? featureModel.get('title').rendered : featureModel.get('title'),
+			content: ! _.isUndefined( featureModel.get('content').rendered ) ? featureModel.get('content').rendered : featureModel.get('content'),
+		});
+
+		layer.bindPopup( popupContent );
+
+		layer.on( 'click', function(e) {
+			layer.openPopup();
+		});
+
 	}
 
 }
 
-_.extend( MapView.prototype, MapMixin);
+// _.extend( MapView.prototype, MapMixin );
+_.defaults( MapView.prototype, MapMixin );
 
 export default MapView;

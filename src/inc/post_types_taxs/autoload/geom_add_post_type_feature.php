@@ -49,7 +49,7 @@ function geom_add_post_type_feature() {
 		'labels'                => $labels,
 		'supports'              => array(
 			'title',
-			// 'author',
+			'author',
 			'editor',
 			// 'excerpt',
 			// 'thumbnail',

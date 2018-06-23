@@ -39,6 +39,7 @@ export default class Controller extends Marionette.Object {
 				this.featureCollection.fetch({
 					data: {
 						include: this.data.featureIds.join(','),
+						per_page: 100,
 					}
 				});
 			}

@@ -10,6 +10,9 @@
 
     list-style: none !important;
 
+    a {
+        color: #777;
+    }
     a.geom-icon-cancel {
         background-image: url('../images/icon-cancel.png');
     }
@@ -23,6 +26,9 @@
 .leaflet-retina {
     .leaflet-control-toolbar,
     .leaflet-draw-toolbar {
+        a {
+            color: #777;
+        }
         a.geom-icon-cancel {
             background-image: url('../images/icon-cancel-2x.png');
         }
@@ -39,6 +45,7 @@
 .leaflet-control-toolbar,
 .leaflet-draw-toolbar {
     a {
+        color: #777;
         background-repeat: no-repeat;
     }
     .geom-icon {

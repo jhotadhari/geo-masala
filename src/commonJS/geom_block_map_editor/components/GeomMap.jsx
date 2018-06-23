@@ -1,3 +1,5 @@
+import swal from 'sweetalert';
+
 const { __ } = wp.i18n;
 
 const {
@@ -11,6 +13,7 @@ import FeatureCollection from '../../geom_block_map/collections/FeatureCollectio
 
 import Map from './Map.jsx';
 import FeatureListPanel from './FeatureListPanel.jsx';
+import GeomToolbar from './GeomToolbar.jsx';
 
 const layersControlOptions = [
 	{ value: 'OpenStreetMap.Mapnik', label: 'OpenStreetMap.Mapnik' },
@@ -31,7 +34,7 @@ const layersControlOptions = [
 ];
 
 const viewZoomControlOptions = [
-	{ value: 'FitBoundsAction', label: 'Fit Map to Features' },
+	{ value: 'FlyToAction', label: 'Fit Map to Features' },
 	{ value: 'ZoomLocationAction', label: 'Zoom to current Location' },
 ];
 
@@ -55,23 +58,28 @@ class GeomMap extends React.Component {
 				isLoaded: true,
 			});
 		} else {
-			this.state.featureCollection.fetch({
-				data: {
-					include: this.state.featureIds,
-				},
-				success: function( collection, response, options ){
-					self.setState({
-						featureCollection: collection,
-						isLoaded: true,
-					});
-				},
-				error: function( collection, response, options ){
-					console.log( 'error', response );		// ??? debug
-				}
-			});
+			this.fetchFeatureCollection();
 		}
 	}
 
+	fetchFeatureCollection(){
+		const self = this;
+		this.state.featureCollection.fetch({
+			data: {
+				include: this.state.featureIds,
+				per_page: 100,
+			},
+			success: function( collection, response, options ){
+				self.setState({
+					featureCollection: collection,
+					isLoaded: true,
+				});
+			},
+			error: function( collection, response, options ){
+				console.log( 'error', response );		// ??? debug
+			}
+		});
+	}
 
 	onDrawCreated(layer) {
 		let self = this;
@@ -83,28 +91,22 @@ class GeomMap extends React.Component {
 
 		featureModel.save().then( function( data, textStatus, jqXHR ) {
 			self.state.featureCollection.add( featureModel );
+			// featurePanelTriggers fetchPool
 			self.setState({
-				featureCollection: self.state.featureCollection,
+				featurePanelTriggers: {
+					fetchPool: featureModel.get('id'),
+				}
 			});
+			self.onChangeFeatures();
 		}, function( jqXHR, textStatus, errorThrown ) {
-			console.log( 'textStatus errorThrown', textStatus, errorThrown );		// ??? debug
+			console.log( 'textStatus jqXHR', textStatus, jqXHR );		// ??? debug
 		});
 	}
 
 	onDrawRemoved( evt ){
 		let self = this;
-
-		// this.state.featureCollection.remove( _.pluck( layers.getLayers(), 'postId' ) );
 		this.state.featureCollection.remove( evt.layer.postId );
-		this.setState({
-			featureCollection: self.state.featureCollection,
-		});
-
-		console.log( 'onDrawRemoved featureCollection', self.state.featureCollection );
-	}
-
-	onDrawDeleted(layers){
-		console.log( 'onDrawDeleted', layers );		// ??? debug
+		this.onChangeFeatures();
 	}
 
 	onDrawEdited(evt){
@@ -123,49 +125,98 @@ class GeomMap extends React.Component {
 		});
 	}
 
-
 	onDrawEditedAttributes(evt){
-		let self = this;
-
-		console.log( 'onDrawEditedAttributes', evt );		// ??? debug
 		let featureModel = this.state.featureCollection.findWhere({
 			id: evt.layer.postId,
 		});
+		// fetch feature model ... will update features list
+		featureModel.fetch();
+		// trigger
+		this.setState({
+			featurePanelTriggers: {
+				fetchAvailableItem: featureModel.get('id'),
+			}
+		});
+	}
 
-		// if ( ! _.isUndefined( evt.attributes ) ) {
-		// 	featureModel.set( evt.attributes );
+	onFlyToFeature( featureModel ) {
+		this.setState({
+			mapTriggers: {
+				flyToFeature: featureModel.get('id'),
+			}
+		});
+	}
 
-		// 	featureModel.save().then( function( data, textStatus, jqXHR ) {
-		// 		// console.log( 'onDrawEditedAttributes saved featureModel', featureModel );		// ??? debug
-		// 	}, function( jqXHR, textStatus, errorThrown ) {
-		// 		console.log( 'textStatus errorThrown', textStatus, errorThrown );		// ??? debug
-		// 	});
-		// }
+	onAddNewFeature( featureModel ) {
+		if ( undefined === this.state.featureCollection.findWhere({id: featureModel.get('id')}) ) {
+			this.state.featureCollection.add( featureModel );
+			this.onChangeFeatures();
+		}
+	}
 
-		let includeIds = this.state.featureCollection.pluck('id');
-		this.state.featureCollection.fetch({
-			data: {
-				include: includeIds,
-			},
-			success: function( collection, response, options ){
-				// sort
-				self.state.featureCollection.models = _(self.state.featureCollection.models).sortBy( function( model ) {
-					return _.indexOf( includeIds, model.get('id') );
+	onRemoveFeature( featureModel ) {
+		let modelInCollection = this.state.featureCollection.findWhere({id: featureModel.get('id')});
+		if ( undefined !== modelInCollection ) {
+			this.state.featureCollection.remove( modelInCollection );
+			this.onChangeFeatures();
+		}
+	}
+
+	onTrashFeature( featureModel ) {
+		let self = this;
+
+		let featureModelTilte = featureModel.get('title').rendered || featureModel.get('title');
+		featureModelTilte = 'object' === typeof( featureModelTilte ) ? featureModel.get('id') : featureModelTilte;
+
+		let strings = {
+			confirm: 'Are you sure?',
+			confirm_trash: 'Do you really want to delete "' + featureModelTilte + '"? The Feature might be used by another Post!',
+			cancel: 'cancel',
+			trash: 'trash',
+		};
+
+		swal({
+			title: strings.confirm,
+			text: strings.confirm_trash,
+			icon: 'warning',
+			dangerMode: true,
+			buttons: [ 			// ??? how to make buttons keyboard accessable?
+				strings.cancel,
+				strings.trash,
+			],
+		}).then( ( value ) => {
+			if ( value ) {
+				// move to trash
+				featureModel.destroy({
+					success: function( model, response) {
+
+						// remove from collection and call this.onChangeFeatures
+						self.onRemoveFeature( model );
+
+						// remove from FeatureListPanel
+						self.setState({
+							featurePanelTriggers: {
+								trash: model.get('id'),
+							}
+						});
+
+						// remove from map
+						self.setState({
+							mapTriggers: {
+								removeFeature: model.get('id'),
+							}
+						});
+
+						console.log( 'moved to trash: ' + model.get('id').toString() );
+					}
 				});
-			},
-			error: function( collection, response, options ){
-				console.log( 'error', response );		// ??? debug
 			}
 		});
 
 	}
 
-	onAddNewFeature() {
-		console.log( 'onAddNewFeature' );		// ??? debug
-	}
-
-	onChangeFeatures( features ) {
-		this.props.onChangeFeatures(features);
+	onChangeFeatures() {
+		this.props.onChangeFeatures( this.state.featureCollection );
 	}
 
 	onChangeControlsSearchBar( val ) {
@@ -201,30 +252,38 @@ class GeomMap extends React.Component {
 
 	render() {
 		return ([
+
+			<GeomToolbar/>,
+
         	<Map
         		featureCollection={this.state.featureCollection}
         		onDrawCreated={this.onDrawCreated.bind(this)}
-        		onDrawDeleted={this.onDrawDeleted.bind(this)}
         		onDrawRemoved={this.onDrawRemoved.bind(this)}
         		onDrawEdited={this.onDrawEdited.bind(this)}
         		onDrawEditedAttributes={this.onDrawEditedAttributes.bind(this)}
 				isLoaded={ this.state.isLoaded }
 				controls={ this.state.controls }
+				mapTriggers={ this.state.mapTriggers }
         	/>,
+
+			<FeatureListPanel
+				title='Features'
+				className={'geom-panel geom-components-features-panel'}
+				initialOpen={false}
+				onFlyToFeature={ this.onFlyToFeature.bind(this) }
+				onAddNewFeature={ this.onAddNewFeature.bind(this) }
+				onRemoveFeature={ this.onRemoveFeature.bind(this) }
+				onTrashFeature={ this.onTrashFeature.bind(this) }
+				featureCollection={ this.state.featureCollection }
+				isLoaded={ this.state.isLoaded }
+				featurePanelTriggers={ this.state.featurePanelTriggers }
+			/>,
+
 			<PanelBody
 				title='Map Settings'
 				className={'geom-panel geom-components-settings-panel'}
-				initialOpen={true}
+				initialOpen={false}
 			>
-				<FeatureListPanel
-					title='Features'
-					className={'geom-panel geom-components-settings-panel-features'}
-					initialOpen={false}
-					onChangeFeatures={ this.onChangeFeatures.bind(this) }
-					onAddNewFeature={ this.onAddNewFeature.bind(this) }
-					featureCollection={ this.state.featureCollection }
-					isLoaded={ this.state.isLoaded }
-				/>
 
 				<PanelBody
 					title='Controls'

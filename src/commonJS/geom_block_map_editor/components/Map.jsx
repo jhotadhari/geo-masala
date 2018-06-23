@@ -1,12 +1,18 @@
+
 let L = require('leaflet');
 require('leaflet-toolbar');
 require('leaflet-draw');
-require('leaflet-draw-toolbar/dist/leaflet.draw-toolbar');
+// require('leaflet-draw-toolbar/dist/leaflet.draw-toolbar');
 
 import MapMixin from '../../geom_block_map/MapMixin';
+import defaults from '../../geom_block_map/defaults';
+import getNestedObject from '../../geom_block_map/functions/getNestedObject';
+
+import CustomDrawToolbar from '../../geom_block_map/toolbarControls/CustomDrawToolbar';
 
 import EditDrawAction from '../../geom_block_map/toolbarActions/EditDrawAction';
-import EditTitleAction from '../../geom_block_map/toolbarActions/EditTitleAction';
+import EditPopupContentAction from '../../geom_block_map/toolbarActions/EditPopupContentAction';
+import EditAppearanceAction from '../../geom_block_map/toolbarActions/EditAppearanceAction';
 import RemoveModelAction from '../../geom_block_map/toolbarActions/RemoveModelAction';
 import CancelAction from '../../geom_block_map/toolbarActions/CancelAction';
 
@@ -33,10 +39,6 @@ class Map extends React.Component {
 		this.props.onDrawRemoved( evt );
 	}
 
-	onDrawDeleted(layers){
-		this.props.onDrawDeleted(layers);
-	}
-
 	onDrawEdited( evt ){
 		this.props.onDrawEdited( evt );
 	}
@@ -53,29 +55,41 @@ class Map extends React.Component {
 		this.config = {
 			controls: this.props.controls,
 		};
+
+		// init map if neccessary
 		this.initMap();
+
+		// update MapFeatures
 		if ( this.props.isLoaded ) {
 			this.updateMapFeatures();
 		}
+
+		// update controls
 		this.updateControls();
+
+		// run triggered actions
+		let flyToPostId = getNestedObject( this.props, 'mapTriggers.flyToFeature' );
+		if ( flyToPostId !== getNestedObject( prevProps, 'mapTriggers.flyToFeature' ) ) {
+			this.flyToFeature( flyToPostId );
+		}
+		let removeFeatureId = getNestedObject( this.props, 'mapTriggers.removeFeature' );
+		if ( removeFeatureId !== getNestedObject( prevProps, 'mapTriggers.removeFeature' ) ) {
+			this.flyToFeature( removeFeatureId );
+		}
 	}
 
 	initMap(){
 		if ( this.refs.map && ! this.map  ) {
-			this.map = L.map( this.refs.map,{
-				center: [51.505, -0.09],
-				zoom: 13,
-			});
-
+			this.map = L.map( this.refs.map, defaults.leaflet.initMapOptions );
 			this.getBaseLayer().addTo( this.map );
-
 			this.addDrawToolbar();
 		}
 	}
 
 	addDrawToolbar() {
 		if ( ! this.drawToolbar ){
-			this.drawToolbar = new L.Toolbar2.DrawToolbar({
+			// this.drawToolbar = new L.Toolbar2.DrawToolbar({
+			this.drawToolbar = new CustomDrawToolbar({
 				position: 'topleft'
 			});
 
@@ -90,9 +104,6 @@ class Map extends React.Component {
         map.on('draw:created', function( evt ) {
 			self.onDrawCreated(evt.layer);
 		});
-		map.on('draw:deleted', function( evt ) {
-			self.onDrawDeleted(evt.layers);
-		});
 		map.on('draw:removed', function( evt ) {
 			self.onDrawRemoved( evt );
 		});
@@ -105,22 +116,37 @@ class Map extends React.Component {
 		return this;
 	}
 
-	featureAddPopup( layer ) {
+	featureBindPopup( layer, featureModel ) {
 		let self = this;
 		layer.on('click', function( event ) {
 			new L.Toolbar2.EditToolbar.Popup( event.latlng, {
-				actions: self.getPopupActions(),
-			}).addTo( self.map, layer ); // , AppDetails.instance.channel.request('featureModel:get') );
+				actions: self.getPopupActions(featureModel),
+			}).addTo( self.map, layer );
 		});
 	}
 
-	getPopupActions(){
-		return [
-			EditDrawAction,
-			EditTitleAction,
+	getPopupActions(featureModel){
+		let actions = [];
+		if ( featureModel.get('author').toString() === geomData.user.id ) {
+			actions = actions.concat([
+				EditDrawAction,
+				EditPopupContentAction,
+				EditAppearanceAction,
+			]);
+		}
+		actions = actions.concat([
 			RemoveModelAction,
-			CancelAction
-		];
+			CancelAction,
+		]);
+		return actions;
+	}
+
+	flyToFeature( postId ){
+		let layer = _.findWhere( this.getFeatureGroup().getLayers(), { postId: postId } );
+		if ( undefined  === layer ) return;
+		let tempFeatureGroup = new L.FeatureGroup();
+		tempFeatureGroup.addLayer( layer );
+		this.map.flyToBounds( tempFeatureGroup.getBounds(), defaults.leaflet.flyToBounds );
 	}
 
 	render() {
@@ -138,6 +164,7 @@ class Map extends React.Component {
 	}
 }
 
-_.extend( Map.prototype, MapMixin);
+// _.extend( Map.prototype, MapMixin);
+_.defaults( Map.prototype, MapMixin);
 
 export default Map;

@@ -6,13 +6,13 @@ require('leaflet.fullscreen');
 require('leaflet-providers');
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
-import FitBoundsAction from './toolbarActions/FitBoundsAction';
+import FlyToAction from './toolbarActions/FlyToAction';
 import ZoomLocationAction from './toolbarActions/ZoomLocationAction';
 
 import defaults from './defaults';
 
 const actionsMap = {
-	FitBoundsAction: FitBoundsAction,
+	FlyToAction: FlyToAction,
 	ZoomLocationAction: ZoomLocationAction,
 };
 
@@ -202,11 +202,13 @@ const MapMixin = {
 		let featureGroup = this.getFeatureGroup();
 		let collection = this.collection || this.state.featureCollection;
 
+		let featureGroupAdded = false;
 		collection.each( function( featureModel ) {
 			let featureGroupPostIds = _.pluck( featureGroup.getLayers(), 'postId' );
 
 			// add layer
 			if ( _.indexOf( featureGroupPostIds, featureModel.get('id') ) === -1 ) {
+				featureGroupAdded = true;
 
 				let geom_feature_geo_json = featureModel.get('geom_feature_geo_json');
 				if ( ! geom_feature_geo_json ) return;
@@ -239,14 +241,10 @@ const MapMixin = {
 						// add layer to featureGroup
 						featureGroup.addLayer( layer );
 
-						// add popup to layer
-						self.featureAddPopup( layer );
-
-						// set line style
-						// ???
-
-						// set icon
+						self.featureBindPopup( layer, featureModel );
 						self.featureAddIcon( layer, featureModel );
+						self.featureSetStyle( layer, featureModel );
+
 					},
 				});
 
@@ -263,11 +261,9 @@ const MapMixin = {
 			}
 		});
 
-		// sort layers ???
-
-		// fitBounds
-		if ( ! _.isEmpty( featureGroup.getBounds() ) )
-			this.map.fitBounds( featureGroup.getBounds(), defaults.leaflet.fitBounds );
+		// flyToBounds
+		if ( featureGroupAdded && ! _.isEmpty( featureGroup.getBounds() ) )
+			this.map.flyToBounds( featureGroup.getBounds(), defaults.leaflet.flyToBounds );
 
 	},
 
@@ -277,6 +273,15 @@ const MapMixin = {
 			layer.setIcon( L.icon( geom_feature_icon ) );
 		}
 	},
+
+	featureSetStyle: function( layer, featureModel ) {
+		let geom_feature_path_style = featureModel.get( 'geom_feature_path_style' );
+		if ( layer.setStyle !== undefined ) {
+			layer.setStyle( geom_feature_path_style );
+		}
+	},
+
+
 }
 
 export default MapMixin;
