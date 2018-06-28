@@ -108,6 +108,9 @@ This Plugin is still in early development. Reality might be in movement.
 
 == Changelog ==
 
+0.0.3
+edited readme.
+
 0.0.2
 first stable version.
 edited readme.

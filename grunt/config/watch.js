@@ -70,6 +70,8 @@ module.exports = {
 		],
 		tasks: [
 			'concat:readme',
+			'concat:readmeMd',
+			'string-replace:readmeMd',
 			'local_sync:<%= local_sync.wp_install %>'
 		]
 	},
