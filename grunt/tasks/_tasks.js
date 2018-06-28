@@ -25,6 +25,7 @@ module.exports = function(grunt){
 		// add readme task and copy/str_replace tasks for php files and imgs/fonts ...
 		tasks = tasks.concat( [
 			'concat:readme',					// readme
+			'concat:readmeMd',					// readme.md
 			'string-replace:plugin_main_file',	// copies plugin_main_file to destination
 			'concat:plugin_main_file',			// add banner plugin_main_file
 			'string-replace:inc_to_dest',		// copies inc to destination

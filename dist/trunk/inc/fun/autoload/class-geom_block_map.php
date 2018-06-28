@@ -104,6 +104,18 @@ class Geom_Block_Map {
 	// }
 
 	public function enqueue_frontend_assets() {
+		global $post;
+
+		wp_register_script(
+			'backbone-memento',
+			Geom_Geo_masala::plugin_dir_url() . '/js/backbone.memento.min.js',
+			array(
+				'wp-backbone',
+				),
+			false,
+			true
+		);
+
 		if ( is_admin() || ! $this->post_has_block() )
 			return;
 
@@ -123,16 +135,32 @@ class Geom_Block_Map {
 				'wp-backbone',
 				'wp-api',
 				'utils',
+				'backbone-memento',
 				),
 			filemtime( Geom_Geo_masala::plugin_dir_path() . 'js/' . $handle . '.min.js' )
 		);
 
 		// wp_localize_script( $handle, 'geomData', $this->get_localize_data() );
 
+		$current_user = wp_get_current_user();
+		wp_localize_script( $handle, 'geomData', array(
+			'pluginDirUrl' => Geom_Geo_masala::plugin_dir_url(),
+			'user' => array(
+				'id' => strval( $current_user->ID ),
+			),
+			'post' => array(
+				'id' => strval( $post->ID ),
+			)
+		));
+
+		wp_enqueue_media();
+		wp_enqueue_editor();
+
 		wp_enqueue_script( $handle );
 	}
 
 	public function enqueue_editor_assets() {
+		global $post;
 		$handle = $this->get_handle( 'editor' );
 
 		wp_register_script(
@@ -145,7 +173,7 @@ class Geom_Block_Map {
 			true
 		);
 
-		wp_enqueue_script(
+		wp_register_script(
 			$handle,
 			Geom_Geo_masala::plugin_dir_url() . '/js/' . $handle . '.min.js',
 			array(
@@ -154,9 +182,23 @@ class Geom_Block_Map {
 				'wp-element',
 				'jquery-ui-position',
 				'backform',
+				'backbone-memento',
 				),
 			filemtime( Geom_Geo_masala::plugin_dir_path() . 'js/' . $handle . '.min.js' )
 		);
+
+		$current_user = wp_get_current_user();
+		wp_localize_script( $handle, 'geomData', array(
+			'pluginDirUrl' => Geom_Geo_masala::plugin_dir_url(),
+			'user' => array(
+				'id' => strval( $current_user->ID ),
+			),
+			'post' => array(
+				'id' => strval( $post->ID ),
+			)
+		) );
+
+		wp_enqueue_script( $handle );
 
 		wp_enqueue_style(
 			$handle,

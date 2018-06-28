@@ -5,7 +5,7 @@
   "uri": "https://github.com/jhotadhari/geo-masala",
   "textDomain": "geo-masala",
   "domainPath": "/languages",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Add interactive Leaflet Maps. A new block for gutenberg: 'Geo Masala Map'",
   "main": "index.js",
   "scripts": {
