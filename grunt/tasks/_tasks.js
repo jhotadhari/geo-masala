@@ -26,7 +26,7 @@ module.exports = function(grunt){
 		tasks = tasks.concat( [
 			'concat:readme',					// readme
 			'concat:readmeMd',					// readme.md
-			'string-replace:readmeMd',
+			'wp_readme_to_markdown:readmeMd',
 			'string-replace:plugin_main_file',	// copies plugin_main_file to destination
 			'concat:plugin_main_file',			// add banner plugin_main_file
 			'string-replace:inc_to_dest',		// copies inc to destination

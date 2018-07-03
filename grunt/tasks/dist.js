@@ -8,6 +8,7 @@ module.exports = function(grunt){
 
 		tasks = tasks.concat([
 			'bump-only:' + vInc,				// version bump
+			'_updateConfig',
 		]);
 
 		tasks = tasks.concat([
