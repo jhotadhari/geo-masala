@@ -1,15 +1,15 @@
 # Geo Masala #
-Tags: gutenberg,leaflet,map,geo,gis
-Donate link: http://waterproof-webdesign.info/donate
-Contributors: jhotadhari
-Tested up to: 4.9.4
-Requires at least: 4.7
-Requires PHP: 5.6
-Stable tag: trunk
-License: GNU General Public License v2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+**Tags:** gutenberg,leaflet,map,geo,gis  
+**Donate link:** http://waterproof-webdesign.info/donate  
+**Contributors:** [jhotadhari](https://profiles.wordpress.org/jhotadhari)  
+**Tested up to:** 4.9.4  
+**Requires at least:** 4.7  
+**Requires PHP:** 5.6  
+**Stable tag:** trunk  
+**License:** GNU General Public License v2 or later  
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
-Add interactive Leaflet Maps. A new block for gutenberg: 'Geo Masala Map'
+**Add interactive Leaflet Maps. A new block for gutenberg:** 'Geo Masala Map'  
 
 
 ## Description ##
@@ -36,7 +36,7 @@ Edit any Post with gutenberg and add a 'Geo Masala Map' block, save post and don
 * ...
 
 ### What is a Feature? ###
-The term "Feature" is used in the cartographic context. A representation of a real-world object on a map. [feature|Definition - Esri Support GIS Dictionary](https://support.esri.com/en/other-resources/gis-dictionary/term/dcc335be-78ae-4bd2-b254-b44c37343f75)
+The term "Feature" is used in the cartographic context. A representation of a real-world object on a map [feature|Definition - Esri Support GIS Dictionary](https://support.esri.com/en/other-resources/gis-dictionary/term/dcc335be-78ae-4bd2-b254-b44c37343f75).
 Within this plugin, a Feature can represent a simple location (Marker), a way/route/track (Polyline) or an Area (Polygon/Rectangle).
 A couple of properties are stored with the Feature, eg. appereance and popup-content data.
 
@@ -85,7 +85,8 @@ Known issues:
   * [Leaflet Providers](https://github.com/leaflet-extras/leaflet-providers)
   * [Leaflet Fullscreen](https://github.com/brunob/leaflet.fullscreen)
   * [Leaflet Toolbar](https://github.com/Leaflet/Leaflet.toolbar)
-* This Plugin is generated with [generator-pluginboilerplate version 1.1.0](https://github.com/jhotadhari/generator-pluginboilerplate)
+* This Plugin is generated with [generator-pluginboilerplate version 1.2.0](https://github.com/jhotadhari/generator-pluginboilerplate)
+* Background for plugin banner and icon [OpenTopoMap](http://opentopomap.org/)
 * ...
 
 ## Installation ##
@@ -107,6 +108,11 @@ This Plugin is still in early development. Reality might be in movement.
 
 
 ## Changelog ##
+
+0.0.5
+Edit Popup, WysiwygControl works
+Added Plugin assets
+Updates grunt environment. Integrated updates from generator-pluginboilerplate 1.2.0
 
 0.0.4
 

@@ -2,6 +2,11 @@
   "next": [
     ""
   ],
+  "0.0.5": [
+    "Edit Popup, WysiwygControl works",
+    "Added Plugin assets",
+    "Updates grunt environment. Integrated updates from generator-pluginboilerplate 1.2.0"
+  ],
   "0.0.4": [
     ""
   ],
