@@ -1,61 +1,15 @@
 
-.geom-toolbar {
-    display: table;
-    width: 100%;
-    position: relative;
-
-    .geom-inline-editor-toolbar {
-
-        width: 100%;
-
-        .mce-flow-layout-item {
-            float: left;
-        }
-
-        .mce-widget.mce-btn {
-            float: left;
-            button {
-                padding: 0;
-            }
-        }
-
-    }
-}
-
-.geom-inline-editor {
-    min-height: 100px;
-
-    .edit-post-visual-editor,
-    .edit-post-visual-editor p {
-        font-size: inherit;
-        font-family: inherit;
-        line-height: inherit;
-    }
-
-    ul {
-        margin-left: 1em;
-    }
-}
 
 
-// ??? stupid fix ...
-.mce-widget.mce-tooltip[role="presentation"] {
-    position: absolute;
 
-    background-color: #111;
-    padding: 0.5em;
-}
-.mce-container.mce-panel.mce-floatpanel.mce-menu.mce-animate.mce-fixed.mce-menu-align.mce-in {
-    position: absolute;
-    max-width: 200px;
-    width: 200px !important;
-    .mce-container-body {
-        width: 100% !important;
-        .mce-menu-item {
-            width: 85%;
-        }
-    }
-}
+
+
+
+
+
+
+
+
 
 .geom-panel {
     .components-panel__body {

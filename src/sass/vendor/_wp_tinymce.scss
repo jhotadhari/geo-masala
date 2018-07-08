@@ -1,3 +1,33 @@
+// copy of gutenberg/core-blocks/freeform component (classic editor)
+
+@import "./wp_tinymce/variables/variables";
+@import "./wp_tinymce/editor";
+@import "./wp_tinymce/freeform_toolbar";
+
+// custom
+.geom-toolbar {
+    width: 100%;
+    position: relative;
+    .geom-inline-editor-toolbar {
+        width: 100%;
+        margin: 0 0 14px 0;
+        outline: none;
+    }
+}
+.geom-inline-editor {
+    min-height: 100px;
+}
+
+
+
+// no need for this
+// div[data-type="core/freeform"] .editor-block-contextual-toolbar + div {
+//     margin-top: 0;
+//     padding-top: 0;
+// }
+
+
+
 /* Image captions using the HTML5 figure element */
 figure.align-left {
     float: left;

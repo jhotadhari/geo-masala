@@ -192,6 +192,7 @@ let EditAppearanceAction = EditAttributesBaseAction.extend({
 		this.applyIconToLayer();
 		this.setStyleToLayer();
 		this.getFeatureModel().store();
+		this.close();
 	},
 
 	applyIconToLayer: function(){

@@ -1,28 +1,28 @@
+/**
+ * External dependencies
+ */
 import Backform from 'Backform';
 
-let isEscPressed = function( e ){
-	let isEscape = false;
-	if ( 'key' in e ) {
-		isEscape = ( e.key == 'Escape' || e.key == 'Esc');
-	} else {
-		isEscape = ( e.keyCode == 27);
-	}
-	return isEscape;
-};
+/**
+ * WordPress dependencies
+ */
+const { __ } = wp.i18n;
+const { F10, ESCAPE, ALT } = wp.utils.keycodes;
 
-let tinymceOptions = {
-	inline: true,
-	toolbar1: 'formatselect fontsizeselect bold italic underline | bullist numlist | alignleft aligncenter alignright | link pastetext',
-};
-
-let WysiwygControl = Backform.Control.extend({
+/**
+ * Wysiwyg Control
+ *
+ * The tinyMce integration is mostly copied from the gutenberg/core-blocks/freeform component (classic editor)
+ *
+ */
+const WysiwygControl = Backform.Control.extend({
 
 	defaults: {
 		label: '',
 		helpMessage: null
 	},
 
-	initialize: function( options) {
+	initialize( options ) {
 		Backform.Control.prototype.initialize.apply(this, arguments);
 		this.layer = options.layer;
 	},
@@ -40,123 +40,185 @@ let WysiwygControl = Backform.Control.extend({
 	].join('\n')),
 
 	events: _.extend({}, Backform.Control.prototype.events, {
-		'click': 'onclick',
+		'click': 'onClick',
+		'dblclick': 'onClick',
 	}),
 
-
-	onclick: function(e){
+	onClick(e){
 		if ( e ) e.preventDefault();
-		this.initMceEditor();
+		const { baseURL, suffix } = window.wpEditorL10n.tinymce;
+
+		if ( this.editor ) return this;
+
+		window.tinymce.EditorManager.overrideDefaults( {
+			base_url: baseURL,
+			suffix,
+		} );
+
+		if ( document.readyState === 'complete' ) {
+			this.initEditor();
+		} else {
+			window.addEventListener( 'DOMContentLoaded', this.initEditor );
+		}
 	},
 
-	setupToolbar: function(){
+	setupToolbar(){
 		if ( ! this.$toolbar ){
+			// create toolbar element
 			this.$toolbar = $('<div>', {
 				id: 'geom-inline-editor-toolbar-' + this.cid,
-				class: 'geom-inline-editor-toolbar',
+				class: 'geom-inline-editor-toolbar freeform-toolbar',
+				['data-placeholder']: __( 'Classic' ),
 			} );
+			// append toolbar to container
 			this.$el.closest('div[data-type="geom/map"]').find('.geom-toolbar').append(this.$toolbar);
+			// animate toolbar
+			let autoHeight = this.$toolbar.css('height', 'auto').height();
+			this.$toolbar.height(0).animate({height: autoHeight}, 500, () => this.$toolbar.css('height', 'auto') );
+			// toolbar events
+			this.$toolbar.on('keydown', this.onToolbarKeyDown.bind(this) );
 		}
 	},
 
-	removeToolbar: function(){
-		if ( this.$toolbar ){
-			this.$toolbar.remove();
-			delete this.$toolbar;
-		}
-	},
-
-	getMceElement: function(){
+	getEditorElement(){
 		return this.$el.find('.geom-inline-editor');
 	},
 
-
-	initMceEditor: function(){
-		let self = this;
-
-		if ( this.mceEditor )
-			return this;
-
+	initEditor() {
+		const { settings } = window.wpEditorL10n.tinymce;
+		if ( this.editor ) return;
 		// setup editor element
-		this.getMceElement().attr( 'id', this.cid );
+		this.getEditorElement().attr( 'id', 'editor-' + this.cid );
 		// setup toolbar element
 		this.setupToolbar();
-
-		let settings = _.extend( {}, wp.editor.getDefaultSettings().tinymce, tinymceOptions, {
-			selector: this.cid,
-			toolbar: true,
-			content_css: geomData.pluginDirUrl + '/css/tinymce_content.min.css',
+		// initialize
+		wp.oldEditor.initialize( 'editor-' + this.cid, {
+			tinymce: {
+			...settings,
+			inline: true,
+			content_css: geomData.pluginDirUrl + '/css/geom_block_map_editor_tinymce_content.min.css',
 			fixed_toolbar_container: '#geom-inline-editor-toolbar-' + this.cid,
-			setup: function (editor) {
-				editor.on('init', function ( e ) {
-					self.mceEditor.focus();
-				}).on('KeyUp Change Paste input touchend', function ( e ) {
-					if ( isEscPressed(e) ) {
-						self.setModelVal(e);
-						self.close(e);
-					}
-				}).on('focusout', function ( e ) {
-					if ( $( e.explicitOriginalTarget ) !== undefined ){
+			setup: this.onSetup.bind(this),
+		},
+		} );
+	},
 
-						if ( $( e.explicitOriginalTarget ).attr('id') ){
-							if ( $( e.explicitOriginalTarget ).attr('id').startsWith('mce') ){
-								// toolbarClicked
-								return;
-							}
-						}
+	onSetup( editor ) {
+		const self = this;
+		const content  = this.getEditorElement().html();
+		this.editor = editor;
 
-						if ( e.explicitOriginalTarget.tagName === 'BUTTON' ){
-							self.setModelVal(e);
-							self.close(e);
-							$( e.explicitOriginalTarget ).trigger('click');
-
-							return;
-						}
-
-					}
-					self.setModelVal(e);
-					self.close(e);
-				});
+		editor.addButton( 'kitchensink', {
+			tooltip: __( 'More' ),
+			icon: 'dashicon dashicons-editor-kitchensink',
+			onClick: function() {
+				const button = this;
+				const active = ! button.active();
+				button.active( active );
+				editor.dom.toggleClass( self.$toolbar, 'has-advanced-toolbar', active );
 			},
 		} );
 
-		// init mceEditor
-		this.mceEditor = tinymce.createEditor( this.cid, settings );
+		if ( content ) {
+			editor.on( 'loadContent', () => editor.setContent( content ) );
+		}
 
-		// render mceEditor
-		this.mceEditor.render();
+		editor.on( 'init', () => {
+			// Create the toolbar by refocussing the editor.
+			editor.getBody().blur();
+			editor.focus();
+		} );
 
-		return this;
+		// // ??? well that doesn't work... will fix that in future
+		// editor.on('keydown', ( event ) => {
+		// 	const { altKey } = event;
+		// 	// Prevent Mousetrap from kicking in: TinyMCE already uses its own 'alt+f10' shortcut to focus its toolbar.
+		// 	// if ( altKey && event.keyCode === F10 ) {
+		// 	if ( event.keyCode === F10 ) {
+		// 		event.stopPropagation();
+		// 	}
+		// });
+
+		editor.on( 'blur', (event) => {
+			this.setModelVal(event);
+			return false;
+		} );
+
+		editor.on('KeyUp Change Paste input touchend', ( event ) => {
+			// close editor if esc pressed
+			if ( event.keyCode === ESCAPE ) {
+				this.close(event);
+			}
+		});
+
+		editor.on('focusout', ( event ) => {
+			if ( undefined !== $( event.explicitOriginalTarget ) ){
+
+				if ( $( event.explicitOriginalTarget ).attr('id') ){
+					if ( $( event.explicitOriginalTarget ).attr('id').startsWith('mce') ){
+						return;
+					}
+				}
+
+				if ( event.explicitOriginalTarget.tagName === 'BUTTON' ){
+					this.setModelVal(event);
+					this.close(event);
+					$( event.explicitOriginalTarget ).trigger('click');
+					return;
+				}
+			}
+			this.setModelVal(event);
+			this.close(event);
+		});
 	},
 
-	close: function(e){
-		if ( e ) e.preventDefault();
-		this.removeMceEditor();
+	focus() {
+		if ( this.editor ) {
+			this.editor.focus();
+		}
 	},
 
-	setModelVal: function(e){
+	onToolbarKeyDown( event ) {
+		// Prevent WritingFlow from kicking in and allow arrows navigation on the toolbar.
+		event.stopPropagation();
+		// Prevent Mousetrap from moving focus to the top toolbar when pressing 'alt+f10' on this block toolbar.
+		event.nativeEvent.stopImmediatePropagation();
+	},
+
+	close(e){
 		if ( e ) e.preventDefault();
-		let model = this.model;
-		let val = this.mceEditor.getContent();
-		let oldVal = model.get( this.field.get( 'name' ) ) || model.get( this.field.get( 'name' ) ).rendered;
-		let newVal = this.formatter.toRaw( val ) || this.formatter.toRaw( val ).rendered;
+		this.removeEditor();
+	},
 
-		console.log( 'setModelVal newVal', newVal );		// ??? debug
-
+	setModelVal(e){
+		if ( e ) e.preventDefault();
+		const model = this.model;
+		const val = this.editor.getContent();
+		const oldVal = model.get( this.field.get( 'name' ) ) || model.get( this.field.get( 'name' ) ).rendered;
+		const newVal = this.formatter.toRaw( val ) || this.formatter.toRaw( val ).rendered;
 		if ( ! _.isUndefined( newVal ) ) this.model.set( 'content', newVal );
 	},
 
-	getValueFromDOM: function() {
-		return this.formatter.toRaw( this.getMceElement().html(), this.model );
+	getValueFromDOM() {
+		return this.formatter.toRaw( this.getEditorElement().html(), this.model );
 	},
 
-	removeMceEditor: function() {
-		if ( this.mceEditor ){
-			this.mceEditor.remove();
+	removeEditor() {
+		if ( this.editor ){
+			window.addEventListener( 'DOMContentLoaded', this.initEditor );
+			wp.oldEditor.remove( 'editor-' + this.cid );
 			this.removeToolbar();
-			this.mceEditor.destroy();
-			delete this.mceEditor;
-			this.getMceElement().attr( 'id', null);
+			delete this.editor;
+			this.getEditorElement().attr( 'id', null);
+		}
+	},
+
+	removeToolbar(){
+		if ( this.$toolbar ){
+			this.$toolbar.animate({height: 0}, 500, () => {
+				this.$toolbar.remove();
+				delete this.$toolbar;
+			});
 		}
 	},
 

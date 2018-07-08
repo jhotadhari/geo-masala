@@ -21,13 +21,6 @@ function geom_feature_rest_query_custom( $args, $request ) {
 	if ( ! $geom_custom )
 		return $args;
 
-	// // nonce check
-	// $id = array_key_exists( 'appId', $query_params ) && isset( $query_params['appId'] ) && ! empty( $query_params['appId'] ) ? $query_params['appId'] : '';
-	// $nonce = array_key_exists( 'nonce', $query_params ) && isset( $query_params['nonce'] ) && ! empty( $query_params['nonce'] ) ? $query_params['nonce'] : false;
-	// $current_user_id = is_user_logged_in() ? wp_get_current_user()->ID : 0;
-	// if ( ! wp_verify_nonce( $nonce, 'geom_fl' . $id . $current_user_id ) )
-	// 	return $args;
-
 	foreach ( $geom_custom as $arg_key => $arg_val ) {
 		switch ( $arg_key ) {
 			case 'author':

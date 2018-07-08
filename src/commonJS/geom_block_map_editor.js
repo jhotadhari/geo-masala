@@ -5,7 +5,6 @@ import _ from  'lodash';
 import defaults from './geom_block_map/defaults';
 import GeomMap from './geom_block_map_editor/components/GeomMap.jsx';
 
-
 registerBlockType( 'geom/map', {
 	title: __( 'Geo Masala Map' ),
 	icon: 'location-alt',

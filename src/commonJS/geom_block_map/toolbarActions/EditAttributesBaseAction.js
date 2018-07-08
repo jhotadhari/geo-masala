@@ -93,13 +93,11 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 					submit: function(e) {
 						e.preventDefault();
 						self.save();
-						// self.close();
 						return false;
 					},
 					reset: function(e) {
 						e.preventDefault();
 						self.reset();
-						// self.close();
 						return false;
 					}
 				}
@@ -113,16 +111,14 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 	},
 
 	getPopup:function(){
+		const self = this;
 		if (! this.popup ){
 			this.popup = L.popup({
 				minWidth: 150,
 				maxWidth: 350,
 				// closeOnClick: false,
 			}).setContent( this.getPopupContent() );
-			this.popup.on( 'remove popupclose', function(e){
-				this.reset();
-				this.close();
-			}.bind(this));
+			this.popup.on( 'remove popupclose', (e) => this.reset() )
 		}
 
 		return this.popup;
@@ -136,14 +132,17 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 	},
 
 	close: function(){
-		let self = this;
+		console.log( 'close' );		// ??? debug
+
+		// let self = this;
+		this._shape.closePopup();
 		this._shape.unbindPopup();
-		setTimeout( function(){
-			if ( self.popupContentView ) {
-				self.popupContentView.remove();
-				self.popupContentView = undefined;
-			}
-		}, 250 );
+		// setTimeout( () => {
+		// 	if ( this.popupContentView ) {
+		// 		this.popupContentView.remove();
+		// 		this.popupContentView = undefined;
+		// 	}
+		// }, 250 );
 	},
 
 	save: function() {
@@ -157,6 +156,7 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 					layer: self._shape,
 				});
 			}
+			self.close();
 		}, function( jqXHR, textStatus, errorThrown ) {
 			console.log( 'textStatus errorThrown', textStatus, errorThrown );		// ??? debug
 		});
@@ -165,7 +165,8 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 	reset: function() {
 		this.getFeatureModel().restore();
 		this.getFeatureModel().store();
-		this.getPopupContentView().render();
+		// this.getPopupContentView().render();
+		this.close();
 	},
 
 });
