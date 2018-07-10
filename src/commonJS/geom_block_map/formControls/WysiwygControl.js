@@ -22,6 +22,7 @@ const WysiwygControl = Backform.Control.extend({
 		helpMessage: null
 	},
 
+	// ./form.js inits the controls with options for layer and model
 	initialize( options ) {
 		Backform.Control.prototype.initialize.apply(this, arguments);
 		this.layer = options.layer;

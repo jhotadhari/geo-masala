@@ -2,6 +2,12 @@
   "next": [
     ""
   ],
+  "0.0.6": [
+    "- copmatible with gb 3.2.0 and wp 4.9.7;",
+    "- fix: Plugin ensures function exist;",
+    "- fix: use geomData.api enstead of wpApiSettings;",
+    "- fix: removed Backbone.Memento from frontend;"
+  ],
   "0.0.5": [
     "Edit Popup, WysiwygControl works",
     "Added Plugin assets",

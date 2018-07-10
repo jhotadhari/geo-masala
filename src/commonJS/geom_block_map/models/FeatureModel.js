@@ -6,15 +6,15 @@ let FeatureModel = wp.api.models.Post.extend({
 
 	initialize: function() {
 		wp.api.models.Post.prototype.initialize.apply(this, arguments);
-		// this.listenTo( this, 'change', this.triggerValidate );
-
-		_.extend(this, new Backbone.Memento( this, {
-			ignore: ['appearanceActionTab']
-		}));
+		if ( undefined !== Backbone.Memento ) {
+			_.extend(this, new Backbone.Memento( this, {
+				ignore: ['appearanceActionTab']
+			}));
+		}
 	},
 
     urlRoot: function(){
-    	let url = wpApiSettings.root + wpApiSettings.versionString + 'geom_features';
+    	let url = geomData.api.root + geomData.api.versionString + 'geom_features';
     	if ( this.get('id') ) {
     		url += '/' + this.get('id');
     	}
@@ -22,7 +22,7 @@ let FeatureModel = wp.api.models.Post.extend({
     },
 
     url: function(){
-    	let url = wpApiSettings.root + wpApiSettings.versionString + 'geom_features';
+    	let url = geomData.api.root + geomData.api.versionString + 'geom_features';
     	if ( this.get('id') ) {
     		url += '/' + this.get('id');
     	}

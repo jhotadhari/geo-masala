@@ -35,14 +35,15 @@ class Geom_Block_Map {
 	}
 
 	public function geom_block_map_register() {
-		register_block_type( $this->namspace, array(
-			'editor_script' => $this->get_handle( 'editor' ),
-			'editor_style' => $this->get_handle( 'editor' ),
-			// 'style' => 'geom_block_map',		// dont set a style here. use hook instead and check if post_has_block
-			// 'script' => 'geom_block_map',	// dont set a style here. use hook instead and check if post_has_block
-			'render_callback' => array( $this, 'render' ),
-		) );
-
+		if ( function_exists( 'register_block_type' ) ) {
+			register_block_type( $this->namspace, array(
+				'editor_script' => $this->get_handle( 'editor' ),
+				'editor_style' => $this->get_handle( 'editor' ),
+				// 'style' => 'geom_block_map',		// dont set a style here. use hook instead and check if post_has_block
+				// 'script' => 'geom_block_map',	// dont set a style here. use hook instead and check if post_has_block
+				'render_callback' => array( $this, 'render' ),
+			) );
+		}
 	}
 
 	protected function get_handle( $key ){
@@ -113,7 +114,12 @@ class Geom_Block_Map {
 			),
 			'post' => array(
 				'id' => strval( $post->ID ),
-			)
+			),
+			'api' => array(
+				'root' => 'https://test01.localhost/wp-json/',
+				'versionString' => 'wp/v2/',
+
+			),
 		);
 	}
 
@@ -148,7 +154,6 @@ class Geom_Block_Map {
 				'wp-backbone',
 				'wp-api',
 				'utils',
-				'backbone-memento',
 				),
 			filemtime( Geom_Geo_masala::plugin_dir_path() . 'js/' . $handle . '.min.js' )
 		);
@@ -156,7 +161,7 @@ class Geom_Block_Map {
 		wp_localize_script( $handle, 'geomData', $this->get_localize_data() );
 
 		wp_enqueue_media();
-		wp_enqueue_editor();
+		// wp_enqueue_editor();
 
 		wp_enqueue_script( $handle );
 	}
@@ -181,7 +186,6 @@ class Geom_Block_Map {
 				'wp-blocks',
 				'wp-i18n',
 				'wp-element',
-				'jquery-ui-position',
 				'backform',
 				'backbone-memento',
 				),

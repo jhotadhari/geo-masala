@@ -132,8 +132,7 @@ class Geom_Feature_Meta {
 	}
 
 	public function api_field_get_cb( $object, $field_name, $request ) {
-		// ??? escape
-		return get_post_meta( $object['id'], $field_name, true );
+		return get_post_meta( $object['id'], sanitize_key( $field_name ), true );
 	}
 
 	public function api_field_update_cb( $value, $object, $field_name ) {

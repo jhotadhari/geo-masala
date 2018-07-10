@@ -96,7 +96,7 @@ Known issues:
 * JavaScript needs to be enabled
 * The [Gutenberg Editor Plugin](https://wordpress.org/plugins/gutenberg/) is required for WordPress versions prior to 5.0
 
-If the Plugin is not available in the official WordPress Plugin Repository yet, you will find the [latest distributed version in its github repository: ./dist/trunk/](https://github.com/jhotadhari/geo-masala/tree/master/dist/trunk). Copy the ./dist/trunk/ folder, rename it to 'geo-masala' and upload it to your WordPress.
+If the Plugin is not available in the official WordPress Plugin Repository yet, you will find the [latest distributed version in its github repository: ./dist/trunk/](https://github.com/jhotadhari/geo-masala/tree/master/dist/trunk). Copy the ./dist/trunk/ folder, rename it to 'geo-masala' and upload it to your WordPress plugins directory.
 
 Upload and install this Plugin the same way you'd install any other plugin.
 
@@ -108,6 +108,12 @@ This Plugin is still in early development. Reality might be in movement.
 
 
 == Changelog ==
+
+0.0.6
+- copmatible with gb 3.2.0 and wp 4.9.7;
+- fix: Plugin ensures function exist;
+- fix: use geomData.api enstead of wpApiSettings;
+- fix: removed Backbone.Memento from frontend;
 
 0.0.5
 Edit Popup, WysiwygControl works
