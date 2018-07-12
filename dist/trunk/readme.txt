@@ -109,6 +109,9 @@ This Plugin is still in early development. Reality might be in movement.
 
 == Changelog ==
 
+0.0.7
+- fix: geomData.api.root was still hardcoded;
+
 0.0.6
 - copmatible with gb 3.2.0 and wp 4.9.7;
 - fix: Plugin ensures function exist;

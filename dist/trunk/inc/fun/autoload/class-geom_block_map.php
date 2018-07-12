@@ -116,9 +116,9 @@ class Geom_Block_Map {
 				'id' => strval( $post->ID ),
 			),
 			'api' => array(
-				'root' => 'https://test01.localhost/wp-json/',
+				'root'          => esc_url_raw( get_rest_url() ),
+				'nonce'         => ( wp_installing() && ! is_multisite() ) ? '' : wp_create_nonce( 'wp_rest' ),
 				'versionString' => 'wp/v2/',
-
 			),
 		);
 	}

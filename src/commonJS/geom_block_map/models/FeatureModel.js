@@ -2,7 +2,9 @@ import Cocktail from 'backbone.cocktail';
 
 import DeepModel from 'backbone.deep-model';
 
-let FeatureModel = wp.api.models.Post.extend({
+const apiSettings = 'undefined' !== typeof(wpApiSettings) ? wpApiSettings : geomData.api;
+
+const FeatureModel = wp.api.models.Post.extend({
 
 	initialize: function() {
 		wp.api.models.Post.prototype.initialize.apply(this, arguments);
@@ -14,7 +16,7 @@ let FeatureModel = wp.api.models.Post.extend({
 	},
 
     urlRoot: function(){
-    	let url = geomData.api.root + geomData.api.versionString + 'geom_features';
+    	let url = apiSettings.root + apiSettings.versionString + 'geom_features';
     	if ( this.get('id') ) {
     		url += '/' + this.get('id');
     	}
@@ -22,7 +24,7 @@ let FeatureModel = wp.api.models.Post.extend({
     },
 
     url: function(){
-    	let url = geomData.api.root + geomData.api.versionString + 'geom_features';
+    	let url = apiSettings.root + apiSettings.versionString + 'geom_features';
     	if ( this.get('id') ) {
     		url += '/' + this.get('id');
     	}
