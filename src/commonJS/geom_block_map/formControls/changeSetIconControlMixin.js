@@ -1,4 +1,4 @@
-let changeSetIconControlMixin = {
+const changeSetIconControlMixin = {
 
 	initialize: function( options ){
 		this.layer = this.layer || options.layer;

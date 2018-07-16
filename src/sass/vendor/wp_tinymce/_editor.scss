@@ -1,6 +1,14 @@
+// copy of wp-block-freeform component
 
+// original selector
 // .wp-block-freeform.core-blocks-rich-text__tinymce {
-.geom-inline-editor {
+
+// selector for editor inside WysiwygControl
+// .geom-inline-editor {
+
+// select entire control-group-tab-content, so the title gets styled as well
+.control-group.control-group-tab-content.titleContent {
+
 	overflow: hidden;
 	margin: -4px;
 	padding: 4px;

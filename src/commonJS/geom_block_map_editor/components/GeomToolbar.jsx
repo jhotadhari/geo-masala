@@ -6,14 +6,6 @@ class GeomToolbar extends React.Component {
 		this.props = props;
 	}
 
-	// shouldComponentUpdate(nextProps: Props) {
-	// 	// if( 'function' !== typeof this.props.items.map )
-	// 	// 	return false;
-	// 	console.log( 'shouldComponentUpdate' );		// ??? debug
-
-	// 	return false;
-	// }
-
 	render() {
 		return ([
 			<div

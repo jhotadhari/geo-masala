@@ -18,7 +18,7 @@ let FlyToAction = L.Toolbar2.Action.extend({
 	enable: function (e) {
 		if ( e ) e.preventDefault();
 		if ( this._featureGroup.getLayers().length ){
-			this._map.flyToBounds( this._featureGroup.getBounds(), defaults.leaflet.flyToBounds );
+			this._map.flyToBounds( this._featureGroup.getBounds(), {...defaults.leaflet.flyToBounds} );
 		}
 	},
 });

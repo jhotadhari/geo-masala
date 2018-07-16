@@ -104,7 +104,9 @@ class Geom_Geo_masala {
 
 		// check php version
 		if ( version_compare( PHP_VERSION, $this->deps['php_version'], '<') ){
-			$err_msg = sprintf( 'PHP version %s or higher', $this->deps['php_version'] );
+				$err_msg = sprintf( 'PHP version %s or higher', $this->deps['php_version'] ) . '<br/>' .
+					'For older php versions, edit the dependency on line 17 in geo-masala.php and test it.' . '<br/>' .
+					sprintf( '<a href="%s" target="_blank">Report</a> me your tests, I really appreciate.','https://waterproof-webdesign.info/en/#contact' );
 			array_push( $error_msgs, $err_msg );
 		}
 

@@ -1,6 +1,6 @@
 import Backform from 'Backform';
 
-let Form = Backform.Form.extend({
+const Form = Backform.Form.extend({
 
 	initialize: function( options ) {
 		Backform.Form.prototype.initialize.apply(this, arguments);

@@ -262,8 +262,10 @@ const MapMixin = {
 		});
 
 		// flyToBounds
-		if ( featureGroupAdded && ! _.isEmpty( featureGroup.getBounds() ) )
-			this.map.flyToBounds( featureGroup.getBounds(), defaults.leaflet.flyToBounds );
+		if ( featureGroupAdded && ! _.isEmpty( featureGroup.getBounds() ) ) {
+			this.map._stop();	 // stop panning and fly animations if any
+			this.map.flyToBounds( featureGroup.getBounds(), {...defaults.leaflet.flyToBounds} );
+		}
 
 	},
 

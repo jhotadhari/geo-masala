@@ -1,7 +1,7 @@
 import L from 'leaflet';
 require('leaflet-toolbar');
 
-let CancelAction = L.Toolbar2.Action.extend({
+const CancelAction = L.Toolbar2.Action.extend({
 	options: {
 		toolbarIcon: {
 			className: 'geom-icon-cancel geom-icon geom-icon-small',

@@ -15,7 +15,13 @@
 @import "components/editor-components";
 
 
-
+.geom-map {
+    margin: 0 auto;
+    z-index: 29;    // gb's right sidebar: 91; gb's edit-post-header: 30;
+    &.leaflet-pseudo-fullscreen {
+        z-index: 99999;
+    }
+}
 
 // ??? responsive media query ....
 .geom-left {

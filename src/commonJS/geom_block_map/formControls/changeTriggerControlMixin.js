@@ -1,4 +1,4 @@
-let changeTriggerControlMixin = {
+const changeTriggerControlMixin = {
 	onChange: function(e) {
 		let self = this;
 		let attrArrPath = this.field.get('name').split('.');

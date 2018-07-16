@@ -6,6 +6,7 @@ const {
     PanelBody,
     SelectControl,
     ToggleControl,
+    TextControl,
 } = wp.components;
 
 import FeatureModel from '../../geom_block_map/models/FeatureModel';
@@ -48,6 +49,8 @@ class GeomMap extends React.Component {
 			featureCollection: new FeatureCollection(),
 			isLoaded: false,
 			controls: props.controls,
+			mapOptions: props.mapOptions,
+			mapDimensions: props.mapDimensions,
 		};
 	}
 
@@ -76,7 +79,7 @@ class GeomMap extends React.Component {
 				});
 			},
 			error: function( collection, response, options ){
-				console.log( 'error', response );		// ??? debug
+				console.log( 'error', response );
 			}
 		});
 	}
@@ -99,7 +102,7 @@ class GeomMap extends React.Component {
 			});
 			self.onChangeFeatures();
 		}, function( jqXHR, textStatus, errorThrown ) {
-			console.log( 'textStatus jqXHR', textStatus, jqXHR );		// ??? debug
+			console.log( 'textStatus jqXHR', textStatus, jqXHR );
 		});
 	}
 
@@ -119,9 +122,8 @@ class GeomMap extends React.Component {
 		});
 
 		featureModel.save().then( function( data, textStatus, jqXHR ) {
-			// console.log( 'onDrawEdited saved featureModel', featureModel );		// ??? debug
 		}, function( jqXHR, textStatus, errorThrown ) {
-			console.log( 'textStatus errorThrown', textStatus, errorThrown );		// ??? debug
+			console.log( 'textStatus errorThrown', textStatus, errorThrown );
 		});
 	}
 
@@ -219,35 +221,32 @@ class GeomMap extends React.Component {
 		this.props.onChangeFeatures( this.state.featureCollection );
 	}
 
-	onChangeControlsSearchBar( val ) {
-		this.state.controls.searchControl = val;
-		this.setState( { controls: this.state.controls } );
-		this.props.onChangeControls( this.state.controls );
+	onChangeMapDimensions( key, val ) {
+		const mapDimensions = {...this.state.mapDimensions}
+		mapDimensions[key] = val;
+		this.setState( { mapDimensions: mapDimensions } );
+		this.props.onChangeMapDimensions( mapDimensions );
 	}
 
-	onChangeControlsFullscreen( val ) {
-		this.state.controls.fullscreenControl = val;
-		this.setState( { controls: this.state.controls } );
-		this.props.onChangeControls( this.state.controls );
+	onChangeMapOptions( key, val ) {
+		const mapOptions = {...this.state.mapOptions}
+		mapOptions[key] = val;
+		this.setState({
+			mapOptions: mapOptions,
+			mapTriggers: {
+				setOptions: mapOptions,
+			}
+		});
+		this.props.onChangeMapOptions( mapOptions );
+
+
 	}
 
-	onChangeControlsLayers( val ) {
-		val = val.length ? val : ['OpenTopoMap'];
-		this.state.controls.layersControl = val;
-		this.setState( { controls: this.state.controls } );
-		this.props.onChangeControls( this.state.controls );
-	}
-
-	onChangeControlsZoomView( val ) {
-		this.state.controls.viewZoomControl = val;
-		this.setState( { controls: this.state.controls } );
-		this.props.onChangeControls( this.state.controls );
-	}
-
-	onChangeControlsLoading( val ) {
-		this.state.controls.loadingControl = val;
-		this.setState( { controls: this.state.controls } );
-		this.props.onChangeControls( this.state.controls );
+	onChangeControls( key, val ){
+		const controls = {...this.state.controls}
+		controls[key] = val;
+		this.setState( { controls: controls } );
+		this.props.onChangeControls( controls );
 	}
 
 	render() {
@@ -262,6 +261,8 @@ class GeomMap extends React.Component {
         		onDrawEdited={this.onDrawEdited.bind(this)}
         		onDrawEditedAttributes={this.onDrawEditedAttributes.bind(this)}
 				isLoaded={ this.state.isLoaded }
+				mapOptions={ this.state.mapOptions }
+				mapDimensions={ this.state.mapDimensions }
 				controls={ this.state.controls }
 				mapTriggers={ this.state.mapTriggers }
         	/>,
@@ -285,6 +286,38 @@ class GeomMap extends React.Component {
 				initialOpen={false}
 			>
 
+				<TextControl
+					label='Width [%]'
+					// help='Width of the Map in percent'
+					type='number'
+					value={ this.state.mapDimensions.width }
+					onChange={ (val) => this.onChangeMapDimensions( 'width', val ) }
+				/>
+
+				<TextControl
+					label='Height [px]'
+					// help='Height of the Map in pixels'
+					type='number'
+					value={ this.state.mapDimensions.height }
+					onChange={ (val) => this.onChangeMapDimensions( 'height', val ) }
+				/>
+
+				<ToggleControl
+					label='Scroll Wheel Zoom'
+					// help='Whether the map can be zoomed by using the mouse wheel'
+					onChange={ (val) => this.onChangeMapOptions( 'scrollWheelZoom', val ) }
+					checked={ this.state.mapOptions.scrollWheelZoom }
+				>
+				</ToggleControl>
+
+				<ToggleControl
+					label='Touch Zoom'
+					// help='Whether the map can be zoomed by touch-dragging with two fingers'
+					onChange={ (val) => this.onChangeMapOptions( 'touchZoom', val ) }
+					checked={ this.state.mapOptions.touchZoom }
+				>
+				</ToggleControl>
+
 				<PanelBody
 					title='Controls'
 					className={'geom-panel geom-components-settings-panel-controls'}
@@ -293,21 +326,21 @@ class GeomMap extends React.Component {
 
 					<ToggleControl
 						label='Search bar'
-						onChange={ this.onChangeControlsSearchBar.bind(this) }
+						onChange={ (val) => this.onChangeControls( 'searchControl', val ) }
 						checked={ this.state.controls.searchControl }
 					>
 					</ToggleControl>
 
 					<ToggleControl
 						label='Fullscreen'
-						onChange={ this.onChangeControlsFullscreen.bind(this) }
+						onChange={ (val) => this.onChangeControls( 'fullscreenControl', val ) }
 						checked={ this.state.controls.fullscreenControl }
 					>
 					</ToggleControl>
 
 					<ToggleControl
 						label='Loading Control'
-						onChange={ this.onChangeControlsLoading.bind(this) }
+						onChange={ (val) => this.onChangeControls( 'loadingControl', val ) }
 						checked={ this.state.controls.loadingControl }
 					>
 					</ToggleControl>
@@ -318,7 +351,7 @@ class GeomMap extends React.Component {
 						className={'geom-components-settings-panel-controls-layers'}
 						value={ this.state.controls.layersControl }
 						options={ layersControlOptions }
-						onChange={ this.onChangeControlsLayers.bind(this) }
+						onChange={ (val) => this.onChangeControls( 'layersControl', (val.length ? val : ['OpenTopoMap']) ) }
 					/>
 
 					<SelectControl
@@ -327,7 +360,7 @@ class GeomMap extends React.Component {
 						className={'geom-components-settings-panel-controls-view-zoom'}
 						value={ this.state.controls.viewZoomControl }
 						options={ viewZoomControlOptions }
-						onChange={ this.onChangeControlsZoomView.bind(this) }
+						onChange={ (val) => this.onChangeControls( 'viewZoomControl', val ) }
 					/>
 
 				</PanelBody>

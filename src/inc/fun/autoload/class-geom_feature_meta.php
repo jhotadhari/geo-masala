@@ -65,6 +65,16 @@ class Geom_Feature_Meta {
 
 		array_push( $fields, array(
 			'title' => array(
+				'key' => 'geom_feature_popup_options',
+				'val' => 'Type',
+			),
+			'schema' => array(
+				'type' => 'string',
+			),
+		) );
+
+		array_push( $fields, array(
+			'title' => array(
 				'key' => 'geom_feature_path_style',
 				'val' => 'Type',
 			),
@@ -92,8 +102,6 @@ class Geom_Feature_Meta {
 				'type' => 'string',
 			),
 		) );
-
-
 
 		$this->fields = $fields;
 	}
@@ -138,6 +146,7 @@ class Geom_Feature_Meta {
 	public function api_field_update_cb( $value, $object, $field_name ) {
 		switch( $field_name ) {
 			case 'geom_feature_icon':
+			case 'geom_feature_popup_options':
 			case 'geom_feature_path_style':
 			case 'geom_feature_share':
 				$value = json_decode( $value, true ) !== null ? json_decode( $value, true ) : $value;

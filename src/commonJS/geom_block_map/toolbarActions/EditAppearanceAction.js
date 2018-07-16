@@ -6,35 +6,41 @@ import changeSetIconControlMixin		from '../formControls/changeSetIconControlMixi
 import changeTriggerControlMixin		from '../formControls/changeTriggerControlMixin';
 import ChooseIconControl 				from '../formControls/ChooseIconControl';
 
-let InputControl = Backform.InputControl.extend();
+const InputControl = Backform.InputControl.extend();
 Cocktail.mixin( InputControl, changeSetIconControlMixin, changeTriggerControlMixin );
 
-let EditAppearanceAction = EditAttributesBaseAction.extend({
+const EditAppearanceAction = EditAttributesBaseAction.extend({
 
 	options: {
 		toolbarIcon: {
-			className: 'dashicons dashicons-admin-appearance geom-icon-appearance geom-icon geom-icon-medium',	// ??? dashicons-admin-appearance
+			className: 'dashicons dashicons-admin-appearance geom-icon-appearance geom-icon geom-icon-medium',
 			tooltip: 'Edit Appearance',
 		}
 	},
 
 	getHeaderFields: function(){
+		const options = [];
+
+		if ( this._shape instanceof L.Marker ){
+			options.push(
+				{label: 'Icon', value: 'icon'},
+				{label: 'Shadow', value: 'shadow'},
+			);
+		}
+
+		if ( this._shape instanceof L.Path ){
+			options.push(
+				{label: 'Stroke/Fill', value: 'line'},
+			);
+		}
+
 		return [
 			{
 				name: 'actionTab',
 				control: 'radio',
 				controlGroup: 'controlGroupTabs',
-				options: [
-					{label: 'Icon', value: 'icon'},
-					{label: 'Shadow', value: 'shadow'},
-					{label: 'Stroke/Fill', value: 'line'},
-				]
+				options: options,
 			},
-			// {
-			// 	control: Backform.SpacerControl,
-			// 	controlGroup: 'controlGroupTabContent',
-			// 	groupClasses: 'form-group control-spacer',
-			// }
 		];
 	},
 
@@ -42,7 +48,7 @@ let EditAppearanceAction = EditAttributesBaseAction.extend({
 		return [
 			{
 				name: 'geom_feature_icon.iconUrl',
-				// label: 'Icon',
+				label: 'Icon',
 				control: ChooseIconControl,
 				controlGroup: 'controlGroupTabContent',
 				tab: 'icon',
@@ -104,7 +110,7 @@ let EditAppearanceAction = EditAttributesBaseAction.extend({
 
 			{
 				name: 'geom_feature_icon.shadowUrl',
-				// label: 'Shadow',
+				label: 'Shadow',
 				control: ChooseIconControl,
 				controlGroup: 'controlGroupTabContent',
 				tab: 'shadow',

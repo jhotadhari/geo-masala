@@ -2,6 +2,9 @@ import Cocktail from 'backbone.cocktail';
 
 import DeepModel from 'backbone.deep-model';
 
+import defaults from '../defaults';
+
+
 const apiSettings = 'undefined' !== typeof(wpApiSettings) ? wpApiSettings : geomData.api;
 
 const FeatureModel = wp.api.models.Post.extend({
@@ -64,6 +67,7 @@ const FeatureModel = wp.api.models.Post.extend({
 
 	fieldsToSerialize: [
 		'geom_feature_icon',
+		'geom_feature_popup_options',
 		'geom_feature_path_style',
 		'geom_feature_geo_json',
 		'geom_feature_share',
@@ -81,7 +85,6 @@ const FeatureModel = wp.api.models.Post.extend({
 		content: '',
 		status: 'publish',
 
-
 		geom_feature_share: {
 			user: geomData.user.id.toString(),			// userId || 'publicReadOnly'
 			post: geomData.post.id.toString(),			// postId || -1
@@ -96,32 +99,12 @@ const FeatureModel = wp.api.models.Post.extend({
 			weight: 3,
 		},
 
-		geom_feature_icon: {
-			iconUrl: geomData.pluginDirUrl + '/images/leaflet/marker-icon.png',
-			iconRetinaUrl: '',
-			iconSize: {
-				x: 25,
-				y: 41,
-			},
-			iconAnchor: {
-				x: 12,
-				y: 41,
-			},
+		geom_feature_popup_options: {
+			...defaults.leaflet.popupOptions
+		},
 
-			shadowUrl: geomData.pluginDirUrl + '/images/leaflet/marker-shadow.png',
-			shadowRetinaUrl: '',
-			shadowSize: {
-				x: 41,
-				y: 41,
-			},
-			shadowAnchor: {
-				x: 12,
-				y: 41,
-			},
-			popupAnchor: {
-				x: 1,
-				y: -34,
-			},
+		geom_feature_icon: {
+			...defaults.leaflet.iconOptions
 		},
 
 	},

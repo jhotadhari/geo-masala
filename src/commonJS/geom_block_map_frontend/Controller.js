@@ -12,8 +12,12 @@ import FeatureCollection	from '../geom_block_map/collections/FeatureCollection';
 export default class Controller extends Marionette.Object {
 
     onStart() {
-    	this.data = JSON.parse( this.options.element.getAttribute('data-geom-map') );
-		_.defaults( this.data, defaults );
+    	this.data = {
+    		controls: {...defaults.controls},
+    		mapOptions: {...defaults.leaflet.mapOptions},
+    		mapDimensions: {...defaults.mapDimensions},
+    		...JSON.parse( this.options.element.getAttribute('data-geom-map') ),
+    	};
     	this.appLayout = new AppLayout( this.options );
         this.showMapView();
     }
@@ -27,6 +31,8 @@ export default class Controller extends Marionette.Object {
 			this.mapView = new MapView({
 				collection: this.getFeatureCollection(),
 				controls: this.data.controls,
+				mapOptions: this.data.mapOptions,
+				mapDimensions: this.data.mapDimensions,
 			});
 		}
     	return this.mapView;

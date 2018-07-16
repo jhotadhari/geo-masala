@@ -78,15 +78,21 @@ Known issues:
 == Installation ==
 
 ### Requirements:
-* php 5.6
 * JavaScript needs to be enabled
 * The [Gutenberg Editor Plugin](https://wordpress.org/plugins/gutenberg/) is required for WordPress versions prior to 5.0
+* It works on **php version 5.6**
+
+For **older php versions**, edit the dependency on line 17 in geo-masala.php and test it. [Report](https://waterproof-webdesign.info/en/#contact) me your tests, I really appreciate.
 
 If the Plugin is not available in the official WordPress Plugin Repository yet, you will find the [latest distributed version in its github repository: ./dist/trunk/](https://github.com/jhotadhari/geo-masala/tree/master/dist/trunk). Copy the ./dist/trunk/ folder, rename it to 'geo-masala' and upload it to your WordPress plugins directory.
 
 Upload and install this Plugin the same way you'd install any other plugin.
 
 == Screenshots ==
+1. Controls and Controls-Settings
+2. Edit Popup Content
+3. Map Feature editing and sharing
+4. Edit Feature appearance, choose Icon
 
 == Upgrade Notice ==
 

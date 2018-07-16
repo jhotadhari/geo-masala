@@ -86,10 +86,13 @@
 
 
 .geom-components-settings-panel {
-
+    &-controls-layers select {
+        min-height: 125px;
+    }
+    &-controls-view-zoom select {
+        min-height: 50px;
+    }
 }
-
-
 
 
 
@@ -106,6 +109,7 @@
             &.titleContent {
                 input[name="title"] {
                     border: none;
+                    font-size: inherit;
                 }
             }
         }

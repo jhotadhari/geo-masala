@@ -11,7 +11,7 @@ import getNestedObject from '../../geom_block_map/functions/getNestedObject';
 import CustomDrawToolbar from '../../geom_block_map/toolbarControls/CustomDrawToolbar';
 
 import EditDrawAction from '../../geom_block_map/toolbarActions/EditDrawAction';
-import EditPopupContentAction from '../../geom_block_map/toolbarActions/EditPopupContentAction';
+import EditPopupAction from '../../geom_block_map/toolbarActions/EditPopupAction';
 import EditAppearanceAction from '../../geom_block_map/toolbarActions/EditAppearanceAction';
 import RemoveModelAction from '../../geom_block_map/toolbarActions/RemoveModelAction';
 import CancelAction from '../../geom_block_map/toolbarActions/CancelAction';
@@ -27,6 +27,8 @@ class Map extends React.Component {
 
 		this.config = {
 			controls: props.controls,
+			mapOptions: props.mapOptions,
+			mapDimensions: props.mapDimensions,
 		};
 
 	}
@@ -54,6 +56,8 @@ class Map extends React.Component {
 	componentDidUpdate(prevProps, prevState, snapshot){
 		this.config = {
 			controls: this.props.controls,
+			mapOptions: this.props.mapOptions,
+			mapDimensions: this.props.mapDimensions,
 		};
 
 		// init map if neccessary
@@ -71,18 +75,49 @@ class Map extends React.Component {
 		let flyToPostId = getNestedObject( this.props, 'mapTriggers.flyToFeature' );
 		if ( flyToPostId !== getNestedObject( prevProps, 'mapTriggers.flyToFeature' ) ) {
 			this.flyToFeature( flyToPostId );
+			delete this.props.mapTriggers.flyToFeature;
 		}
 		let removeFeatureId = getNestedObject( this.props, 'mapTriggers.removeFeature' );
 		if ( removeFeatureId !== getNestedObject( prevProps, 'mapTriggers.removeFeature' ) ) {
 			this.flyToFeature( removeFeatureId );
+			delete this.props.mapTriggers.removeFeature;
+		}
+		let mapOptions = getNestedObject( this.props, 'mapTriggers.setOptions' );
+		if ( mapOptions !== getNestedObject( prevProps, 'mapTriggers.setOptions' ) ) {
+			this.setMapOptions( mapOptions )
+			delete this.props.mapTriggers.setOptions;
 		}
 	}
 
 	initMap(){
 		if ( this.refs.map && ! this.map  ) {
-			this.map = L.map( this.refs.map, defaults.leaflet.initMapOptions );
+			this.map = L.map( this.refs.map, {...defaults.leaflet.mapOptions, ...this.config.mapOptions} );
 			this.getBaseLayer().addTo( this.map );
 			this.addDrawToolbar();
+		}
+
+
+	}
+
+	setMapOptions( newMapOptions ){
+		// loop newMapOptions object
+		for ( let newMapOptionKey in newMapOptions ) {
+			if( newMapOptions.hasOwnProperty(newMapOptionKey)) {
+				this.setMapOption( newMapOptionKey, newMapOptions[newMapOptionKey] );
+			}
+		}
+	}
+
+	setMapOption( newMapOptionKey, newMapOptionVal ){
+		// set map option
+		L.Util.setOptions( this.map, {[newMapOptionKey]: newMapOptionVal});
+		// apply option to handler
+		if ( this.map[newMapOptionKey] instanceof L.Handler ) {
+			if ( newMapOptionVal ) {
+				this.map[newMapOptionKey].enable();
+			} else {
+				this.map[newMapOptionKey].disable();
+			}
 		}
 	}
 
@@ -130,7 +165,7 @@ class Map extends React.Component {
 		if ( featureModel.get('author').toString() === geomData.user.id ) {
 			actions = actions.concat([
 				EditDrawAction,
-				EditPopupContentAction,
+				EditPopupAction,
 				EditAppearanceAction,
 			]);
 		}
@@ -144,19 +179,32 @@ class Map extends React.Component {
 	flyToFeature( postId ){
 		let layer = _.findWhere( this.getFeatureGroup().getLayers(), { postId: postId } );
 		if ( undefined  === layer ) return;
+		this.map._stop();	 // stop panning and fly animations if any
 		let tempFeatureGroup = new L.FeatureGroup();
 		tempFeatureGroup.addLayer( layer );
 		this.map.flyToBounds( tempFeatureGroup.getBounds(), defaults.leaflet.flyToBounds );
 	}
 
+	getFullscreenControl() {
+		if ( ! this.fullscreenControl ) {
+			this.fullscreenControl = new L.Control.FullScreen({
+				position: 'topleft',
+				forceSeparateButton: true,
+				forcePseudoFullscreen: true,
+			});
+		}
+		return this.fullscreenControl;
+	}
+
 	render() {
+		const {mapDimensions} = this.config;
 		return (
 			<div
 				className='geom-map'
 				ref='map'
 				style={{
-					height: '400px',
-					width: '100%',
+					height: mapDimensions.height + 'px',
+					width: mapDimensions.width + '%',
 				}}
 			>
 			</div>

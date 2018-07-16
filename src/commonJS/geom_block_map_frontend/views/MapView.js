@@ -13,6 +13,8 @@ class MapView extends Marionette.View {
 		super(...args);
 		this.config = {
 			controls: this.options.controls,
+			mapOptions: this.options.mapOptions,
+			mapDimensions: this.options.mapDimensions,
 		};
 		this.template = _.template('<div class="geom-map"></div>');
 		this.listenTo( this.collection, 'update', this.onUpdate, this );
@@ -34,16 +36,17 @@ class MapView extends Marionette.View {
 
 	initMap(){
 		if ( ! this.map  ) {
+			const { mapDimensions, mapOptions } = this.config;
 
 			// map element
 			let mapEl = this.$('.geom-map')[0];
 			$( mapEl ).css({
-				height: '400px',
-				width: '100%'
+				height: mapDimensions.height + 'px',
+				width: mapDimensions.width + '%',
 			});
 
 			// init map
-			this.map = L.map( mapEl, defaults.leaflet.initMapOptions );
+			this.map = L.map( mapEl, {...defaults.leaflet.mapOptions, ...mapOptions} );
 
 			this.getBaseLayer().addTo( this.map );
 		}
@@ -53,7 +56,7 @@ class MapView extends Marionette.View {
 		if ( layer.bindPopup === undefined ) return;
 
 		let popupContentTemplate = _.template([
-			'<h2><%=title%></h2>',
+			'<h1><%=title%></h1>',
 			'<div><%=content%></div>',
 		].join('\n'));
 
@@ -62,7 +65,7 @@ class MapView extends Marionette.View {
 			content: ! _.isUndefined( featureModel.get('content').rendered ) ? featureModel.get('content').rendered : featureModel.get('content'),
 		});
 
-		layer.bindPopup( popupContent );
+		layer.bindPopup( popupContent, {...defaults.popupOptions, ...featureModel.get('geom_feature_popup_options')} );
 
 		layer.on( 'click', function(e) {
 			layer.openPopup();
@@ -72,7 +75,6 @@ class MapView extends Marionette.View {
 
 }
 
-// _.extend( MapView.prototype, MapMixin );
 _.defaults( MapView.prototype, MapMixin );
 
 export default MapView;

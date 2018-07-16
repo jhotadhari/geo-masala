@@ -16,13 +16,23 @@ registerBlockType( 'geom/map', {
         },
         controls: {
         	type: 'string',
-        	default: JSON.stringify( defaults.controls ),
+        	default: JSON.stringify( {...defaults.controls} ),
+        },
+        mapDimensions: {
+        	type: 'string',
+        	default: JSON.stringify( {...defaults.mapDimensions} ),
+        },
+        mapOptions: {
+        	type: 'string',
+        	default: JSON.stringify( {...defaults.leaflet.mapOptions} ),
         }
     },
 
     edit( {  attributes, className, setAttributes } ) {
-        const { featureIds, controls } = attributes;
+        const { featureIds, controls, mapOptions, mapDimensions } = attributes;
         const controlsObject = JSON.parse( undefined === controls ? '{}' : controls );
+        const mapOptionsObject = JSON.parse( undefined === mapOptions ? '{}' : mapOptions );
+        const mapDimensionsObject = JSON.parse( undefined === mapDimensions ? '{}' : mapDimensions );
 
 		if ( undefined === featureIds ) {
 			setAttributes({
@@ -32,8 +42,6 @@ registerBlockType( 'geom/map', {
 
 		function onChangeFeatures( newFeatures ) {
 			let newFeatureIds = [];
-
-
 			if ( newFeatures.length ){
 				if ( newFeatures instanceof Backbone.Collection ){
 					newFeatureIds = newFeatures.pluck('id');
@@ -43,20 +51,19 @@ registerBlockType( 'geom/map', {
 					newFeatureIds = newFeatures;
 				}
 			}
-
 			setAttributes( { featureIds:newFeatureIds } );
-		}
-
-		function onChangeControls( newControls ) {
-			setAttributes( { controls: JSON.stringify( newControls ) } );
 		}
 
         return (
 			<GeomMap
 				featureIds={featureIds}
 				controls={controlsObject}
+				mapOptions={mapOptionsObject}
+				mapDimensions={mapDimensionsObject}
 				onChangeFeatures={onChangeFeatures}
-				onChangeControls={onChangeControls}
+				onChangeControls={ (newVal) => setAttributes( { controls: JSON.stringify( newVal ) } ) }
+				onChangeMapOptions={ (newVal) => setAttributes( { mapOptions: JSON.stringify( newVal ) } ) }
+				onChangeMapDimensions={ (newVal) => setAttributes( { mapDimensions: JSON.stringify( newVal ) } ) }
 			/>
 		);
     },

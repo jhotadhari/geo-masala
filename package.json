@@ -16,10 +16,10 @@
   "authorUri": "https://waterproof-webdesign.info",
   "license": "GNU General Public License v2 or later",
   "licenseUri": "http://www.gnu.org/licenses/gpl-2.0.html",
-  "tags": "gutenberg,leaflet,map,geo,gis",
+  "tags": "gutenberg,block,leaflet,map,geo,gis",
   "donateLink": "http://waterproof-webdesign.info/donate",
-  "wpVersionTested": "4.9.4",
-  "wpRequiresAtLeast": "4.7",
+  "wpVersionTested": "4.9.7",
+  "wpRequiresAtLeast": "4.9.6",
   "phpRequiresAtLeast": "5.6",
   "devDependencies": {
     "@mapbox/geojsonhint": "^2.1.0",
