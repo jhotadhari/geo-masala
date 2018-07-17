@@ -1,10 +1,9 @@
 import EditAttributesBaseAction					from './EditAttributesBaseAction';
 
 import WysiwygControl 		from '../formControls/WysiwygControl';
-import PosIntControl		from '../formControls/PosIntControl';
+import FloatControl		from '../formControls/FloatControl';
 import IntNullControl		from '../formControls/IntNullControl';
 import WrappedInputControl	from '../formControls/WrappedInputControl';
-
 
 const EditPopupAction = EditAttributesBaseAction.extend({
 
@@ -63,7 +62,9 @@ const EditPopupAction = EditAttributesBaseAction.extend({
 			{
 				name: "geom_feature_popup_options.minWidth",
 				label: 'Minimum Width?',
-				control: PosIntControl,
+				control: FloatControl,
+				max: '',
+				step: 1,
 				controlGroup: 'controlGroupTabContent',
 				tab: 'options',
 				groupClasses: 'form-group geom-coord left',
@@ -72,7 +73,9 @@ const EditPopupAction = EditAttributesBaseAction.extend({
 			{
 				name: "geom_feature_popup_options.maxWidth",
 				label: 'Maximum Width?',
-				control: PosIntControl,
+				control: FloatControl,
+				max: '',
+				step: 1,
 				controlGroup: 'controlGroupTabContent',
 				tab: 'options',
 				groupClasses: 'form-group geom-coord right',

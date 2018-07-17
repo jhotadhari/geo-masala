@@ -64,7 +64,19 @@ const defaults = {
 				x: 1,
 				y: -34,
 			},
-		}
+		},
+		polylineOptions: {
+			stroke: true,
+			color: '#3388ff',
+			weight: 3,
+			opacity: 1.0,
+			// fill: true,			// don't set a default for fill: so L will default to: instance of L.Polygon ? true : false;
+			fillColor: '#3388ff',
+			fillOpacity: 0.2,
+			className: '',
+			interactive: true,
+			smoothFactor: 1.0,
+		},
 	},
 };
 export default defaults;

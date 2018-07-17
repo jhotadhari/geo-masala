@@ -106,6 +106,9 @@
         }
 
         &-tab-content {
+            overflow-y: scroll !important;  // important because editor might overwrite
+            overflow-x: hidden !important;
+
             &.titleContent {
                 input[name="title"] {
                     border: none;

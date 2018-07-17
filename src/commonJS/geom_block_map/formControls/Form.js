@@ -4,6 +4,7 @@ const Form = Backform.Form.extend({
 
 	initialize: function( options ) {
 		Backform.Form.prototype.initialize.apply(this, arguments);
+		this.map = options.map;
 		this.setInitialTab();
 	},
 
@@ -41,12 +42,13 @@ const Form = Backform.Form.extend({
 		} );
 
 		this.fields.each( function( field ) {
+
 			// init control
 			let control = new ( field.get( 'control' ) )({
 				field: field,
 				model: model,
 				layer: field.get('layer'),
-				showAsterisk: form.showRequiredAsAsterisk && field.get( 'required' )
+				showAsterisk: form.showRequiredAsAsterisk && field.get( 'required' ),
 			});
 			// render control
 			let $control = control.render().$el;
@@ -80,7 +82,11 @@ const Form = Backform.Form.extend({
 		if ( $.trim( $controlGroupTabContent.html() ) !== '' ) $form.append( $controlGroupTabContent );
 		if ( $.trim( $controlGroupActions.html() ) !== '' ) $form.append( $controlGroupActions );
 
+		// hide tabs, if only one
 		if ( $controlGroupTabs.find('.actionTab .checkbox').children().length <= 1 ) $controlGroupTabs.addClass('hidden');
+
+		// set content maxHeight
+		$controlGroupTabContent.css('maxHeight', Math.max( ($(this.map.getContainer()).outerHeight() * 0.5), 200 ));
 
 		return this;
 	},

@@ -26,7 +26,7 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 			this.featureModel = new FeatureModel({ id: this._shape.postId });
 			this.featureModel.fetch().done(function(){
 				self.featureModel.store();
-				self.getPopupContentView();
+				self.getPopupContentView().render();
 			});
 		}
 		return this.featureModel;
@@ -84,20 +84,20 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 	},
 
 	getPopupContentView:function(){
-		let self = this;
 		if ( ! this.popupContentView ) {
 			this.popupContentView = new Form({
 				model: this.getFeatureModel(),
 				fields: this.getFields(),
+				map: this._map,
 				events: {
-					submit: function(e) {
+					submit: (e) => {
 						e.preventDefault();
-						self.save();
+						this.save();
 						return false;
 					},
-					reset: function(e) {
+					reset: (e) => {
 						e.preventDefault();
-						self.reset();
+						this.reset();
 						return false;
 					}
 				}
@@ -111,7 +111,6 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 	},
 
 	getPopup:function(){
-		const self = this;
 		if (! this.popup ){
 			this.popup = L.popup({
 				minWidth: 250,
@@ -120,12 +119,10 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 			}).setContent( this.getPopupContent() );
 			this.popup.on( 'remove popupclose', (e) => this.reset() )
 		}
-
 		return this.popup;
 	},
 
 	enable: function (e) {
-		let self = this;
 		if ( e ) e.preventDefault();
 		this._map.removeLayer(this.toolbar);
 		this._shape.bindPopup( this.getPopup() ).openPopup();
@@ -137,29 +134,24 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 	},
 
 	save: function() {
-		let self = this;
-		this.getFeatureModel().save().then( function( data, textStatus, jqXHR ) {
-			self.getFeatureModel().store();
-			if (  self.eventName ){
-				self._map.fire( self.eventName , {
-					layer: self._shape,
+		this.getFeatureModel().save().then( ( data, textStatus, jqXHR ) => {
+			this.getFeatureModel().store();
+			if (  this.eventName ){
+				this._map.fire( this.eventName , {
+					layer: this._shape,
 				});
 			}
-			self.close();
-		}, function( jqXHR, textStatus, errorThrown ) {
-			console.log( 'textStatus errorThrown', textStatus, errorThrown );
-		});
+			this.close();
+		}, ( jqXHR, textStatus, errorThrown ) => console.log( 'textStatus errorThrown', textStatus, errorThrown ) );
 	},
 
 	reset: function() {
 		this.getFeatureModel().restore();
 		this.getFeatureModel().store();
-		// this.getPopupContentView().render();
+		// this.getPopupContentView().render();	// we'll close it anyway
 		this.close();
 	},
 
 });
 
-
 export default EditAttributesBaseAction;
-

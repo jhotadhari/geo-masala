@@ -18,8 +18,6 @@ class FeatureListPanel extends React.Component {
 	constructor(props) {
 		super(props);
 
-		let self = this;
-
 		this.props = props;
 
 		this.state = {
@@ -28,14 +26,14 @@ class FeatureListPanel extends React.Component {
 			availableCollectionLoaded: false,
 			displayOptions: {
 				user: 'allUsersFeatures',
-				post: 'allPostsFeatures',
+				// post: 'allPostsFeatures',
 				// user: geomData.user.id.toString(),
-				// post: geomData.post.id.toString(),
+				post: geomData.post.id.toString(),
 			}
 		};
 
-		this.props.featureCollection.on( 'sync', function(collection, options){
-			self.setState({});
+		this.props.featureCollection.on( 'sync', (collection, options) => {
+			this.setState({});
 		} );
 	}
 
@@ -92,7 +90,6 @@ class FeatureListPanel extends React.Component {
 
 		let metaQueryIndex = _.allKeys(queryArgs.geom_custom.meta_query).length;
 
-
 		switch( displayOptions.user ){
 			case currentUserId:
 				queryArgs.geom_custom.author = currentUserId;
@@ -141,23 +138,20 @@ class FeatureListPanel extends React.Component {
 	}
 
 	fetchAvailableCollection(){
-		let self = this;
-
 		this.state.availableCollection.fetch({
 			data: this.getAvailableCollectionQueryArgs(),
-			success: function( collection, response, options ){
-				self.setState({
+			success: ( collection, response, options ) => {
+				this.setState({
 					availableCollection: collection,
 					availableCollectionLoaded: true,
 				});
 			},
-			error: function( collection, response, options ){
-				self.setState({
+			error: ( collection, response, options ) => {
+				this.setState({
 					error: response,
 				});
 			}
 		});
-
 	}
 
 	onChangePoolDisplayShareUser( val ){
@@ -204,13 +198,12 @@ class FeatureListPanel extends React.Component {
 		const currentUserId = geomData.user.id.toString();
 		const currentPostId = geomData.post.id.toString();
 
-
 		function rowRenderer1({ key, index, isScrolling, isVisible, style }){
-			let model = featureCollection.at(index);
-			style.maxWidth = '100%';
+			const model = featureCollection.at(index);
+
 			return (
 				<FeatureListRow
-					style={style}
+					style={{...style, maxWidth: '100%' }}
 					model={model}
 					onEditShare={ self.onEditShare.bind(self) }
 					onFlyToFeature={ self.onFlyToFeature.bind(self) }
@@ -220,16 +213,18 @@ class FeatureListPanel extends React.Component {
 		}
 
 		function rowRenderer2({ key, index, isScrolling, isVisible, style }){
-			let model = availableCollection.at(index);
-			style.maxWidth = '100%';
+			const model = availableCollection.at(index);
+			const featureCollectionModel = featureCollection.findWhere({ id: model.get('id') });
 
 			return (
 				<FeatureListRow
-					style={style}
+					style={{...style, maxWidth: '100%' }}
 					model={model}
-					className={featureCollection.findWhere({ id: model.get('id') }) ? 'highlight' : ''}
+					className={ featureCollectionModel ? 'highlight' : ''}
 					onEditShare={ self.onEditShare.bind(self) }
-					onAddNewFeature={ self.onAddNewFeature.bind(self) }
+					onFlyToFeature={ featureCollectionModel ? self.onFlyToFeature.bind(self) : false }
+					onAddNewFeature={ featureCollectionModel ? false : self.onAddNewFeature.bind(self) }
+					onRemoveFeature={ featureCollectionModel ? self.onRemoveFeature.bind(self) : false }
 					onTrashFeature={ self.onTrashFeature.bind(self) }
 				/>
 			)

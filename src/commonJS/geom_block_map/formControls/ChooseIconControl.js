@@ -1,5 +1,8 @@
 import Backform from 'Backform';
+
 import defaults from '../defaults';
+
+import setFeatureAppearance 	from '../functions/setFeatureAppearance';
 
 const ChooseIconControl = Backform.Control.extend({
 
@@ -23,7 +26,7 @@ const ChooseIconControl = Backform.Control.extend({
 		'<div class="<%=Backform.controlsClassName%>">',
 		'  <img class="icon-preview" src="<%=value%>" alt="Smiley face" height="42" width="42">',
 		'  <a href="#" class="choose-button button">Choose <%=label%></a>',
-		'  <a href="#" class="remove-button button">Remove <%=label%></a>',
+		'  <a href="#" class="remove-button button">Reset <%=label%></a>',
 		'  <% if (helpMessage && helpMessage.length) { %>',
 		'    <span class="<%=Backform.helpMessageClassName%>"><%=helpMessage%></span>',
 		'  <% } %>',
@@ -99,13 +102,15 @@ const ChooseIconControl = Backform.Control.extend({
 	},
 
 	applyIcon: function(){
-		const geom_feature_icon = this.model.get( 'geom_feature_icon' );
+		// const geom_feature_icon = this.model.get( 'geom_feature_icon' );
 		// applyIcon to form
 		this.render();
+
 		// applyIcon to map layer
-		if ( this.layer.setIcon !== undefined && !_.isUndefined( geom_feature_icon.iconUrl) && geom_feature_icon.iconUrl.length) {
-			this.layer.setIcon( L.icon( geom_feature_icon ) );
-		}
+		// if ( this.layer.setIcon !== undefined && !_.isUndefined( geom_feature_icon.iconUrl) && geom_feature_icon.iconUrl.length) {
+		// 	this.layer.setIcon( L.icon( geom_feature_icon ) );
+		// }
+		setFeatureAppearance( this.model, this.layer );
 	},
 
 	findGoodIconSize: function( iconSize, sizes, tolerance ){
@@ -137,15 +142,6 @@ const ChooseIconControl = Backform.Control.extend({
 			return this.findGoodIconSize( iconSize, sizes, (tolerance * 1.5) );
 		}
 	},
-
-
-
-
-
-
-	// formatter: Backform.ControlFormatter,
-
-
 
 });
 

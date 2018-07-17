@@ -6,6 +6,8 @@ require('leaflet.fullscreen');
 require('leaflet-providers');
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
+import setFeatureAppearance from './functions/setFeatureAppearance';
+
 import FlyToAction from './toolbarActions/FlyToAction';
 import ZoomLocationAction from './toolbarActions/ZoomLocationAction';
 
@@ -242,8 +244,7 @@ const MapMixin = {
 						featureGroup.addLayer( layer );
 
 						self.featureBindPopup( layer, featureModel );
-						self.featureAddIcon( layer, featureModel );
-						self.featureSetStyle( layer, featureModel );
+						setFeatureAppearance( featureModel, layer );
 
 					},
 				});
@@ -268,21 +269,6 @@ const MapMixin = {
 		}
 
 	},
-
-	featureAddIcon: function( layer, featureModel ) {
-		let geom_feature_icon = featureModel.get('geom_feature_icon');
-		if ( layer.setIcon !== undefined && !_.isUndefined( geom_feature_icon.iconUrl) && geom_feature_icon.iconUrl.length) {
-			layer.setIcon( L.icon( geom_feature_icon ) );
-		}
-	},
-
-	featureSetStyle: function( layer, featureModel ) {
-		let geom_feature_path_style = featureModel.get( 'geom_feature_path_style' );
-		if ( layer.setStyle !== undefined ) {
-			layer.setStyle( geom_feature_path_style );
-		}
-	},
-
 
 }
 

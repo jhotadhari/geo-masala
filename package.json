@@ -67,6 +67,7 @@
     "load-grunt-tasks": "^3.5.2",
     "node-bourbon": "^4.2.8",
     "react-virtualized": "^9.19.1",
+    "simple-color-picker": "^0.1.2",
     "sort-object": "^3.0.2",
     "sweetalert": "^2.1.0",
     "time-grunt": "^1.4.0",

@@ -1,5 +1,5 @@
 
-let L = require('leaflet');
+const L = require('leaflet');
 require('leaflet-toolbar');
 require('leaflet-draw');
 // require('leaflet-draw-toolbar/dist/leaflet.draw-toolbar');
@@ -95,8 +95,6 @@ class Map extends React.Component {
 			this.getBaseLayer().addTo( this.map );
 			this.addDrawToolbar();
 		}
-
-
 	}
 
 	setMapOptions( newMapOptions ){

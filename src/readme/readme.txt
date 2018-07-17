@@ -10,11 +10,9 @@ A new block for gutenberg: 'Geo Masala Map'
 
 > Geo Masala on [GitHub](https://github.com/jhotadhari/geo-masala)
 
-> Geo-Masala is coded while sitting wet in a tent during monsoon somwhere in south himalaya. I appreaciate any kind of help or sponsorship. [Donate](http://waterproof-webdesign.info/donate)
-I'm really out of money, cycling around the world and hungry. Thanks, love you.
-
 = How to use =
 Edit any Post with gutenberg and add a 'Geo Masala Map' block, save post and done. Your post will display a map.
+
 * Draw some Features or select some from the Feature-Pool.
 * Edit the Feature, change icon or color, change the popup content and title.
 * Open the Map Settings Panel and customize the controls.
@@ -41,6 +39,7 @@ The Plugin is in early development (and needs a sponsor to go on).
 Some ui will change and more options will be added.
 
 Coming soon hopefully:
+
 * wiki and tutorials
 * Possibility to draw routes on a map.
 * Import for gpx/geoJSON/kml
@@ -50,13 +49,16 @@ Coming soon hopefully:
 * ...
 
 Known issues:
+
 * Currently there is a maximum for hundred Features, will be changed in future. This is the max number for the REST request (can be bypassed easily, but the ui needs some changes before it gets flooded with features)
 * Feature Sharing: The popover control controls if the Feature appears in a Feature-Pool. If it is already in use somwhere, it will still be used, but just not displayed in Feature-Pool.
 
 = Contribute =
+* Most welcome :)
 * Geo-Masala is free and open source. The source is hosted on [GitHub](https://github.com/jhotadhari/geo-masala).
-* Tell me your wishes, maybe get me a bowl of rice and some masala: [Donate](http://waterproof-webdesign.info/donate)
-* I'm really out of money, cycling around the world, and Geo-Masala is coded while sitting wet in a tent during Monsoon somwhere in south himalaya. I appreaciate any kind of help or sponsorship.
+* [Tell me](https://waterproof-webdesign.info/en/#contact) your wishes, maybe get me a bowl of rice and some masala: [Donate](http://waterproof-webdesign.info/donate)
+
+> I'm hungry, cycling around the world and Geo-Masala is coded while sitting wet in a tent during Monsoon somwhere in south himalaya. I appreaciate any kind of [donation](http://waterproof-webdesign.info/donate) or sponsorship.
 
 = Thanks for beautiful ressoucres =
 

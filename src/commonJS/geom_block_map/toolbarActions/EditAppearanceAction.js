@@ -1,13 +1,32 @@
 import Cocktail from 'backbone.cocktail';
 
-import EditAttributesBaseAction					from './EditAttributesBaseAction';
+import getNestedObject 						from '../../geom_block_map/functions/getNestedObject';
 
-import changeSetIconControlMixin		from '../formControls/changeSetIconControlMixin';
-import changeTriggerControlMixin		from '../formControls/changeTriggerControlMixin';
-import ChooseIconControl 				from '../formControls/ChooseIconControl';
+import EditAttributesBaseAction				from './EditAttributesBaseAction';
+
+import changeSetAppearanceMixin				from '../formControls/changeSetAppearanceMixin';
+import changeTriggerControlMixin			from '../formControls/changeTriggerControlMixin';
+import controlRender_passNameToFormatter	from '../formControls/functions/controlRender_passNameToFormatter';
+
+
+import setFeatureAppearance 	from '../functions/setFeatureAppearance';
+
+import ChooseIconControl 		from '../formControls/ChooseIconControl';
+import ColorPickerControl 		from '../formControls/ColorPickerControl';
+
+import FloatControl 			from '../formControls/FloatControl';
+Cocktail.mixin( FloatControl, changeSetAppearanceMixin );
 
 const InputControl = Backform.InputControl.extend();
-Cocktail.mixin( InputControl, changeSetIconControlMixin, changeTriggerControlMixin );
+Cocktail.mixin( InputControl, changeSetAppearanceMixin, changeTriggerControlMixin );
+
+const CheckboxControl = Backform.CheckboxControl.extend({
+	render: controlRender_passNameToFormatter,
+	formatter: _.extend( Backform.ControlFormatter.prototype, {
+		fromRaw: (rawData, model, name) => null === rawData ? getNestedObject( model.defaults, name ) : rawData,
+	}),
+});
+Cocktail.mixin( CheckboxControl, changeSetAppearanceMixin, changeTriggerControlMixin );
 
 const EditAppearanceAction = EditAttributesBaseAction.extend({
 
@@ -30,7 +49,7 @@ const EditAppearanceAction = EditAttributesBaseAction.extend({
 
 		if ( this._shape instanceof L.Path ){
 			options.push(
-				{label: 'Stroke/Fill', value: 'line'},
+				{label: 'Path', value: 'path'},
 			);
 		}
 
@@ -46,6 +65,9 @@ const EditAppearanceAction = EditAttributesBaseAction.extend({
 
 	getContentFields: function(){
 		return [
+			/*
+				tab icon
+			*/
 			{
 				name: 'geom_feature_icon.iconUrl',
 				label: 'Icon',
@@ -61,13 +83,12 @@ const EditAppearanceAction = EditAttributesBaseAction.extend({
 				tab: 'icon',
 				groupClasses: 'form-group control-spacer',
 			},
-
-
 			{
 				name: 'geom_feature_icon.iconSize.x',
 				label: 'Icon Width',
-				type: 'number',
-				control: InputControl,
+				control: FloatControl,
+				max: '',
+				step: 1,
 				tab: 'icon',
 				controlGroup: 'controlGroupTabContent',
 				groupClasses: 'form-group geom-coord left',
@@ -76,14 +97,14 @@ const EditAppearanceAction = EditAttributesBaseAction.extend({
 			{
 				name: 'geom_feature_icon.iconSize.y',
 				label: 'Icon Heigth',
-				type: 'number',
-				control: InputControl,
+				control: FloatControl,
+				max: '',
+				step: 1,
 				tab: 'icon',
 				controlGroup: 'controlGroupTabContent',
 				groupClasses: 'form-group geom-coord right',
 				layer: this._shape,
 			},
-
 			{
 				name: 'geom_feature_icon.iconAnchor.x',
 				label: 'Icon Anchor left',
@@ -105,9 +126,9 @@ const EditAppearanceAction = EditAttributesBaseAction.extend({
 				layer: this._shape,
 			},
 
-
-
-
+			/*
+				tab shadow
+			*/
 			{
 				name: 'geom_feature_icon.shadowUrl',
 				label: 'Shadow',
@@ -117,7 +138,6 @@ const EditAppearanceAction = EditAttributesBaseAction.extend({
 				groupClasses: 'form-group geom-icon-choose',
 				layer: this._shape,
 			},
-
 			{
 				control: Backform.SpacerControl,
 				controlGroup: 'controlGroupTabContent',
@@ -127,8 +147,9 @@ const EditAppearanceAction = EditAttributesBaseAction.extend({
 			{
 				name: 'geom_feature_icon.shadowSize.x',
 				label: 'Shadow Width',
-				type: 'number',
-				control: InputControl,
+				control: FloatControl,
+				max: '',
+				step: 1,
 				tab: 'shadow',
 				controlGroup: 'controlGroupTabContent',
 				groupClasses: 'form-group geom-coord left',
@@ -137,14 +158,14 @@ const EditAppearanceAction = EditAttributesBaseAction.extend({
 			{
 				name: 'geom_feature_icon.shadowSize.y',
 				label: 'Shadow Heigth',
-				type: 'number',
-				control: InputControl,
+				control: FloatControl,
+				max: '',
+				step: 1,
 				tab: 'shadow',
 				controlGroup: 'controlGroupTabContent',
 				groupClasses: 'form-group geom-coord right',
 				layer: this._shape,
 			},
-
 			{
 				name: 'geom_feature_icon.shadowAnchor.x',
 				label: 'Shadow Anchor left',
@@ -166,57 +187,120 @@ const EditAppearanceAction = EditAttributesBaseAction.extend({
 				layer: this._shape,
 			},
 
+			/*
+				tab path
+			*/
+			{
+				name: 'geom_feature_path_style.stroke',
+				label: 'Stroke',
+				control: CheckboxControl,
+				controlGroup: 'controlGroupTabContent',
+				tab: 'path',
+				groupClasses: 'form-group',
+				layer: this._shape,
+			},
+			{
+				name: 'geom_feature_path_style.color',
+				label: 'Stroke Color',
+				control: ColorPickerControl,
+				controlGroup: 'controlGroupTabContent',
+				tab: 'path',
+				groupClasses: 'form-group',
+				layer: this._shape,
+			},
 			{
 				name: 'geom_feature_path_style.weight',
 				label: 'Stroke Width',
-				type: 'number',
-				control: InputControl,
-				tab: 'line',
+				control: FloatControl,
+				max: '',
+				step: 1,
+				tab: 'path',
 				controlGroup: 'controlGroupTabContent',
-				groupClasses: 'form-group geom-coord',
+				groupClasses: 'form-group',
 				layer: this._shape,
 			},
-
-
-			// color control
-			// {
-			// 	name: 'geom_feature_path_style.color',
-			// 	label: 'Stroke Color',
-			// 	control: InputControl,
-			// 	tab: 'line',
-			// 	controlGroup: 'controlGroupTabContent',
-			// 	groupClasses: 'form-group geom-coord',
-			// 	layer: this._shape,
-			// },
-
-
+			{
+				name: 'geom_feature_path_style.opacity',
+				label: 'Stroke Opacity',
+				control: FloatControl,
+				tab: 'path',
+				controlGroup: 'controlGroupTabContent',
+				groupClasses: 'form-group',
+				layer: this._shape,
+			},
+			{
+				name: 'geom_feature_path_style.fill',
+				label: 'Fill',
+				control: CheckboxControl.extend({
+					formatter: _.extend( Backform.ControlFormatter.prototype, {
+						fromRaw: (rawData, model, name) => {
+							return null === rawData
+								? 'Polygon' === model.get('geom_feature_geo_json.geometry.type') ? true : getNestedObject( model.defaults, name )
+								: rawData;
+						}
+					}),
+				}),
+				controlGroup: 'controlGroupTabContent',
+				tab: 'path',
+				groupClasses: 'form-group',
+				layer: this._shape,
+			},
+			{
+				name: 'geom_feature_path_style.fillColor',
+				label: 'Fill Color',
+				control: ColorPickerControl,
+				controlGroup: 'controlGroupTabContent',
+				tab: 'path',
+				groupClasses: 'form-group',
+				layer: this._shape,
+			},
+			{
+				name: 'geom_feature_path_style.fillOpacity',
+				label: 'Fill Opacity',
+				control: FloatControl,
+				tab: 'path',
+				controlGroup: 'controlGroupTabContent',
+				groupClasses: 'form-group',
+				layer: this._shape,
+			},
+			{
+				name: 'geom_feature_path_style.className',
+				label: 'Class Name',
+				control: InputControl,
+				tab: 'path',
+				controlGroup: 'controlGroupTabContent',
+				groupClasses: 'form-group',
+				layer: this._shape,
+			},
+			{
+				name: 'geom_feature_path_style.interactive',
+				label: 'Interactive',
+				control: CheckboxControl,
+				controlGroup: 'controlGroupTabContent',
+				tab: 'path',
+				groupClasses: 'form-group',
+				layer: this._shape,
+			},
+			{
+				name: 'geom_feature_path_style.smoothFactor',
+				label: 'Smooth Factor',
+				control: FloatControl,
+				max: '',
+				tab: 'path',
+				controlGroup: 'controlGroupTabContent',
+				groupClasses: 'form-group',
+				layer: this._shape,
+			},
 		];
 	},
 
 	reset: function() {
 		this.getFeatureModel().restore();
-		this.applyIconToLayer();
-		this.setStyleToLayer();
+		setFeatureAppearance( this.getFeatureModel(), this._shape );
 		this.getFeatureModel().store();
 		this.close();
 	},
 
-	applyIconToLayer: function(){
-		let geom_feature_icon = this.getFeatureModel().get('geom_feature_icon');
-		if ( this._shape.setIcon !== undefined && !_.isUndefined( geom_feature_icon.iconUrl) && geom_feature_icon.iconUrl.length) {
-			this._shape.setIcon( L.icon( geom_feature_icon ) );
-		}
-	},
-
-	setStyleToLayer: function(){
-		let geom_feature_path_style = this.getFeatureModel().get('geom_feature_path_style');
-		if ( this._shape.setStyle !== undefined ) {
-			this._shape.setStyle( geom_feature_path_style );
-		}
-	},
-
 });
 
-
 export default EditAppearanceAction;
-

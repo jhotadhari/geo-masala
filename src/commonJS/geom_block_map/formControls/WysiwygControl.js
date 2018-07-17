@@ -56,11 +56,7 @@ const WysiwygControl = Backform.Control.extend({
 			suffix,
 		} );
 
-		if ( document.readyState === 'complete' ) {
-			this.initEditor();
-		} else {
-			window.addEventListener( 'DOMContentLoaded', this.initEditor );
-		}
+		this.initEditor();
 	},
 
 	setupToolbar(){

@@ -55,14 +55,19 @@ class MapView extends Marionette.View {
 	featureBindPopup( layer, featureModel ) {
 		if ( layer.bindPopup === undefined ) return;
 
-		let popupContentTemplate = _.template([
+		const popupContentTemplate = _.template([
 			'<h1><%=title%></h1>',
 			'<div><%=content%></div>',
 		].join('\n'));
 
-		let popupContent = popupContentTemplate({
-			title: ! _.isUndefined( featureModel.get('title').rendered ) ? featureModel.get('title').rendered : featureModel.get('title'),
-			content: ! _.isUndefined( featureModel.get('content').rendered ) ? featureModel.get('content').rendered : featureModel.get('content'),
+		const title = ! _.isUndefined( featureModel.get('title').rendered ) ? featureModel.get('title').rendered : featureModel.get('title');
+		const content = ! _.isUndefined( featureModel.get('content').rendered ) ? featureModel.get('content').rendered : featureModel.get('content');
+
+		if ( ! (title + content).length ) return;	// no content, get out of here
+
+		const popupContent = popupContentTemplate({
+			title: title,
+			content: content,
 		});
 
 		layer.bindPopup( popupContent, {...defaults.popupOptions, ...featureModel.get('geom_feature_popup_options')} );

@@ -6,6 +6,10 @@ import defaults from '../defaults';
 
 
 const apiSettings = 'undefined' !== typeof(wpApiSettings) ? wpApiSettings : geomData.api;
+// ???...better?: {
+// 	root: wp.api.utils.getRootUrl(),
+// 	versionString: wp.api.utils.versionString,
+// }
 
 const FeatureModel = wp.api.models.Post.extend({
 
@@ -50,14 +54,17 @@ const FeatureModel = wp.api.models.Post.extend({
 	},
 
 	_prepareItem: function(){
-		let self = this;
 		// prepare status
 		if ( this.get('status') === 'auto-draft' ) this.set( 'status', 'draft' ,{ silent: true, });
 		// prepare title
 		if ( this.get('title') && this.get('title').rendered ) this.set( 'title', this.get('title').rendered,{ silent: true, });
-		// stringify the  fields that should be an object
-		_.each( this.fieldsToSerialize, function( key ){
-			self.set( key, JSON.stringify( self.toJSON()[key] ), { silent: true, } );
+		// stringify the  fields that should be an object, if not done already
+		_.each( this.fieldsToSerialize, ( key ) => {
+			try {
+				JSON.parse( this.toJSON()[key] );
+			} catch(e) {
+				this.set( key, JSON.stringify( this.toJSON()[key] ), { silent: true, } );
+			}
 		});
 	},
 
@@ -96,7 +103,7 @@ const FeatureModel = wp.api.models.Post.extend({
 		},
 
 		geom_feature_path_style: {
-			weight: 3,
+			...defaults.leaflet.polylineOptions
 		},
 
 		geom_feature_popup_options: {

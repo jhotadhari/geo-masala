@@ -6,6 +6,7 @@
 @import "vendor/leaflet/leaflet-draw-toolbar";
 @import "vendor/leaflet-custom";
 @import "vendor/wp_tinymce";
+@import "vendor/simple-color-picker";
 
 @import "portions/clearfix";
 @import "portions/block";
@@ -21,6 +22,10 @@
     &.leaflet-pseudo-fullscreen {
         z-index: 99999;
     }
+}
+
+.geom-color-picker {
+    overflow: hidden;
 }
 
 // ??? responsive media query ....
