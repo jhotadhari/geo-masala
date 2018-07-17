@@ -160,8 +160,7 @@ class Geom_Block_Map {
 
 		wp_localize_script( $handle, 'geomData', $this->get_localize_data() );
 
-		wp_enqueue_media();
-		// wp_enqueue_editor();
+		// wp_enqueue_media();
 
 		wp_enqueue_script( $handle );
 	}
@@ -208,6 +207,8 @@ class Geom_Block_Map {
 
 		$stringified_values = array(
 			'controls',
+			'mapOptions',
+			'mapDimensions',
 		);
 
 		foreach( $stringified_values as $key ) {

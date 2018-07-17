@@ -1,9 +1,9 @@
 # Geo Masala #
-**Tags:** gutenberg,leaflet,map,geo,gis  
+**Tags:** gutenberg,block,leaflet,map,geo,gis  
 **Donate link:** http://waterproof-webdesign.info/donate  
 **Contributors:** [jhotadhari](https://profiles.wordpress.org/jhotadhari)  
-**Tested up to:** 4.9.4  
-**Requires at least:** 4.7  
+**Tested up to:** 4.9.7  
+**Requires at least:** 4.9.6  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
 **License:** GNU General Public License v2 or later  
@@ -24,11 +24,9 @@ A new block for gutenberg: 'Geo Masala Map'
 
 > Geo Masala on [GitHub](https://github.com/jhotadhari/geo-masala)
 
-> Geo-Masala is coded while sitting wet in a tent during monsoon somwhere in south himalaya. I appreaciate any kind of help or sponsorship. [Donate](http://waterproof-webdesign.info/donate)
-I'm really out of money, cycling around the world and hungry. Thanks, love you.
-
 ### How to use ###
 Edit any Post with gutenberg and add a 'Geo Masala Map' block, save post and done. Your post will display a map.
+
 * Draw some Features or select some from the Feature-Pool.
 * Edit the Feature, change icon or color, change the popup content and title.
 * Open the Map Settings Panel and customize the controls.
@@ -55,6 +53,7 @@ The Plugin is in early development (and needs a sponsor to go on).
 Some ui will change and more options will be added.
 
 Coming soon hopefully:
+
 * wiki and tutorials
 * Possibility to draw routes on a map.
 * Import for gpx/geoJSON/kml
@@ -64,13 +63,16 @@ Coming soon hopefully:
 * ...
 
 Known issues:
+
 * Currently there is a maximum for hundred Features, will be changed in future. This is the max number for the REST request (can be bypassed easily, but the ui needs some changes before it gets flooded with features)
 * Feature Sharing: The popover control controls if the Feature appears in a Feature-Pool. If it is already in use somwhere, it will still be used, but just not displayed in Feature-Pool.
 
 ### Contribute ###
+* Most welcome :)
 * Geo-Masala is free and open source. The source is hosted on [GitHub](https://github.com/jhotadhari/geo-masala).
-* Tell me your wishes, maybe get me a bowl of rice and some masala: [Donate](http://waterproof-webdesign.info/donate)
-* I'm really out of money, cycling around the world, and Geo-Masala is coded while sitting wet in a tent during Monsoon somwhere in south himalaya. I appreaciate any kind of help or sponsorship.
+* [Tell me](https://waterproof-webdesign.info/en/#contact) your wishes, maybe get me a bowl of rice and some masala: [Donate](http://waterproof-webdesign.info/donate)
+
+> I'm hungry, cycling around the world and Geo-Masala is coded while sitting wet in a tent during Monsoon somwhere in south himalaya. I appreaciate any kind of [donation](http://waterproof-webdesign.info/donate) or sponsorship.
 
 ### Thanks for beautiful ressoucres ###
 
@@ -92,15 +94,21 @@ Known issues:
 ## Installation ##
 
 ### Requirements:
-* php 5.6
 * JavaScript needs to be enabled
 * The [Gutenberg Editor Plugin](https://wordpress.org/plugins/gutenberg/) is required for WordPress versions prior to 5.0
+* It works on **php version 5.6**
+
+For **older php versions**, edit the dependency on line 17 in geo-masala.php and test it. [Report](https://waterproof-webdesign.info/en/#contact) me your tests, I really appreciate.
 
 If the Plugin is not available in the official WordPress Plugin Repository yet, you will find the [latest distributed version in its github repository: ./dist/trunk/](https://github.com/jhotadhari/geo-masala/tree/master/dist/trunk). Copy the ./dist/trunk/ folder, rename it to 'geo-masala' and upload it to your WordPress plugins directory.
 
 Upload and install this Plugin the same way you'd install any other plugin.
 
 ## Screenshots ##
+1. Controls and Controls-Settings
+2. Edit Popup Content
+3. Map Feature editing and sharing
+4. Edit Feature appearance, choose Icon
 
 ## Upgrade Notice ##
 
@@ -108,6 +116,12 @@ This Plugin is still in early development. Reality might be in movement.
 
 
 ## Changelog ##
+
+0.0.8
+- Dynamic PopupOptions, MapOptions, MapDimensions;
+- Edit Appearance for Polyline inherited Features, most https://leafletjs.com/reference-1.3.0.html#polyline-option now accessable;
+- fixed: choose icon and shadow;
+- read the commit massages for further details;
 
 0.0.7
 - fix: geomData.api.root was still hardcoded;

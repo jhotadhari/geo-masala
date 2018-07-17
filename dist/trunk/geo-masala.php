@@ -3,14 +3,14 @@
 Plugin Name: Geo Masala
 Plugin URI: https://github.com/jhotadhari/geo-masala
 Description: Add interactive Leaflet Maps. A new block for gutenberg: 'Geo Masala Map'
-Version: 0.0.7
+Version: 0.0.8
 Author: jhotadhari
 Author URI: https://waterproof-webdesign.info
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: geo-masala
 Domain Path: /languages
-Tags: gutenberg,leaflet,map,geo,gis
+Tags: gutenberg,block,leaflet,map,geo,gis
 */
 
 ?><?php
@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Geom_Geo_masala {
 
 	protected static $instance = null;
-	const VERSION = '0.0.7';
+	const VERSION = '0.0.8';
 	const DB_VERSION = 0;			// int	increase the number if the database needs an update
 	const PLUGIN_SLUG = 'geo-masala';
 	const PLUGIN_NAME = 'Geo Masala';
@@ -32,7 +32,7 @@ class Geom_Geo_masala {
 	protected $deps = array(
 		'plugins' => array(),
 		'php_version' => '5.6',		// required php version
-		'wp_version' => '4.7',			// required wp version
+		'wp_version' => '4.9.6',			// required wp version
 		'php_ext' => array(),
 	);
 	protected $dependencies_ok = false;
@@ -119,7 +119,9 @@ class Geom_Geo_masala {
 
 		// check php version
 		if ( version_compare( PHP_VERSION, $this->deps['php_version'], '<') ){
-			$err_msg = sprintf( 'PHP version %s or higher', $this->deps['php_version'] );
+				$err_msg = sprintf( 'PHP version %s or higher', $this->deps['php_version'] ) . '<br/>' .
+					'For older php versions, edit the dependency on line 17 in geo-masala.php and test it.' . '<br/>' .
+					sprintf( '<a href="%s" target="_blank">Report</a> me your tests, I really appreciate.','https://waterproof-webdesign.info/en/#contact' );
 			array_push( $error_msgs, $err_msg );
 		}
 
