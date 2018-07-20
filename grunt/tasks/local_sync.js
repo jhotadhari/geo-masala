@@ -13,7 +13,7 @@ module.exports = function(grunt){
 		}
 		// set version 'test' if empty or undefined
 		if ( version === '' || typeof version === 'undefined'){
-			grunt.log.writeln('version empty or  undefined ... set to "test"');
+			grunt.log.writeln('version empty or undefined ... destination set to "./test/"');
 			version = 'test';
 		}
 		// check if arg install is specified in wp_installs
@@ -21,13 +21,13 @@ module.exports = function(grunt){
 		if ( install != '' && typeof wp_installs[install] != 'object' ){
 			grunt.warn("unknown local install");
 		}
-		
+
 		pkg = grunt.file.readJSON('package.json');
-		
+
 		// set paths
 		dest = require('path').resolve(wp_installs[install].local,pkg.name) + require('path').sep;
-		
-		
+
+
 		if ( version === 'test' ){
 			src = require('path').resolve('test') + require('path').sep;
 
@@ -36,14 +36,14 @@ module.exports = function(grunt){
 
 		} else if ( /((\d)\.(\d)\.(\d))/.test(version)){
 			src = require('path').resolve('dist','tags',version) + require('path').sep;
-			
+
 			if (! grunt.file.exists(src)){
 				grunt.warn('"' + version + '" is no valid version');
 			}
 		} else {
 			grunt.warn('"' + version + '" is no valid version');
 		}
-		
+
 		// set config
 		grunt.config.merge({
 			local_sync: {
@@ -51,11 +51,11 @@ module.exports = function(grunt){
 				dest: dest,
 			}
 		});
-		
+
 		// run tasks
-		grunt.task.run([     
+		grunt.task.run([
 			'rsync:local_sync'
 		]);
-		
+
 	});
 };

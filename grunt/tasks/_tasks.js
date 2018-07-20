@@ -34,20 +34,26 @@ module.exports = function(grunt){
 		] );
 
 		// add sass and js tasks
-		if ( process === 'build' ) {
+		// dist-process defaults to compacted mode, build to debug mode
+		// overwrite with boolean option compact
+		let compact = process === 'dist';
+		compact = undefined !== grunt.option('compact') && 'boolean' === typeof( grunt.option('compact') )
+			? grunt.option('compact')
+			: compact;
+		if ( compact ) {
+			tasks = tasks.concat([
+				'eslint',
+				'uglify:dist',
+				'browserify:dist',
+				'uglify:dest',
+				'sass:dist',
+			] );
+		} else {
 			tasks = tasks.concat([
 				'eslint',
 				'uglify:debug',
 				'browserify:debug',
 				'sass:debug',
-			] );
-		} else {
-			tasks = tasks.concat([
-				'eslint',
-				'uglify:dist',
-				'browserify:dist',
-				'uglify:distCommonJs',
-				'sass:dist',
 			] );
 		}
 
