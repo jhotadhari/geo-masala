@@ -98,7 +98,25 @@
 
 
 
-.backform {
+.backform.geom-form {
+
+    &.geom-fullscreen {
+        position: fixed;
+        width: 94%;
+        height: 94%;
+        padding: 3%;
+        top: 0px;
+        left: 0px;
+        z-index: 99999;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        .control-group {
+            &-tab-content {
+                flex-grow: 1;
+            }
+        }
+    }
 
     .control-group {
         &-tabs {

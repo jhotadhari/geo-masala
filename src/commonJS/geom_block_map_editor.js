@@ -70,7 +70,7 @@ registerBlockType( 'geom/map', {
 
     save( { attributes, className } ) {
         // const { featureIds } = attributes;
-    	console.log( 'save attributes', attributes );		// ??? debug
+    	// console.log( 'save attributes', attributes );		// ??? debug
     	return null;
     },
 

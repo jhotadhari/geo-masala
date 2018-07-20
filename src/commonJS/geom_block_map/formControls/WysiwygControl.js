@@ -9,6 +9,9 @@ import Backform from 'Backform';
 const { __ } = wp.i18n;
 const { F10, ESCAPE, ALT } = wp.utils.keycodes;
 
+import deviceIs 				from '../functions/deviceIs';
+import mcefilePickerCallback 	from '../functions/mcefilePickerCallback';
+
 /**
  * Wysiwyg Control
  *
@@ -32,7 +35,11 @@ const WysiwygControl = Backform.Control.extend({
 		'<label class="<%=Backform.controlLabelClassName%>"><%=label%></label>',
 		'<div class="<%=Backform.controlsClassName%>">',
 		'  <div class="geom-inline-editor" <%=disabled ? "disabled" : ""%> <%=required ? "required" : ""%> >',
-		'    <%= value %>',
+		'    <% if (value.length > 0) { %>',
+		'      <%= value %>',
+		'    <% } else { %>',
+		'    	<span class="geom-placeholder">Content is empty. Click to edit</span>',
+		'    <% } %>',
 		'  </div>',
 		'  <% if (helpMessage && helpMessage.length) { %>',
 		'    <span class="<%=Backform.helpMessageClassName%>"><%=helpMessage%></span>',
@@ -65,10 +72,10 @@ const WysiwygControl = Backform.Control.extend({
 			this.$toolbar = $('<div>', {
 				id: 'geom-inline-editor-toolbar-' + this.cid,
 				class: 'geom-inline-editor-toolbar freeform-toolbar',
-				['data-placeholder']: __( 'Classic' ),
+				['data-placeholder']: __( 'Editor Toolbar' ),
 			} );
 			// append toolbar to container
-			this.$el.closest('div[data-type="geom/map"]').find('.geom-toolbar').append(this.$toolbar);
+			this.$el.prepend(this.$toolbar);
 			// animate toolbar
 			let autoHeight = this.$toolbar.css('height', 'auto').height();
 			this.$toolbar.height(0).animate({height: autoHeight}, 500, () => this.$toolbar.css('height', 'auto') );
@@ -84,25 +91,46 @@ const WysiwygControl = Backform.Control.extend({
 	initEditor() {
 		const { settings } = window.wpEditorL10n.tinymce;
 		if ( this.editor ) return;
+
+		let plugins = settings.plugins.split(',');
+		let toolbar1 = settings.toolbar1.split(',');
+		let toolbar2 = settings.toolbar2.split(',');
+		plugins.push( 'image', 'media' );
+		toolbar1.splice( 1, 0, 'image', 'media' );
+		toolbar1 = _.without( toolbar1, 'wp_more' );
+
 		// setup editor element
 		this.getEditorElement().attr( 'id', 'editor-' + this.cid );
 		// setup toolbar element
 		this.setupToolbar();
+
 		// initialize
 		wp.oldEditor.initialize( 'editor-' + this.cid, {
 			tinymce: {
-			...settings,
-			inline: true,
-			content_css: geomData.pluginDirUrl + '/css/geom_block_map_editor_tinymce_content.min.css',
-			fixed_toolbar_container: '#geom-inline-editor-toolbar-' + this.cid,
-			setup: this.onSetup.bind(this),
-		},
+				...settings,
+				plugins: plugins.join(','),
+				toolbar1: toolbar1.join(','),
+				toolbar2: toolbar2.join(','),
+				inline: true,
+				fixed_toolbar_container: '#geom-inline-editor-toolbar-' + this.cid,
+
+				file_picker_callback: mcefilePickerCallback,
+				//image
+				image_description: false,
+				image_dimensions: false,
+				//media
+				media_alt_source: false,
+				media_poster: false,
+				media_dimensions: false,
+				//setup
+				setup: this.onSetup.bind(this),
+			},
 		} );
 	},
 
 	onSetup( editor ) {
 		const self = this;
-		const content  = this.getEditorElement().html();
+		const content = this.model.get( this.field.get( 'name' ) ).rendered || this.model.get( this.field.get( 'name' ) ) || '';
 		this.editor = editor;
 
 		editor.addButton( 'kitchensink', {
@@ -116,9 +144,7 @@ const WysiwygControl = Backform.Control.extend({
 			},
 		} );
 
-		if ( content ) {
-			editor.on( 'loadContent', () => editor.setContent( content ) );
-		}
+		editor.on( 'loadContent', () => editor.setContent( content ) );
 
 		editor.on( 'init', () => {
 			// Create the toolbar by refocussing the editor.
@@ -136,11 +162,6 @@ const WysiwygControl = Backform.Control.extend({
 		// 	}
 		// });
 
-		editor.on( 'blur', (event) => {
-			this.setModelVal(event);
-			return false;
-		} );
-
 		editor.on('KeyUp Change Paste input touchend', ( event ) => {
 			// close editor if esc pressed
 			if ( event.keyCode === ESCAPE ) {
@@ -148,25 +169,37 @@ const WysiwygControl = Backform.Control.extend({
 			}
 		});
 
-		editor.on('focusout', ( event ) => {
-			if ( undefined !== $( event.explicitOriginalTarget ) ){
+		editor.on('focusout', ( event ) => this.onFocusoutBlur( event, this.editor.getContent() ) );
+		editor.on('blur', ( event ) => this.onFocusoutBlur( event, this.editor.getContent() ) );
+	},
 
-				if ( $( event.explicitOriginalTarget ).attr('id') ){
-					if ( $( event.explicitOriginalTarget ).attr('id').startsWith('mce') ){
-						return;
-					}
-				}
+	onFocusoutBlur(event, editorContent ) {
+		// set toolbarheight fix, so it wont disappear and we can animate it
+		this.$toolbar.css('height', this.$toolbar.outerHeight() );
+		// get activeElement and lets see what to do
+		setTimeout( () => {
+			const activeElement = document.activeElement;
 
-				if ( event.explicitOriginalTarget.tagName === 'BUTTON' ){
-					this.setModelVal(event);
-					this.close(event);
-					$( event.explicitOriginalTarget ).trigger('click');
-					return;
-				}
+			if ( activeElement.id.startsWith('mce') || activeElement.classList.contains('media-modal') ){
+				// fitMceWindows for mobile
+				this.fitMceWindows();
+				// nothing happend, set toolbarheight back to auto and get out
+				this.$toolbar.css('height', 'auto' );
+				return;
 			}
-			this.setModelVal(event);
+
+			if ( activeElement.classList.contains('geom-reset') || activeElement.classList.contains('geom-submit') ){
+				// reset/submit button clicked, save and close and trigger button
+				this.setModelVal(editorContent);
+				this.close(event);
+				$(activeElement).trigger('click');
+				return;
+			}
+
+			// we really lost the focus, save and close
+			this.setModelVal(editorContent);
 			this.close(event);
-		});
+		}, 1 );
 	},
 
 	focus() {
@@ -182,17 +215,25 @@ const WysiwygControl = Backform.Control.extend({
 		event.nativeEvent.stopImmediatePropagation();
 	},
 
+	fitMceWindows(){
+		// if mobile, set window to fullscreen and narrow the inputs
+		if ( deviceIs('mobile') ) {
+			const mceWindows = this.editor.windowManager.getWindows();
+			_.each( mceWindows, (mceWindow) => {
+				mceWindow.fullscreen(true);
+				mceWindow.$el.find('input').css('maxWidth', '100px' );
+			} );
+		}
+	},
+
 	close(e){
 		if ( e ) e.preventDefault();
 		this.removeEditor();
 	},
 
-	setModelVal(e){
-		if ( e ) e.preventDefault();
-		const model = this.model;
-		const val = this.editor.getContent();
-		const oldVal = model.get( this.field.get( 'name' ) ) || model.get( this.field.get( 'name' ) ).rendered;
-		const newVal = this.formatter.toRaw( val ) || this.formatter.toRaw( val ).rendered;
+	setModelVal(editorContent){
+		// const oldVal = this.model.get( this.field.get( 'name' ) ) || this.model.get( this.field.get( 'name' ) ).rendered;
+		const newVal = this.formatter.toRaw( editorContent );
 		if ( ! _.isUndefined( newVal ) ) this.model.set( 'content', newVal );
 	},
 
@@ -202,21 +243,27 @@ const WysiwygControl = Backform.Control.extend({
 
 	removeEditor() {
 		if ( this.editor ){
-			window.addEventListener( 'DOMContentLoaded', this.initEditor );
 			wp.oldEditor.remove( 'editor-' + this.cid );
-			this.removeToolbar();
-			delete this.editor;
-			this.getEditorElement().attr( 'id', null);
+			this.removeToolbar().then( () => {
+				delete this.editor;
+				this.getEditorElement().attr( 'id', null);
+				this.render(); // render, so we get the placeholder for empty content
+			});
 		}
 	},
 
 	removeToolbar(){
-		if ( this.$toolbar ){
-			this.$toolbar.animate({height: 0}, 500, () => {
-				this.$toolbar.remove();
-				delete this.$toolbar;
-			});
-		}
+		return new Promise( ( resolve, reject ) => {
+			if ( this.$toolbar ){
+				this.$toolbar.animate({height: 0}, 500, () => {
+					this.$toolbar.remove();
+					delete this.$toolbar;
+					resolve();
+				});
+			} else {
+				resolve();
+			}
+		});
 	},
 
 });

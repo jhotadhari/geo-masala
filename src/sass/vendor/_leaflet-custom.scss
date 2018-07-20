@@ -59,6 +59,21 @@
     }
 }
 @import "leaflet/leaflet-geosearch";
+.leaflet-control-geosearch.bar {
+    width: 100%;
+    background: transparent;
+    z-index: 990; // layers control is 999
+
+    form {
+        margin: 0 auto;
+        padding: 0;
+        width: 80%;
+        width: calc(100% - 130px);
+    }
+
+
+
+}
 
 
 @import "leaflet/leaflet-toolbar";

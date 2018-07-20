@@ -5,14 +5,10 @@
 @import "./wp_tinymce/freeform_toolbar";
 
 // custom
-.geom-toolbar {
+.geom-inline-editor-toolbar {
     width: 100%;
-    position: relative;
-    .geom-inline-editor-toolbar {
-        width: 100%;
-        margin: 0 0 14px 0;
-        outline: none;
-    }
+    margin: 0 0 14px 0;
+    outline: none;
 }
 .geom-inline-editor {
     min-height: 100px;

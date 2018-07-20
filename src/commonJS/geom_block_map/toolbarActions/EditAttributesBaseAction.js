@@ -1,10 +1,12 @@
 import _ from 'lodash';
+import classnames from 'classnames';
 
 import L from 'leaflet';
 require('leaflet-toolbar');
 require('leaflet-draw');
 require('leaflet-draw-toolbar/dist/leaflet.draw-toolbar');
 
+import breakpoints from '../breakpoints';
 import Form from '../formControls/Form';
 
 import FeatureModel from '../models/FeatureModel';
@@ -26,7 +28,7 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 			this.featureModel = new FeatureModel({ id: this._shape.postId });
 			this.featureModel.fetch().done(function(){
 				self.featureModel.store();
-				self.getPopupContentView().render();
+				self.getContentView().render();
 			});
 		}
 		return this.featureModel;
@@ -67,6 +69,7 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 				label: 'Cancel',
 				controlGroup: 'controlGroupActions',
 				groupClasses: 'form-group left',
+				extraClasses: ['geom-reset'],
 			},
 			{
 				type: 'submit',
@@ -74,6 +77,7 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 				label: 'Save',
 				controlGroup: 'controlGroupActions',
 				groupClasses: 'form-group right',
+				extraClasses: ['geom-submit'],
 			},
 			{
 				control: Backform.SpacerControl,
@@ -83,11 +87,12 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 		];
 	},
 
-	getPopupContentView:function(){
+	getContentView:function(){
 		if ( ! this.popupContentView ) {
 			this.popupContentView = new Form({
 				model: this.getFeatureModel(),
 				fields: this.getFields(),
+				className: () => classnames( Backform.formClassName, 'geom-form' ),
 				map: this._map,
 				events: {
 					submit: (e) => {
@@ -106,17 +111,14 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 		return this.popupContentView;
 	},
 
-	getPopupContent:function(){
-		return this.getPopupContentView().render().el;
-	},
-
 	getPopup:function(){
 		if (! this.popup ){
 			this.popup = L.popup({
-				minWidth: 250,
-				maxWidth: 450,
-				// closeOnClick: false,
-			}).setContent( this.getPopupContent() );
+				minWidth: Math.min( ($(this._map.getContainer()).outerWidth() * 0.5), 250 ),
+				maxWidth: Math.min( ($(this._map.getContainer()).outerWidth() * 0.8), 450 ),
+				maxHeight: $(this._map.getContainer()).outerHeight() * 0.8,
+				closeOnClick: false,
+			}).setContent( this.getContentView().render().el );
 			this.popup.on( 'remove popupclose', (e) => this.reset() )
 		}
 		return this.popup;
@@ -124,13 +126,25 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 
 	enable: function (e) {
 		if ( e ) e.preventDefault();
+		this.isFullscreen = $(window).width() < breakpoints.medium;
+		// remove L toolbar
 		this._map.removeLayer(this.toolbar);
-		this._shape.bindPopup( this.getPopup() ).openPopup();
+		if ( this.isFullscreen ) {
+			// render as fullscreen
+			this.getContentView().render().$el.appendTo('body').addClass('geom-fullscreen');
+		} else {
+			// render as popup
+			this._shape.bindPopup( this.getPopup() ).openPopup();
+		}
 	},
 
 	close: function(){
-		this._shape.closePopup();
-		this._shape.unbindPopup();
+		if ( this.isFullscreen ) {
+			this.getContentView().remove();
+		} else {
+			this._shape.closePopup();
+			this._shape.unbindPopup();
+		}
 	},
 
 	save: function() {
@@ -148,7 +162,7 @@ let EditAttributesBaseAction = L.Toolbar2.Action.extend({
 	reset: function() {
 		this.getFeatureModel().restore();
 		this.getFeatureModel().store();
-		// this.getPopupContentView().render();	// we'll close it anyway
+		// this.getContentView().render();	// we'll close it anyway
 		this.close();
 	},
 

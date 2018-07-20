@@ -3,28 +3,33 @@
 Add interactive Leaflet Maps to your blog.
 A new block for gutenberg: 'Geo Masala Map'
 
-* Customize the Map and its Features directly from within the gutenberg block.
-* Create and edit Features (Markers, Lines, Polygones ...). Change their color, icon, Popup ...
-* Customize the Map itself, baselayers, controls ...
+* Customize the Map and its Features directly from within the **Gutenberg Block**
+* **Draw and edit Features**. Markers, Lines, Polygons ...
+* **Customize Feature-Appearance**. Icon/Shadow, Color, Opacity, Class-Names ...
+* A **Wysiwyg Editor** to Edit the Popup-Content. Use **Images/Videos/Audios** inside the Popup-Content
+* **Customize the Map** itself. Dimensions, Baselayers, Controls ...
 * Map Features are shareable and can be used between users and posts (depending on Features settings)
 
-> Geo Masala on [GitHub](https://github.com/jhotadhari/geo-masala)
+> Geo Masala on [GitHub](https://github.com/jhotadhari/geo-masala).<br/>It's open-source, free as freedom, free of cost and it will remain free.
 
 = How to use =
+
 Edit any Post with gutenberg and add a 'Geo Masala Map' block, save post and done. Your post will display a map.
 
 * Draw some Features or select some from the Feature-Pool.
 * Edit the Feature, change icon or color, change the popup content and title.
 * Open the Map Settings Panel and customize the controls.
-* Change the Feature sharing settings for a sngle Feature, and reuse the Feature in other Posts
+* Change the Feature sharing settings for a single Feature, and reuse the Feature in other Posts
 * ...
 
+> The [Gutenberg Editor Plugin](https://wordpress.org/plugins/gutenberg/) **is required** for WordPress versions prior to 5.0, see [requirements](https://wordpress.org/plugins/geo-masala/#installation)
+
 = What is a Feature? =
-The term "Feature" is used in the cartographic context. A representation of a real-world object on a map [feature|Definition - Esri Support GIS Dictionary](https://support.esri.com/en/other-resources/gis-dictionary/term/dcc335be-78ae-4bd2-b254-b44c37343f75).
+The term "Feature" is used in the cartographic context. A representation of a real-world object on a map ([feature|Definition - Esri Support GIS Dictionary](https://support.esri.com/en/other-resources/gis-dictionary/term/dcc335be-78ae-4bd2-b254-b44c37343f75)).
 Within this plugin, a Feature can represent a simple location (Marker), a way/route/track (Polyline) or an Area (Polygon/Rectangle).
 A couple of properties are stored with the Feature, eg. appereance and popup-content data.
 
-= How does the Plugin works? =
+= How does the Plugin work? =
 A Feature is saved as a post type, and not saved to the Block!
 
 * The Plugin registered a new custom-post-type 'geom_feature'. Each geom_feature is used to store a single cartographic Feature, formatted in geoJSON. The cartographic Feature and other data (appearance, popup-content ...) are stored as post-meta.
@@ -55,7 +60,9 @@ Known issues:
 
 = Contribute =
 * Most welcome :)
-* Geo-Masala is free and open source. The source is hosted on [GitHub](https://github.com/jhotadhari/geo-masala).
+* Geo-Masala is free and open source. The source is hosted on [GitHub](https://github.com/jhotadhari/geo-masala). So dig the code as you like.
+* For **support**, to **request new features** or inform me about **issues and bugs** [create a new issue on Github](https://github.com/jhotadhari/geo-masala/issues/new) or [add a new topic to WP's support forum](https://wordpress.org/support/plugin/geo-masala)
+* Love to get your **feedback**, [Create a new review and rate this Plugin](https://wordpress.org/support/plugin/geo-masala/reviews/#new-post), write a tutorial and tell your friends.
 * [Tell me](https://waterproof-webdesign.info/en/#contact) your wishes, maybe get me a bowl of rice and some masala: [Donate](http://waterproof-webdesign.info/donate)
 
 > I'm hungry, cycling around the world and Geo-Masala is coded while sitting wet in a tent during Monsoon somwhere in south himalaya. I appreaciate any kind of [donation](http://waterproof-webdesign.info/donate) or sponsorship.

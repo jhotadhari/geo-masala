@@ -14,7 +14,6 @@ import FeatureCollection from '../../geom_block_map/collections/FeatureCollectio
 
 import Map from './Map.jsx';
 import FeatureListPanel from './FeatureListPanel.jsx';
-import GeomToolbar from './GeomToolbar.jsx';
 
 const layersControlOptions = [
 	{ value: 'OpenStreetMap.Mapnik', label: 'OpenStreetMap.Mapnik' },
@@ -209,7 +208,7 @@ class GeomMap extends React.Component {
 							}
 						});
 
-						console.log( 'moved to trash: ' + model.get('id').toString() );
+						// console.log( 'moved to trash: ' + model.get('id').toString() );
 					}
 				});
 			}
@@ -251,8 +250,6 @@ class GeomMap extends React.Component {
 
 	render() {
 		return ([
-
-			<GeomToolbar/>,
 
         	<Map
         		featureCollection={this.state.featureCollection}

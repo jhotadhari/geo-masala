@@ -1,5 +1,7 @@
 import Backform from 'Backform';
 
+import breakpoints from '../breakpoints';
+
 const Form = Backform.Form.extend({
 
 	initialize: function( options ) {
@@ -86,7 +88,8 @@ const Form = Backform.Form.extend({
 		if ( $controlGroupTabs.find('.actionTab .checkbox').children().length <= 1 ) $controlGroupTabs.addClass('hidden');
 
 		// set content maxHeight
-		$controlGroupTabContent.css('maxHeight', Math.max( ($(this.map.getContainer()).outerHeight() * 0.5), 200 ));
+		if ( $(window).width() >= breakpoints.medium )
+			$controlGroupTabContent.css('maxHeight', Math.max( ($(this.map.getContainer()).outerHeight() * 0.5), 200 ));
 
 		return this;
 	},

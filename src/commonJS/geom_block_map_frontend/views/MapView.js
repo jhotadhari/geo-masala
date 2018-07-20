@@ -56,8 +56,10 @@ class MapView extends Marionette.View {
 		if ( layer.bindPopup === undefined ) return;
 
 		const popupContentTemplate = _.template([
-			'<h1><%=title%></h1>',
-			'<div><%=content%></div>',
+			'<div class="geom-popup-content">',
+			'  <h1><%=title%></h1>',
+			'  <div><%=content%></div>',
+			'</div',
 		].join('\n'));
 
 		const title = ! _.isUndefined( featureModel.get('title').rendered ) ? featureModel.get('title').rendered : featureModel.get('title');
@@ -70,9 +72,11 @@ class MapView extends Marionette.View {
 			content: content,
 		});
 
-		layer.bindPopup( popupContent, {...defaults.popupOptions, ...featureModel.get('geom_feature_popup_options')} );
+		const popupOptions = {...defaults.popupOptions, ...featureModel.get('geom_feature_popup_options')};
+		layer.bindPopup( popupContent, popupOptions );
 
 		layer.on( 'click', function(e) {
+			// ??? we need a possibility to render as fullscreen. well later, lets open the popup
 			layer.openPopup();
 		});
 
