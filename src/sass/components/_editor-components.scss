@@ -92,6 +92,23 @@
     &-controls-view-zoom select {
         min-height: 50px;
     }
+
+    .geom-color-palette {
+
+        &-display {
+            width: 30px;
+            display: inline-block;
+            height: 30px;
+            line-height: normal;
+            float: left;
+            vertical-align: middle;
+            margin-right: 1em;
+        }
+
+        .components-color-palette__clear {
+            display: none;
+        }
+    }
 }
 
 

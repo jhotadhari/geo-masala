@@ -1,0 +1,50 @@
+
+// thank you! http://tobiasahlin.com/spinkit/
+
+.geom-placeholder {
+    color: #72777c; // same as ::-moz-placeholder
+    position: relative;
+
+    &-overlay {
+
+        $spinner_size: 100px;
+
+        position: absolute;
+        z-index: 10;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+
+        border: solid $color_border;
+        border-radius: $border_radius;
+
+        &-spinner {
+            width: $spinner_size;
+            max-width: 40%;
+            height: $spinner_size;
+            max-height: 80%;
+            background-color: transparentize( $color_highlight, 0.25 );
+
+            @include abs_center();
+
+            -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+            animation: sk-rotateplane 1.2s infinite ease-in-out;
+        }
+
+        @-webkit-keyframes sk-rotateplane {
+            0% { -webkit-transform: perspective( $spinner_size * 3 ) }
+            50% { -webkit-transform: perspective( $spinner_size * 3 ) rotateY(180deg) }
+            100% { -webkit-transform: perspective( $spinner_size * 3 ) rotateY(180deg)  rotateX(180deg) }
+        }
+
+        @keyframes sk-rotateplane {
+            0% {
+                @include transform ( translate(-50%, -50%) perspective( $spinner_size * 3 ) rotateX(0deg) rotateY(0deg) );
+            } 50% {
+                @include transform ( translate(-50%, -50%) perspective( $spinner_size * 3 ) rotateX(-180.1deg) rotateY(0deg) );
+            } 100% {
+                @include transform ( translate(-50%, -50%) perspective( $spinner_size * 3 ) rotateX(-180deg) rotateY(-179.9deg) );
+            }
+        }
+    }
+}

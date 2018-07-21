@@ -1,18 +1,24 @@
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 import _ from  'lodash';
+import loadJS from 'load-js';
 
 import defaults from './geom_block_map/defaults';
-import GeomMap from './geom_block_map_editor/components/GeomMap.jsx';
+import MapPlaceholder from './geom_block_map_editor/components/MapPlaceholder.jsx';
+let GeomMap = null; // will be overwritten when loadJS loaded geom_block_map_component_GeomMap
 
 registerBlockType( 'geom/map', {
 	title: __( 'Geo Masala Map' ),
 	icon: 'location-alt',
 	category: 'widgets',
+	supports: {
+		html: false,
+	},
 
     attributes: {
         featureIds: {
             type: 'array',
+            default: [],
         },
         controls: {
         	type: 'string',
@@ -25,52 +31,53 @@ registerBlockType( 'geom/map', {
         mapOptions: {
         	type: 'string',
         	default: JSON.stringify( {...defaults.leaflet.mapOptions} ),
-        }
+        },
+        options: {
+        	type: 'string',
+        	default: JSON.stringify( {...defaults.options} ),
+        },
     },
 
     edit( {  attributes, className, setAttributes } ) {
-        const { featureIds, controls, mapOptions, mapDimensions } = attributes;
+        const { featureIds, controls, mapOptions, mapDimensions, options } = attributes;
+        // parse serialized attributes to objects
         const controlsObject = JSON.parse( undefined === controls ? '{}' : controls );
         const mapOptionsObject = JSON.parse( undefined === mapOptions ? '{}' : mapOptions );
         const mapDimensionsObject = JSON.parse( undefined === mapDimensions ? '{}' : mapDimensions );
+        const optionsObject = JSON.parse( undefined === options ? '{}' : options );
 
-		if ( undefined === featureIds ) {
-			setAttributes({
-				featureIds: [],
-			});
+        // load the main editor component
+        loadJS( [geomData.pluginDirUrl + '/js/geom_block_map_module_GeomMap.min.js'] ).then( () => GeomMap = geomData.modules.GeomMap );
+
+		// display a loading placeholder or run the app
+		if ( 'undefined' === typeof(GeomMap) || null === GeomMap ) {
+			return ([
+				<MapPlaceholder
+					color={optionsObject.placeholder.color}
+					dimensions={mapDimensionsObject}
+				/>
+			]);
+		} else {
+			return (
+				<GeomMap
+					featureIds={featureIds}
+					controls={controlsObject}
+					mapOptions={mapOptionsObject}
+					mapDimensions={mapDimensionsObject}
+					options={optionsObject}
+					onChangeFeatures={ (newFeatures) => newFeatures instanceof Backbone.Collection ? setAttributes( { featureIds: newFeatures.length ? newFeatures.pluck('id') : [] } ) : null }
+					onChangeControls={ (newVal) => setAttributes( { controls: JSON.stringify( newVal ) } ) }
+					onChangeMapOptions={ (newVal) => setAttributes( { mapOptions: JSON.stringify( newVal ) } ) }
+					onChangeMapDimensions={ (newVal) => setAttributes( { mapDimensions: JSON.stringify( newVal ) } ) }
+					onChangeOptions={ (newVal) => setAttributes( { options: JSON.stringify( newVal ) } ) }
+				/>
+			);
 		}
 
-		function onChangeFeatures( newFeatures ) {
-			let newFeatureIds = [];
-			if ( newFeatures.length ){
-				if ( newFeatures instanceof Backbone.Collection ){
-					newFeatureIds = newFeatures.pluck('id');
-				} else if ( 'object' === typeof ( newFeatures[0] ) ){
-					newFeatureIds = _.pluck( newFeatures, 'id' );
-				} else if ( 'integer' === typeof ( newFeatures[0] ) ) {
-					newFeatureIds = newFeatures;
-				}
-			}
-			setAttributes( { featureIds:newFeatureIds } );
-		}
-
-        return (
-			<GeomMap
-				featureIds={featureIds}
-				controls={controlsObject}
-				mapOptions={mapOptionsObject}
-				mapDimensions={mapDimensionsObject}
-				onChangeFeatures={onChangeFeatures}
-				onChangeControls={ (newVal) => setAttributes( { controls: JSON.stringify( newVal ) } ) }
-				onChangeMapOptions={ (newVal) => setAttributes( { mapOptions: JSON.stringify( newVal ) } ) }
-				onChangeMapDimensions={ (newVal) => setAttributes( { mapDimensions: JSON.stringify( newVal ) } ) }
-			/>
-		);
     },
 
     save( { attributes, className } ) {
-        // const { featureIds } = attributes;
-    	// console.log( 'save attributes', attributes );		// ??? debug
+    	console.log( 'save attributes', attributes );		// ??? debug
     	return null;
     },
 

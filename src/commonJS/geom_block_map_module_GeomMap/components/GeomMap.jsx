@@ -3,11 +3,15 @@ import swal from 'sweetalert';
 const { __ } = wp.i18n;
 
 const {
+    BaseControl,
     PanelBody,
     SelectControl,
     ToggleControl,
     TextControl,
+    ColorPalette,
 } = wp.components;
+
+import setNestedObject from '../../geom_block_map/functions/setNestedObject';
 
 import FeatureModel from '../../geom_block_map/models/FeatureModel';
 import FeatureCollection from '../../geom_block_map/collections/FeatureCollection';
@@ -50,6 +54,7 @@ class GeomMap extends React.Component {
 			controls: props.controls,
 			mapOptions: props.mapOptions,
 			mapDimensions: props.mapDimensions,
+			options: props.options,
 		};
 	}
 
@@ -237,8 +242,13 @@ class GeomMap extends React.Component {
 			}
 		});
 		this.props.onChangeMapOptions( mapOptions );
+	}
 
-
+	onChangeOptions( key, val ) {
+		const options = {...this.state.options}
+		setNestedObject( options, key, val );
+		this.setState( { options: options } );
+		this.props.onChangeOptions( options );
 	}
 
 	onChangeControls( key, val ){
@@ -298,6 +308,17 @@ class GeomMap extends React.Component {
 					value={ this.state.mapDimensions.height }
 					onChange={ (val) => this.onChangeMapDimensions( 'height', val ) }
 				/>
+
+				<BaseControl
+					label="Loading Placeholder Color"
+					className={'geom-color-palette'}
+				>
+					<span className='geom-color-palette-display' style={{ background: this.state.options.placeholder.color }}></span>
+					<ColorPalette
+						value={ this.state.options.placeholder.color }
+						onChange={ (val) => this.onChangeOptions( 'placeholder.color', val ) }
+					/>
+				</BaseControl>
 
 				<ToggleControl
 					label='Scroll Wheel Zoom'

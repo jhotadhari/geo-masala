@@ -11,6 +11,11 @@ const defaults = {
 		width: 100,
 		height: 400,
 	},
+	options: {
+		placeholder: {
+			color: '#af63aa',
+		},
+	},
 	leaflet: {
 		mapOptions: {
 			// https://leafletjs.com/reference-1.3.0.html#map-option

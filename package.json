@@ -65,6 +65,7 @@
     "leaflet-toolbar": "^0.4.0-alpha.1",
     "leaflet.fullscreen": "^1.4.5",
     "load-grunt-tasks": "^3.5.2",
+    "load-js": "^3.0.2",
     "node-bourbon": "^4.2.8",
     "react-virtualized": "^9.19.1",
     "simple-color-picker": "^0.1.2",

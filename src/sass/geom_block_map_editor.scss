@@ -12,6 +12,7 @@
 @import "portions/block";
 @import "portions/uploader";
 @import "portions/popover";
+@import "portions/placeholder";
 
 @import "components/editor-components";
 
@@ -28,9 +29,6 @@
     overflow: hidden;
 }
 
-.geom-placeholder {
-    color: #72777c; // same as ::-moz-placeholder
-}
 
 // ??? responsive media query ....
 .geom-left {

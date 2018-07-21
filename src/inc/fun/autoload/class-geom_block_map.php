@@ -209,6 +209,7 @@ class Geom_Block_Map {
 			'controls',
 			'mapOptions',
 			'mapDimensions',
+			'options',
 		);
 
 		foreach( $stringified_values as $key ) {

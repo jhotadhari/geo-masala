@@ -3,7 +3,8 @@
     ""
   ],
   "0.0.9": [
-    ""
+    "- Use Images/Videos/Audios inside the Popup-Content;",
+    "- read the commit massages for further details;"
   ],
   "0.0.8": [
     "- Dynamic PopupOptions, MapOptions, MapDimensions;",
