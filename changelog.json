@@ -1,5 +1,8 @@
 {
   "next": [
+    ""
+  ],
+  "0.0.10": [
     "- compatible with gutenberg 3.3.0;",
     "- lazyloading scripts using load-js on frontend and admin;",
     "- New style for block panels;",

@@ -75,7 +75,7 @@ Known issues:
 ### Contribute ###
 * Most welcome :)
 * Geo-Masala is free and open source. The source is hosted on [GitHub](https://github.com/jhotadhari/geo-masala). So dig the code as you like.
-* For **support**, to **request new features** or inform me about **issues and bugs** [create a new issue on Github](https://github.com/jhotadhari/geo-masala/issues/new) or [add a new topic to WP's support forum](https://wordpress.org/support/plugin/geo-masala)
+* For **support**, to **request new plugin-features** or inform me about **issues and bugs** [create a new issue on Github](https://github.com/jhotadhari/geo-masala/issues/new) or [add a new topic to WP's support forum](https://wordpress.org/support/plugin/geo-masala)
 * Love to get your **feedback**, [Create a new review and rate this Plugin](https://wordpress.org/support/plugin/geo-masala/reviews/#new-post), write a tutorial and tell your friends.
 * [Tell me](https://waterproof-webdesign.info/en/#contact) your wishes, maybe get me a bowl of rice and some masala: [Donate](http://waterproof-webdesign.info/donate)
 
@@ -103,11 +103,7 @@ Known issues:
 ### Requirements:
 * JavaScript needs to be enabled
 * The [Gutenberg Editor Plugin](https://wordpress.org/plugins/gutenberg/) is required for WordPress versions prior to 5.0
-* It works on **php version 5.6**
-
-For **older php versions**, edit the dependency on line 17 in geo-masala.php and test it. [Report](https://waterproof-webdesign.info/en/#contact) me your tests, I really appreciate.
-
-If the Plugin is not available in the official WordPress Plugin Repository yet, you will find the [latest distributed version in its github repository: ./dist/trunk/](https://github.com/jhotadhari/geo-masala/tree/master/dist/trunk). Copy the ./dist/trunk/ folder, rename it to 'geo-masala' and upload it to your WordPress plugins directory.
+* It works on **php version 5.6**. For **older php versions**, edit the dependency ```php_version``` on line 34 in ```./geo-masala.php``` and test it. [Report](https://waterproof-webdesign.info/en/#contact) me your tests, I really appreciate.
 
 Upload and install this Plugin the same way you'd install any other plugin.
 
@@ -124,14 +120,21 @@ This Plugin is still in early development. Reality might be in movement.
 
 ## Changelog ##
 
-0.0.9
+0.0.10
+- compatible with gutenberg 3.3.0;
+- lazyloading scripts using load-js on frontend and admin;
+- New style for block panels;
+- Read the commit massages for further details;
 
+0.0.9
+- Use Images/Videos/Audios inside the Popup-Content;
+- Read the commit massages for further details;
 
 0.0.8
 - Dynamic PopupOptions, MapOptions, MapDimensions;
 - Edit Appearance for Polyline inherited Features, most https://leafletjs.com/reference-1.3.0.html#polyline-option now accessable;
 - fixed: choose icon and shadow;
-- read the commit massages for further details;
+- Read the commit massages for further details;
 
 0.0.7
 - fix: geomData.api.root was still hardcoded;
