@@ -4,8 +4,8 @@ import _ from  'lodash';
 import loadJS from 'load-js';
 
 import defaults from './geom_block_map/defaults';
+import getNestedObject from './geom_block_map/functions/getNestedObject';
 import MapPlaceholder from './geom_block_map_editor/components/MapPlaceholder.jsx';
-let GeomMap = null; // will be overwritten when loadJS loaded geom_block_map_component_GeomMap
 
 registerBlockType( 'geom/map', {
 	title: __( 'Geo Masala Map' ),
@@ -46,11 +46,10 @@ registerBlockType( 'geom/map', {
         const mapDimensionsObject = JSON.parse( undefined === mapDimensions ? '{}' : mapDimensions );
         const optionsObject = JSON.parse( undefined === options ? '{}' : options );
 
-        // load the main editor component
-        loadJS( [geomData.pluginDirUrl + '/js/geom_block_map_module_GeomMap.min.js'] ).then( () => GeomMap = geomData.modules.GeomMap );
-
-		// display a loading placeholder or run the app
-		if ( 'undefined' === typeof(GeomMap) || null === GeomMap ) {
+        if ( undefined === getNestedObject( geomData, 'modules.GeomMap' ) ) {
+        	// load the main editor component, then set some nonsense to rerender the block
+			loadJS( [geomData.pluginDirUrl + '/js/geom_block_map_module_GeomMap.min.js'] ).then( () => setAttributes({nonsense: true}) );
+			// until loaded, display a placeholder
 			return ([
 				<MapPlaceholder
 					color={optionsObject.placeholder.color}
@@ -59,7 +58,7 @@ registerBlockType( 'geom/map', {
 			]);
 		} else {
 			return (
-				<GeomMap
+				<geomData.modules.GeomMap
 					featureIds={featureIds}
 					controls={controlsObject}
 					mapOptions={mapOptionsObject}
@@ -77,7 +76,7 @@ registerBlockType( 'geom/map', {
     },
 
     save( { attributes, className } ) {
-    	console.log( 'save attributes', attributes );		// ??? debug
+    	// console.log( 'save attributes', attributes );		// ??? debug
     	return null;
     },
 

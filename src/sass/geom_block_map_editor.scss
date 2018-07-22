@@ -1,5 +1,6 @@
 @import "bourbon";
 @import "variables/variables";
+@import "mixins/breakpoints";
 @import "mixins/mixins-master";
 
 @import "vendor/leaflet/leaflet-draw";
@@ -27,18 +28,4 @@
 
 .geom-color-picker {
     overflow: hidden;
-}
-
-
-// ??? responsive media query ....
-.geom-left {
-    float: left;
-}
-
-.geom-rigth {
-    float: right;
-}
-
-.geom-half-width {
-    width: 45%;
 }

@@ -14,7 +14,8 @@ A new block for gutenberg: 'Geo Masala Map'
 * [Tell me](https://waterproof-webdesign.info/en/#contact) your wishes, maybe get me a bowl of rice and some masala: [Donate](http://waterproof-webdesign.info/donate)
 
 
-##How to install:
+## How to install:
+
 Geo-Masala is [available in the official WordPress Plugin repository](https://wordpress.org/plugins/geo-masala/). You can install this Plugin the same way you'd install any other plugin.
 
 To install it from this GitHub Repo:

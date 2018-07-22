@@ -84,8 +84,13 @@ class Map extends React.Component {
 		}
 		let mapOptions = getNestedObject( this.props, 'mapTriggers.setOptions' );
 		if ( mapOptions !== getNestedObject( prevProps, 'mapTriggers.setOptions' ) ) {
-			this.setMapOptions( mapOptions )
+			this.setMapOptions( mapOptions );
 			delete this.props.mapTriggers.setOptions;
+		}
+		let invalidateSize = getNestedObject( this.props, 'mapTriggers.invalidateSize' );
+		if ( invalidateSize !== getNestedObject( prevProps, 'mapTriggers.invalidateSize' ) ) {
+			this.map.invalidateSize();
+			delete this.props.mapTriggers.invalidateSize;
 		}
 	}
 

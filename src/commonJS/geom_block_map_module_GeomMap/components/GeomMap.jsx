@@ -228,7 +228,12 @@ class GeomMap extends React.Component {
 	onChangeMapDimensions( key, val ) {
 		const mapDimensions = {...this.state.mapDimensions}
 		mapDimensions[key] = val;
-		this.setState( { mapDimensions: mapDimensions } );
+		this.setState( {
+			mapDimensions: mapDimensions,
+			mapTriggers: {
+				invalidateSize: true,
+			}
+		} );
 		this.props.onChangeMapDimensions( mapDimensions );
 	}
 
@@ -275,7 +280,7 @@ class GeomMap extends React.Component {
         	/>,
 
 			<FeatureListPanel
-				title='Features'
+				title='Map Features'
 				className={'geom-panel geom-components-features-panel'}
 				initialOpen={false}
 				onFlyToFeature={ this.onFlyToFeature.bind(this) }

@@ -1,3 +1,5 @@
+import classnames from 'classnames';
+
 /**
  * WordPress dependencies
  */
@@ -9,7 +11,6 @@ const {
     IconButton,
 } = wp.components;
 
-import classnames from 'classnames';
 
 class FeatureListRow extends React.Component {
 
@@ -17,48 +18,16 @@ class FeatureListRow extends React.Component {
 		super(props);
 	}
 
-	onFlyToFeature(e){
-		if (e) e.preventDefault();
-		this.props.onFlyToFeature( this.props.model );
-	}
-
 	onEditShareUser(val){
-		let self = this;
-
 		this.props.model.set( 'geom_feature_share.user', val.toString() )
-		this.forceUpdate();	// ... may be set seState to busy, and display some kind of loader instead
-		this.props.model.save().done(function(){
-			self.props.onEditShare( self.props.model );
-		});
+		this.forceUpdate();		// ... may be set setState({busy:true}), and display some kind of loader instead
+		this.props.model.save().done( () => this.props.onEditShare( this.props.model ) );
 	}
 
 	onEditSharePost(val){
-		let self = this;
-		// let geom_feature_share = this.props.model.get('geom_feature_share');
-		// geom_feature_share.post = val.toString();
-		// this.props.model.set({
-		// 	geom_feature_share: geom_feature_share,
-		// });
 		this.props.model.set( 'geom_feature_share.post', val.toString() );
-		this.forceUpdate();
-		this.props.model.save().done(function(){
-			self.props.onEditShare( self.props.model );
-		});
-	}
-
-	onAddNewFeature(e){
-		if (e) e.preventDefault();
-		this.props.onAddNewFeature( this.props.model );
-	}
-
-	onRemoveFeature(e){
-		if (e) e.preventDefault();
-		this.props.onRemoveFeature( this.props.model );
-	}
-
-	onTrashFeature(e){
-		if (e) e.preventDefault();
-		this.props.onTrashFeature( this.props.model );
+		this.forceUpdate();		// ... may be set setState({busy:true}), and display some kind of loader instead
+		this.props.model.save().done( () => this.props.onEditShare( this.props.model ) );
 	}
 
 	render() {
@@ -69,16 +38,6 @@ class FeatureListRow extends React.Component {
 			className,
 			classNameWrapper,
 		} = this.props;
-
-		let wrapperClasses = classnames(
-			'geom-components-features-list-item-wrapper',
-			classNameWrapper,
-		);
-
-		let classes = classnames(
-			'geom-components-features-list-item',
-			className,
-		);
 
 		let userCanEdit = false;
 		let userCanDelete = false;
@@ -91,21 +50,24 @@ class FeatureListRow extends React.Component {
 			<div
 				key={model.get('cid')}
 				style={style}
-				className={wrapperClasses}
+				className={classnames( 'geom-components-features-list-item-wrapper', classNameWrapper )}
 			>
 
 				<div
-					className={classes}
+					className={classnames( 'geom-components-features-list-item', className )}
 				>
-
-					<span className="geom-components-features-list-item-id" >
-						{ model.get('id') }
-					</span>
 
 					<span className="geom-components-features-list-item-title" >
 						{ 'string' === typeof( model.get('title') ) ? model.get('title') : model.get('title').rendered }
 					</span>
 
+					<span className="geom-components-features-list-item-status" >
+						{ model.get('status') }
+					</span>
+
+					<span className="geom-components-features-list-item-author" >
+						{ model.get('author_nicename') }
+					</span>
 
 					<div className="geom-components-features-list-item-actions" >
 						{ this.props.onEditShare && userCanEdit &&
@@ -113,6 +75,7 @@ class FeatureListRow extends React.Component {
 								contentClassName="geom-popover"
 								position="left center"
 								expandOnMobile={true}
+								className={'geom-inline-block'}
 								renderToggle={ ( { isOpen, onToggle, onClose } ) => (
 									<Button
 										onClick={ onToggle } aria-expanded={ isOpen }
@@ -121,7 +84,6 @@ class FeatureListRow extends React.Component {
 									>
 										<Dashicon icon={ 'share' } className="components-panel__share" />
 									</Button>
-
 								) }
 								renderContent={ ({ isOpen, onToggle, onClose }) => (
 									<div>
@@ -171,7 +133,7 @@ class FeatureListRow extends React.Component {
 
 						{ this.props.onFlyToFeature &&
 							<Button
-								onClick={ this.onFlyToFeature.bind(this) }
+								onClick={ () => this.props.onFlyToFeature( this.props.model ) }
 								className={'geom-block'}
 								title='Fly to Feature'
 							>
@@ -181,7 +143,7 @@ class FeatureListRow extends React.Component {
 
 						{ this.props.onAddNewFeature &&
 							<Button
-								onClick={ this.onAddNewFeature.bind(this) }
+								onClick={ () => this.props.onAddNewFeature( this.props.model ) }
 								className={'geom-block'}
 								title='Add to Map'
 							>
@@ -191,7 +153,7 @@ class FeatureListRow extends React.Component {
 
 						{ this.props.onRemoveFeature &&
 							<Button
-								onClick={ this.onRemoveFeature.bind(this) }
+								onClick={ () => this.props.onRemoveFeature( this.props.model ) }
 								className={'geom-block'}
 								title='Remove from Map (keep in Feature-Pool)'
 							>
@@ -201,7 +163,7 @@ class FeatureListRow extends React.Component {
 
 						{ this.props.onTrashFeature && userCanDelete &&
 							<Button
-								onClick={ this.onTrashFeature.bind(this) }
+								onClick={ () => this.props.onTrashFeature( this.props.model ) }
 								className={'geom-block'}
 								title='Move Feature to Trash'
 							>

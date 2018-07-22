@@ -2,6 +2,7 @@
 import { List } from 'react-virtualized';
 
 const {
+    BaseControl,
     PanelBody,
     RadioControl,
 } = wp.components;
@@ -10,6 +11,7 @@ import getNestedObject from '../../geom_block_map/functions/getNestedObject';
 
 import FeatureCollection from '../../geom_block_map/collections/FeatureCollection';
 
+import FeatureListHeader from './FeatureListHeader.jsx';
 import FeatureListRow from './FeatureListRow.jsx';
 
 
@@ -232,8 +234,15 @@ class FeatureListPanel extends React.Component {
 
 		function noRowsRenderer1(){
 			return ([
-				<p>Draw some Features</p>,
-				<p>Or select some from the Feature-Pool</p>,
+				<p>No Features</p>,
+				<p>Draw some Features, or select from the Feature-Pool</p>,
+			])
+		}
+
+		function noRowsRenderer2(){
+			return ([
+				<p>No Features found</p>,
+				<p>Try to adjust filters</p>,
 			])
 		}
 
@@ -245,13 +254,20 @@ class FeatureListPanel extends React.Component {
 				initialOpen={false}
 			>
 
-				{ featureCollection.length ? <p>Features on Map</p> : <p>No Features on Map until now.</p> }
+				 {
+				 	 //featureCollection.length && <p>No Features</p>
+				 }
 
-				{ isLoaded ?
+				{ isLoaded ? [
+
+					<FeatureListHeader
+						style={{maxWidth: '100%' }}
+					/>,
+
 					<List
 						height={200}
 						width={300}
-						style={{width: 'auto',maxWidth: '100%'}}
+						style={{width: 'auto',maxWidth: '100%', overflowY: 'scroll' }}
 						containerStyle={{width: 'auto',maxWidth: '100%'}}
 						autoContainerWidth={false}
 						rowCount={featureCollection.length}
@@ -260,7 +276,7 @@ class FeatureListPanel extends React.Component {
 						rowRenderer={rowRenderer1}
 						className="geom-components-features-list"
 					/>
-					: <span>... loading</span>
+					] : <span>... loading</span>
 				}
 				<PanelBody
 					title='Feature-Pool'
@@ -273,47 +289,53 @@ class FeatureListPanel extends React.Component {
 						initialOpen={false}
 					>
 
-						<RadioControl
-							label="Author Filter"
-							selected={ displayOptions.user }
-							className="geom-left geom-half-width"
-							help="Who created the Feature?"
-							options={[
-								{ label: 'My Features', value: currentUserId },
-								{ label: 'Other Users Features', value: 'otherUsersFeatures' },
-								{ label: 'All Features', value: 'allUsersFeatures' },
-							]}
-							onChange={ this.onChangePoolDisplayShareUser.bind(this) }
-						/>
+						<div className='geom-flex-row' >
+							<RadioControl
+								label="Author Filter"
+								selected={ displayOptions.user }
+								help="Who created the Feature?"
+								options={[
+									{ label: 'My Features', value: currentUserId },
+									{ label: 'Other Users Features', value: 'otherUsersFeatures' },
+									{ label: 'All Features', value: 'allUsersFeatures' },
+								]}
+								onChange={ this.onChangePoolDisplayShareUser.bind(this) }
+							/>
 
-						<RadioControl
-							label="Posts Filter"
-							selected={ displayOptions.post }
-							className="geom-left geom-half-width"
-							help="Limit Search results to Features private to this Post, or display them all"
-							options={[
-								{ label: 'Private Features for this Post', value: currentPostId },
-								{ label: 'Features for all Posts', value: 'allPostsFeatures' },
-							]}
-							onChange={ this.onChangePoolDisplaySharePost.bind(this) }
-						/>
+							<RadioControl
+								label="Posts Filter"
+								selected={ displayOptions.post }
+								help="Limit Search results to Features private to this Post"
+								options={[
+									{ label: 'Private Features for this Post', value: currentPostId },
+									{ label: 'Features for all Posts', value: 'allPostsFeatures' },
+								]}
+								onChange={ this.onChangePoolDisplaySharePost.bind(this) }
+							/>
+						</div>
 
 					</PanelBody>
 
 					<div className="geom-clearfix"></div>
 
-					{ availableCollectionLoaded ?
+					{ availableCollectionLoaded ? [
+
+						<FeatureListHeader
+							style={{maxWidth: '100%' }}
+						/>,
+
 						<List
 							height={200}
 							width={300}
-							style={{width: 'auto',maxWidth: '100%'}}
+							style={{width: 'auto',maxWidth: '100%', overflowY: 'scroll' }}
 							containerStyle={{width: 'auto',maxWidth: '100%'}}
 							rowCount={availableCollection.length}
 							rowHeight={45}
+							noRowsRenderer={noRowsRenderer2}
 							rowRenderer={rowRenderer2}
 							className="geom-components-features-list"
 						/>
-						: <span>... loading</span>
+						]: <span>... loading</span>
 					}
 				</PanelBody>
 			</PanelBody>,

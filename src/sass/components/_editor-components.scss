@@ -1,79 +1,109 @@
 
 
+.geom-flex-row {
 
+    @include for-small-up {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
 
-
-
-
-
-
-
-
-
-
-.geom-panel {
-    .components-panel__body {
-        border: none;
-        &-toggle {
-            font-size: 16px !important;
+        > * {
+            flex: 1;
         }
     }
+
 }
 
-.geom-components-features-panel {
+
+
+.geom-inline-block {
+    display: inline-block;
+}
+
+
+
+
+/*
+ *    base
+ */
+$color__panel_bg: transparentize($color_background_dark, 0.95);
+.geom-panel.components-panel__body {
+    border: 1px solid #666;
+    background: $color__panel_bg;
     font-size: initial;
+    margin: 0.5em 0px 0.5em 0;
 
-    .components-button:not(:disabled):not([aria-disabled="true"]):focus {
-        box-shadow:none;
-    }
-
-    &-controls {
-        select {
-            min-height: 100px;
+    .components-panel__body-toggle {
+        font-size: 16px !important;
+        outline: none;
+        background: $color__panel_bg;
+        &.components-button:focus:not(:disabled):not([aria-disabled="true"]),
+        &.components-button:not(:disabled):not([aria-disabled="true"]):focus{
+            outline: none;
+            background: $color__panel_bg;
         }
     }
+
+    .components-base-control {
+        margin: 0;
+    }
+
 }
 
-.geom-components-features-list {
 
-    &-item {
-        background-color: $color_background_light_darken_1;
+/*
+ *    features panel
+ */
+.geom-panel.geom-components-features-panel {
+
+    .geom-components-features-list-item,
+    .geom-components-features-list-header {
+        background-color: $color__panel_bg;
         padding: 0 0.5em;
+        border-style: dotted;
+        border-width: 1px;
+
+        display: flex;
 
         &.highlight {
-             background-color: transparentize( $color_highlight, 0.8 );
+            background-color: transparentize( $color_highlight, 0.7 );
         }
 
         & > * {
-            margin-right: 0.5em;
-            &:last-child {
-                margin-right: 0;
-                float: right;
-            }
-        }
-
-        &-id {
-
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         &-title {
             font-weight: bold;
+            flex: 2;
+        }
+
+        &-status {
+        }
+
+        &-author {
         }
 
         &-actions {
+            line-height: normal;
+            margin-top: 3px;
+            margin-right: 0;
+            flex: none;
+            width: 110px;
+            text-align: right;
 
             & > * {
-                margin-right: 0.1em;
-                float: left;
+                margin-right: 0.3em;
                 &:last-child {
                     margin-right: 0;
                 }
             }
 
-            line-height: normal;
-
             .components-button {
                 padding: 0;
+                border-color: #666;
                 svg {
                     vertical-align: middle;
                 }
@@ -82,10 +112,20 @@
 
         }
     }
+
+    .geom-components-features-list-header {
+        border: none;
+        background: none;
+        margin-bottom: 0.5em;
+        width: 97%;
+    }
 }
 
 
-.geom-components-settings-panel {
+/*
+ *    settings panel
+ */
+.geom-panel.geom-components-settings-panel {
     &-controls-layers select {
         min-height: 125px;
     }
@@ -93,8 +133,8 @@
         min-height: 50px;
     }
 
+    // Loading Placeholder Color
     .geom-color-palette {
-
         &-display {
             width: 30px;
             display: inline-block;
@@ -104,12 +144,16 @@
             vertical-align: middle;
             margin-right: 1em;
         }
-
         .components-color-palette__clear {
             display: none;
         }
     }
+
+
 }
+
+
+
 
 
 
@@ -181,7 +225,6 @@
             input {
                 max-width: 100%;
             }
-
         }
 
         &.left {

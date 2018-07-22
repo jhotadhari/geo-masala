@@ -1,0 +1,26 @@
+// idea from here: https://medium.freecodecamp.org/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862
+// breakpoints from gutenberg/viewport/index.js
+
+@mixin for-mobile-only {
+    @media (max-width: 599px) { @content; }
+}
+
+@mixin for-small-up {
+    @media (min-width: 600px) { @content; }
+}
+
+@mixin for-medium-up {
+    @media (min-width: 782px) { @content; }
+}
+
+@mixin for-large-up {
+    @media (min-width: 960px) { @content; }
+}
+
+@mixin for-wide-up {
+    @media (min-width: 1280px) { @content; }
+}
+
+@mixin for-huge-up {
+    @media (min-width: 1440px) { @content; }
+}
