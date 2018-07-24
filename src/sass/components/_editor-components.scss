@@ -9,6 +9,7 @@
 
         > * {
             flex: 1;
+            padding: 0.5em;
         }
     }
 
@@ -54,10 +55,10 @@ $color__panel_bg: transparentize($color_background_dark, 0.95);
 /*
  *    features panel
  */
-.geom-panel.geom-components-features-panel {
+.geom-features-list {
 
-    .geom-components-features-list-item,
-    .geom-components-features-list-header {
+    &-item,
+    &-header {
         background-color: $color__panel_bg;
         padding: 0 0.5em;
         border-style: dotted;
@@ -65,34 +66,70 @@ $color__panel_bg: transparentize($color_background_dark, 0.95);
 
         display: flex;
 
-        &.highlight {
-            background-color: transparentize( $color_highlight, 0.7 );
-        }
-
         & > * {
             flex: 1;
             white-space: nowrap;
             overflow: hidden;
+            text-align: center;
         }
 
         &-title {
             font-weight: bold;
             flex: 2;
+            text-align: left;
         }
 
-        &-status {
-        }
-
-        &-author {
-        }
-
+        &-status,
         &-actions {
             line-height: normal;
             margin-top: 3px;
             margin-right: 0;
+        }
+
+        &-actions {
             flex: none;
             width: 110px;
             text-align: right;
+        }
+
+    }
+
+    &-header {
+        border: none;
+        background: none;
+        margin-bottom: 0.5em;
+        width: 97%;
+    }
+
+    &-item {
+
+        &.highlight {
+            background-color: transparentize( $color_highlight, 0.7 );
+        }
+
+        &-status,
+        &-actions {
+            .components-button {
+                border-color: #666;
+                &:focus {
+                    background-color: inherit;
+                    box-shadow: none;
+                    outline: none;
+                    outline-offset: none;
+                }
+            }
+        }
+
+        &-status {
+            .components-button {
+                padding: 3px;
+                &[disabled] {
+                    opacity: 1;
+                }
+            }
+        }
+
+        &-actions {
 
             & > * {
                 margin-right: 0.3em;
@@ -103,21 +140,12 @@ $color__panel_bg: transparentize($color_background_dark, 0.95);
 
             .components-button {
                 padding: 0;
-                border-color: #666;
                 svg {
                     vertical-align: middle;
                 }
             }
 
-
         }
-    }
-
-    .geom-components-features-list-header {
-        border: none;
-        background: none;
-        margin-bottom: 0.5em;
-        width: 97%;
     }
 }
 
@@ -125,7 +153,7 @@ $color__panel_bg: transparentize($color_background_dark, 0.95);
 /*
  *    settings panel
  */
-.geom-panel.geom-components-settings-panel {
+.geom-settings-panel {
     &-controls-layers select {
         min-height: 125px;
     }
@@ -135,7 +163,7 @@ $color__panel_bg: transparentize($color_background_dark, 0.95);
 
     // Loading Placeholder Color
     .geom-color-palette {
-        &-display {
+        &-preview {
             width: 30px;
             display: inline-block;
             height: 30px;
@@ -144,12 +172,7 @@ $color__panel_bg: transparentize($color_background_dark, 0.95);
             vertical-align: middle;
             margin-right: 1em;
         }
-        .components-color-palette__clear {
-            display: none;
-        }
     }
-
-
 }
 
 

@@ -1,4 +1,17 @@
 @import "leaflet/leaflet";
+@import "../mixins/filter";
+
+.leaflet-marker-icon.geom-feature-status-draft,
+path.geom-feature-status-draft {
+    opacity: 0.35;
+}
+.leaflet-marker-icon.geom-feature-status-trash,
+path.geom-feature-status-trash {
+    opacity: 0.35;
+    @include filterize( blur, 2.5px);
+}
+
+
 @import "leaflet/leaflet-fullscreen";
 @import "leaflet/leaflet-loading";
 
@@ -70,9 +83,6 @@
         width: 80%;
         width: calc(100% - 130px);
     }
-
-
-
 }
 
 

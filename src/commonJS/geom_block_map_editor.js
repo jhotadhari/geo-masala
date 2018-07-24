@@ -1,10 +1,22 @@
-const { __ } = wp.i18n;
-const { registerBlockType } = wp.blocks;
-import _ from  'lodash';
+/**
+ * External dependencies
+ */
 import loadJS from 'load-js';
+import _ from  'lodash';
 
+/**
+ * WordPress dependencies
+ */
+ const { __ } = wp.i18n;
+ const { registerBlockType } = wp.blocks;
+
+/**
+ * Internal dependencies
+ */
 import defaults from './geom_block_map/defaults';
+// functions
 import getNestedObject from './geom_block_map/functions/getNestedObject';
+// components
 import MapPlaceholder from './geom_block_map_editor/components/MapPlaceholder.jsx';
 
 registerBlockType( 'geom/map', {

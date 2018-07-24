@@ -1,12 +1,19 @@
+/**
+ * External dependencies
+ */
 import loadJS from 'load-js';
 import _ from  'underscore';
 import $ from 'jquery';
 import Backbone from 'backbone';
 Backbone.$ = $;
 
+/**
+ * Internal dependencies
+ */
+import defaults from './geom_block_map/defaults';
+// functions
 import getNestedObject from './geom_block_map/functions/getNestedObject';
 import getBlocksWithDefaults from './geom_block_map/functions/getBlocksWithDefaults';
-import defaults from './geom_block_map/defaults';
 import getMapPlaceholder from './geom_block_map_frontend/functions/getMapPlaceholder';
 
 document.addEventListener('DOMContentLoaded', () => {

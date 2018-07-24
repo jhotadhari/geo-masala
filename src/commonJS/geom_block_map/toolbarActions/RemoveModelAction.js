@@ -4,8 +4,8 @@ require('leaflet-toolbar');
 const RemoveModelAction = L.Toolbar2.Action.extend({
 	options: {
 		toolbarIcon: {
-			className: 'leaflet-draw-edit-remove',
-			tooltip: 'Remove',
+			className: 'dashicons dashicons-minus geom-icon geom-icon-medium',
+			tooltip: 'Remove from Map',
 		}
 	},
 

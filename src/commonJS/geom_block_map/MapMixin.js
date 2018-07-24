@@ -207,9 +207,10 @@ const MapMixin = {
 		let featureGroupAdded = false;
 		collection.each( function( featureModel ) {
 			let featureGroupPostIds = _.pluck( featureGroup.getLayers(), 'postId' );
+			let index = _.indexOf( featureGroupPostIds, featureModel.get('id') );
 
 			// add layer
-			if ( _.indexOf( featureGroupPostIds, featureModel.get('id') ) === -1 ) {
+			if ( index === -1 ) {
 				featureGroupAdded = true;
 
 				let geom_feature_geo_json = featureModel.get('geom_feature_geo_json');
@@ -243,7 +244,7 @@ const MapMixin = {
 						// add layer to featureGroup
 						featureGroup.addLayer( layer );
 
-						self.featureBindPopup( layer, featureModel );
+						self.featureBindPopup( featureModel, layer );
 						setFeatureAppearance( featureModel, layer );
 
 					},

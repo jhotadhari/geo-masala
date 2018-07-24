@@ -90,7 +90,7 @@ const FeatureModel = wp.api.models.Post.extend({
 
 		title: '',
 		content: '',
-		status: 'publish',
+		status: 'draft',
 
 		geom_feature_share: {
 			user: geomData.user.id.toString(),			// userId || 'publicReadOnly'
@@ -116,7 +116,9 @@ const FeatureModel = wp.api.models.Post.extend({
 
 	},
 
-	// same as wp.api.models.Post.sync, but deletes empty string responses (for serializedOptions)
+	// same as wp.api.models.Post.sync, but
+	//   - deletes empty string responses (for serializedOptions)
+	//   - passes force option to destroy, if needed
 	sync: function( method, model, options ) {
 		let self = this;
 		var beforeSend;
@@ -159,7 +161,8 @@ const FeatureModel = wp.api.models.Post.extend({
 		}
 
 		// Add '?force=true' to use delete method when required.
-		if ( this.requireForceForDelete && 'delete' === method ) {
+		// if ( this.requireForceForDelete && 'delete' === method ) {
+		if ( ( this.requireForceForDelete || options.force ) && 'delete' === method ) {
 			model.url = model.url() + '?force=true';
 		}
 

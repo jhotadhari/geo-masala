@@ -1,20 +1,23 @@
-
+/**
+ * External dependencies
+ */
 const L = require('leaflet');
 require('leaflet-toolbar');
 require('leaflet-draw');
 // require('leaflet-draw-toolbar/dist/leaflet.draw-toolbar');
 
+/**
+ * Internal dependencies
+ */
 import MapMixin from '../../geom_block_map/MapMixin';
 import defaults from '../../geom_block_map/defaults';
+// functions
 import getNestedObject from '../../geom_block_map/functions/getNestedObject';
-
+import featureOpenPopupToolbar from '../../geom_block_map/functions/featureOpenPopupToolbar';
+import setFeatureAppearance from '../../geom_block_map/functions/setFeatureAppearance';
+import featureBindPopup from '../../geom_block_map/functions/featureBindPopup';
+// toolbarControls
 import CustomDrawToolbar from '../../geom_block_map/toolbarControls/CustomDrawToolbar';
-
-import EditDrawAction from '../../geom_block_map/toolbarActions/EditDrawAction';
-import EditPopupAction from '../../geom_block_map/toolbarActions/EditPopupAction';
-import EditAppearanceAction from '../../geom_block_map/toolbarActions/EditAppearanceAction';
-import RemoveModelAction from '../../geom_block_map/toolbarActions/RemoveModelAction';
-import CancelAction from '../../geom_block_map/toolbarActions/CancelAction';
 
 class Map extends React.Component {
 	constructor(props) {
@@ -34,7 +37,7 @@ class Map extends React.Component {
 	}
 
 	onDrawCreated(layer){
-		this.props.onDrawCreated(layer);
+		this.props.onDrawCreated(layer, this.map);
 	}
 
 	onDrawRemoved( evt ){
@@ -54,6 +57,7 @@ class Map extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot){
+
 		this.config = {
 			controls: this.props.controls,
 			mapOptions: this.props.mapOptions,
@@ -64,9 +68,7 @@ class Map extends React.Component {
 		this.initMap();
 
 		// update MapFeatures
-		if ( this.props.isLoaded ) {
-			this.updateMapFeatures();
-		}
+		if ( this.props.isLoaded ) this.updateMapFeatures();
 
 		// update controls
 		this.updateControls();
@@ -77,10 +79,14 @@ class Map extends React.Component {
 			this.flyToFeature( flyToPostId );
 			delete this.props.mapTriggers.flyToFeature;
 		}
-		let removeFeatureId = getNestedObject( this.props, 'mapTriggers.removeFeature' );
-		if ( removeFeatureId !== getNestedObject( prevProps, 'mapTriggers.removeFeature' ) ) {
-			this.flyToFeature( removeFeatureId );
-			delete this.props.mapTriggers.removeFeature;
+		let updateMapFeatureAppearance = getNestedObject( this.props, 'mapTriggers.updateMapFeatureAppearance' );
+		if ( updateMapFeatureAppearance !== getNestedObject( prevProps, 'mapTriggers.updateMapFeatureAppearance' ) ) {
+			let updateMapFeatureAppearance_layer = _.findWhere( this.getFeatureGroup().getLayers(), { postId: updateMapFeatureAppearance.get('id') } );
+			if ( undefined  !== updateMapFeatureAppearance_layer ) {
+				setFeatureAppearance( updateMapFeatureAppearance, updateMapFeatureAppearance_layer );
+				featureBindPopup( updateMapFeatureAppearance, updateMapFeatureAppearance_layer, this.map );
+			}
+			delete this.props.mapTriggers.updateMapFeatureAppearance;
 		}
 		let mapOptions = getNestedObject( this.props, 'mapTriggers.setOptions' );
 		if ( mapOptions !== getNestedObject( prevProps, 'mapTriggers.setOptions' ) ) {
@@ -91,6 +97,15 @@ class Map extends React.Component {
 		if ( invalidateSize !== getNestedObject( prevProps, 'mapTriggers.invalidateSize' ) ) {
 			this.map.invalidateSize();
 			delete this.props.mapTriggers.invalidateSize;
+		}
+		let openPopupToolbarFeature = getNestedObject( this.props, 'mapTriggers.openPopupToolbarFeature' );
+		if ( openPopupToolbarFeature !== getNestedObject( prevProps, 'mapTriggers.openPopupToolbarFeature' ) ) {
+			let openPopupToolbarFeature_layer = _.findWhere( this.getFeatureGroup().getLayers(), { postId: openPopupToolbarFeature.get('id') } );
+			if ( undefined  !== openPopupToolbarFeature_layer ) {
+				let latlng = undefined !== openPopupToolbarFeature_layer.getCenter ? openPopupToolbarFeature_layer.getCenter() : openPopupToolbarFeature_layer.getLatLng();
+				featureOpenPopupToolbar( openPopupToolbarFeature, openPopupToolbarFeature_layer, this.map, latlng )
+			}
+			delete this.props.mapTriggers.openPopupToolbarFeature;
 		}
 	}
 
@@ -154,29 +169,8 @@ class Map extends React.Component {
 		return this;
 	}
 
-	featureBindPopup( layer, featureModel ) {
-		let self = this;
-		layer.on('click', function( event ) {
-			new L.Toolbar2.EditToolbar.Popup( event.latlng, {
-				actions: self.getPopupActions(featureModel),
-			}).addTo( self.map, layer );
-		});
-	}
-
-	getPopupActions(featureModel){
-		let actions = [];
-		if ( featureModel.get('author').toString() === geomData.user.id ) {
-			actions = actions.concat([
-				EditDrawAction,
-				EditPopupAction,
-				EditAppearanceAction,
-			]);
-		}
-		actions = actions.concat([
-			RemoveModelAction,
-			CancelAction,
-		]);
-		return actions;
+	featureBindPopup( featureModel, layer ) {
+		featureBindPopup( featureModel, layer, this.map );
 	}
 
 	flyToFeature( postId ){

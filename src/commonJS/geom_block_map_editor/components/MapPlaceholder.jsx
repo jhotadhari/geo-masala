@@ -1,3 +1,7 @@
+/**
+ * Internal dependencies
+ */
+import defaults from '../../geom_block_map/defaults';
 
 const MapPlaceholder = (props) => {
 
@@ -20,5 +24,13 @@ const MapPlaceholder = (props) => {
 	]);
 
 };
+
+MapPlaceholder.defaultProps = {
+	color: defaults.options.placeholder.color,
+	dimensions: {
+		width: 100,
+		height: 300,
+	},
+}
 
 export default MapPlaceholder;

@@ -1,3 +1,6 @@
+/**
+ * External dependencies
+ */
 import classnames from 'classnames';
 
 class FeatureListHeader extends React.Component {
@@ -17,25 +20,25 @@ class FeatureListHeader extends React.Component {
 		return ([
 			<div
 				style={style}
-				className={classnames( 'geom-components-features-list-header-wrapper', classNameWrapper )}
+				className={classnames( 'geom-features-list-header-wrapper', classNameWrapper )}
 			>
 
 				<div
-					className={ classnames( 'geom-components-features-list-header', className )}
+					className={ classnames( 'geom-features-list-header', className )}
 				>
-					<span className="geom-components-features-list-header-title" >
+					<span className="geom-features-list-header-title" >
 						Title
 					</span>
 
-					<span className="geom-components-features-list-header-status" >
+					<span className="geom-features-list-header-status" >
 						Status
 					</span>
 
-					<span className="geom-components-features-list-header-author" >
+					<span className="geom-features-list-header-author" >
 						Author
 					</span>
 
-					<div className="geom-components-features-list-header-actions" >
+					<div className="geom-features-list-header-actions" >
 
 					</div>
 

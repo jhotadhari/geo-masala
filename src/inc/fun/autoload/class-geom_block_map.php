@@ -123,6 +123,8 @@ class Geom_Block_Map {
 		);
 	}
 
+	// hooked on enqueue_block_assets. So function will run in admin and frontend.
+	// But we will use it only on frontend if the post has this block
 	public function enqueue_frontend_assets() {
 
 		wp_register_script(
@@ -165,6 +167,7 @@ class Geom_Block_Map {
 		wp_enqueue_script( $handle );
 	}
 
+	// hooked on enqueue_block_editor_assets. So function will only run in admin
 	public function enqueue_editor_assets() {
 		$handle = $this->get_handle( 'editor' );
 
@@ -173,7 +176,7 @@ class Geom_Block_Map {
 			Geom_Geo_masala::plugin_dir_url() . '/js/backform.min.js',
 			array(
 				'wp-backbone',
-				),
+			),
 			false,
 			true
 		);
@@ -187,7 +190,7 @@ class Geom_Block_Map {
 				'wp-element',
 				'backform',
 				'backbone-memento',
-				),
+			),
 			filemtime( Geom_Geo_masala::plugin_dir_path() . 'js/' . $handle . '.min.js' )
 		);
 
@@ -233,8 +236,5 @@ function geom_block_map_init() {
 }
 
 geom_block_map_init();
-
-
-
 
 ?>
