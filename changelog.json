@@ -2,6 +2,12 @@
   "next": [
     ""
   ],
+  "0.1.0": [
+    "- compatible with wp 4.9.8 and gb 3.4.0;",
+    "- Added use of post_status for geom_features ( 'publish', 'draft' and 'trash' );",
+    "- restructuring blockUi;",
+    "- ui: merged FeatureListPanel and its Feature Pool into one component FeatureList;"
+  ],
   "0.0.10": [
     "- compatible with gutenberg 3.3.0;",
     "- lazyloading scripts using load-js on frontend and admin;",

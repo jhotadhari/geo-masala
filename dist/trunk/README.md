@@ -2,7 +2,7 @@
 **Tags:** gutenberg,block,leaflet,map,geo,gis  
 **Donate link:** http://waterproof-webdesign.info/donate  
 **Contributors:** [jhotadhari](https://profiles.wordpress.org/jhotadhari)  
-**Tested up to:** 4.9.7  
+**Tested up to:** 4.9.8  
 **Requires at least:** 4.9.6  
 **Requires PHP:** 5.6  
 **Stable tag:** trunk  
@@ -30,8 +30,10 @@ A new block for gutenberg: 'Geo Masala Map'
 
 Edit any Post with gutenberg and add a 'Geo Masala Map' block, save post and done. Your post will display a map.
 
-* Draw some Features or select some from the Feature-Pool.
-* Edit the Feature, change icon or color, change the popup content and title.
+* Draw some Features or select some from the Feature-Panel.
+  * The default Status for a new Feature is draft, only published ones are displayed in frontend.
+  * To get Features from other posts/users, open Feature-Panel and just the Filters.
+* Edit the Feature, change status, icon or color, change the popup content and title.
 * Open the Map Settings Panel and customize the controls.
 * Change the Feature sharing settings for a single Feature, and reuse the Feature in other Posts
 * ...
@@ -48,9 +50,10 @@ A Feature is saved as a post type, and not saved to the Block!
 
 * The Plugin registered a new custom-post-type 'geom_feature'. Each geom_feature is used to store a single cartographic Feature, formatted in geoJSON. The cartographic Feature and other data (appearance, popup-content ...) are stored as post-meta.
 * The geom_feature is registered without wordpress ui (List table and editing screen) or appearance in admin-navigation or admin-bar.
-* When editing any post with gutenberg, the 'Geo Masala Map' block displays a leaflet map and some settings-panels beneath it. All crud actions (create, read, update, delete) for geom_feature(s) are handled within the editor block using the wp rest api and its backbone client. (Currently all geom_feature(s) are always “publish” state and 'all' operations within the block are saved immediately to the geom_feature)
-* The Features-Pool Panel within the Features-Panel lists available geom_features. If a Feature gets removed from map, the geom_feature is still saved and available to use.
-* Therefor a Feature created by one post can be used in another post as well (depending on the individual feature settings). All changes made to a geom_feature are saved immediately and will effect all posts where the Feature is displayed (well, some map ui elements have cancel/undo buttons).
+* When editing any post with gutenberg, the 'Geo Masala Map' block displays a leaflet map and some settings-panels beneath it. All crud actions (create, read, update, delete) for geom_feature(s) are handled within the editor block using the wp rest api and its backbone client. All geom_feature crud actions are saved immediately (Some ui elements have reset/save buttons).
+* default post_status for geom_feature(s) is 'draft'.
+* The Features-Panel lists geom_features. Features on Map are highlighted. If a Feature gets removed from map, the geom_feature is still saved and available to use.
+* Therefor a Feature created by one post can be used in another post as well (depending on the individual feature settings). All changes made to a geom_feature are saved immediately and will effect all posts where the Feature is displayed.
 * All attributes related to the map (and not to its features) are stored as block attributes.
 
 ### In Development ###
@@ -69,8 +72,8 @@ Coming soon hopefully:
 
 Known issues:
 
-* Currently there is a maximum for hundred Features, will be changed in future. This is the max number for the REST request (can be bypassed easily, but the ui needs some changes before it gets flooded with features)
-* Feature Sharing: The popover control controls if the Feature appears in a Feature-Pool. If it is already in use somwhere, it will still be used, but just not displayed in Feature-Pool.
+* Currently there is a maximum for hundred Features, will be changed in future.
+* Feature Sharing: The popover control controls if the Feature appears in a Feature-Pool. If it is already in use somwhere, it will still be used, but just not displayed in Feature-Panel.
 
 ### Contribute ###
 * Most welcome :)
@@ -83,9 +86,9 @@ Known issues:
 
 ### Thanks for beautiful ressoucres ###
 
-* WordPress, its environment, the [WP REST API](https://developer.wordpress.org/rest-api/), the [Backbone JavaScript Client](https://developer.wordpress.org/rest-api/using-the-rest-api/backbone-javascript-client/) and the [Gutenberg Editor](https://wordpress.org/gutenberg/handbook/) and its components.
-* [Backbone](http://backbonejs.org/), [Backbone Marionette](http://marionettejs.com/) and [Backbone Deep Model](https://www.npmjs.com/package/backbone.deep-model).
-* [React](https://reactjs.org/) and [react-virtualized](https://github.com/bvaughn/react-virtualized)
+* WordPress, the [WP REST API](https://developer.wordpress.org/rest-api/), the [Backbone JavaScript Client](https://developer.wordpress.org/rest-api/using-the-rest-api/backbone-javascript-client/) and the [Gutenberg Editor](https://wordpress.org/gutenberg/handbook/) and its components.
+* [Backbone](http://backbonejs.org/), [Backbone Marionette](http://marionettejs.com/), [Backbone Deep Model](https://www.npmjs.com/package/backbone.deep-model) and [Backbone Cocktail](https://github.com/onsi/cocktail).
+* [React](https://reactjs.org/), [react-virtualized](https://github.com/bvaughn/react-virtualized) and [react-multi-select](https://github.com/khan/react-multi-select)
 * [Leaflet](http://leafletjs.com/) and Plugins:
   * [Leaflet Draw](https://github.com/Leaflet/Leaflet.draw)
   * [Leaflet Draw Toolbar](https://github.com/justinmanley/leaflet-draw-toolbar)
@@ -108,10 +111,10 @@ Known issues:
 Upload and install this Plugin the same way you'd install any other plugin.
 
 ## Screenshots ##
-1. Controls and Controls-Settings
+1. Block Overview
 2. Edit Popup Content
-3. Map Feature editing and sharing
-4. Edit Feature appearance, choose Icon
+3. Edit Feature appearance (Marker)
+4. Edit Feature appearance (Line, Polygone ...)
 
 ## Upgrade Notice ##
 
@@ -119,6 +122,12 @@ This Plugin is still in early development. Reality might be in movement.
 
 
 ## Changelog ##
+
+0.1.0
+- compatible with wp 4.9.8 and gb 3.4.0;
+- Added use of post_status for geom_features ( 'publish', 'draft' and 'trash' );
+- restructuring blockUi;
+- ui: merged FeatureListPanel and its Feature Pool into one component FeatureList;
 
 0.0.10
 - compatible with gutenberg 3.3.0;
