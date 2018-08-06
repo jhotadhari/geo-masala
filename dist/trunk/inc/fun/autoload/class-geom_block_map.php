@@ -57,7 +57,7 @@ class Geom_Block_Map {
 	protected function post_has_block(){
 		global $post;
 
-		if ( strlen( $post->post_content ) === 0 )
+		if ( !( $post instanceof WP_Post ) || ( strlen( $post->post_content ) === 0 ) )
 			return false;
 
 		$block_pattern = (

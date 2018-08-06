@@ -9,13 +9,12 @@ Stable tag: trunk
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Add interactive Leaflet Maps. A new block for gutenberg: 'Geo Masala Map'
+Highly customizable Map Block for Gutenberg, based on Leaflet
 
 
 == Description ==
 
-Add interactive Leaflet Maps to your blog.
-A new block for gutenberg: 'Geo Masala Map'
+Highly customizable Map Block for Gutenberg, based on Leaflet
 
 * Customize the Map and its Features directly from within the **Gutenberg Block**
 * **Draw and edit Features**. Markers, Lines, Polygons ...
@@ -32,7 +31,7 @@ Edit any Post with gutenberg and add a 'Geo Masala Map' block, save post and don
 
 * Draw some Features or select some from the Feature-Panel.
   * The default Status for a new Feature is draft, only published ones are displayed in frontend.
-  * To get Features from other posts/users, open Feature-Panel and just the Filters.
+  * To get Features from other posts/users, open Feature-Panel and adjust the Filters.
 * Edit the Feature, change status, icon or color, change the popup content and title.
 * Open the Map Settings Panel and customize the controls.
 * Change the Feature sharing settings for a single Feature, and reuse the Feature in other Posts
@@ -97,7 +96,7 @@ Known issues:
   * [Leaflet Providers](https://github.com/leaflet-extras/leaflet-providers)
   * [Leaflet Fullscreen](https://github.com/brunob/leaflet.fullscreen)
   * [Leaflet Toolbar](https://github.com/Leaflet/Leaflet.toolbar)
-* This Plugin is generated with [generator-pluginboilerplate version 1.2.0](https://github.com/jhotadhari/generator-pluginboilerplate)
+* This Plugin is generated with [generator-pluginboilerplate version 1.2.3](https://github.com/jhotadhari/generator-pluginboilerplate)
 * Background for plugin banner and icon [OpenTopoMap](http://opentopomap.org/)
 * ...
 
@@ -122,6 +121,10 @@ This Plugin is still in early development. Reality might be in movement.
 
 
 == Changelog ==
+
+0.1.1
+- Fixed error on archive pages;
+- Read the commit massages for further details;
 
 0.1.0
 - compatible with wp 4.9.8 and gb 3.4.0;
