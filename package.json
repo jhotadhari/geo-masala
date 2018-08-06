@@ -6,7 +6,7 @@
   "textDomain": "geo-masala",
   "domainPath": "/languages",
   "version": "0.1.0",
-  "description": "Add interactive Leaflet Maps. A new block for gutenberg: 'Geo Masala Map'",
+  "description": "Highly customizable Map Block for Gutenberg, based on Leaflet",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

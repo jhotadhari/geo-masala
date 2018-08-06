@@ -1,8 +1,6 @@
 WordPress Plugin
 
-Add interactive Leaflet Maps to your blog.
-
-A new block for gutenberg: 'Geo Masala Map'
+Highly customizable Map Block for Gutenberg, based on Leaflet
 
 > Further information: [./dist/trunk/README.md](https://github.com/jhotadhari/geo-masala/tree/master/dist/trunk)
 
