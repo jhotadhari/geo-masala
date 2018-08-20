@@ -2,6 +2,11 @@
   "next": [
     ""
   ],
+  "0.1.2": [
+    "- compatible with Gutenberg v3.6.2 and WordPress v4.9.8",
+    "- fix: lazy load script on frontend. only if el .wp-block-geom-map exist;",
+    "- tweak: enqueue frontend asset-entry-scripts on all sites, and lazy load large scripts. before enqueue only if global post has block, so failed on archive pages;"
+  ],
   "0.1.1": [
     "- Fixed error on archive pages;",
     "- Read the commit massages for further details;"

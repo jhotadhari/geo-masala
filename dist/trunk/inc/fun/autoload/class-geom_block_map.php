@@ -113,7 +113,7 @@ class Geom_Block_Map {
 				'id' => strval( $current_user->ID ),
 			),
 			'post' => array(
-				'id' => strval( $post->ID ),
+				'id' => $post instanceof WP_Post ? strval( $post->ID ) : '0',
 			),
 			'api' => array(
 				'root'          => esc_url_raw( get_rest_url() ),
@@ -137,7 +137,8 @@ class Geom_Block_Map {
 			true
 		);
 
-		if ( is_admin() || ! $this->post_has_block() )
+		// if ( is_admin() || ! $this->post_has_block() )
+		if ( is_admin() )
 			return;
 
 		$handle = $this->get_handle( 'frontend' );
