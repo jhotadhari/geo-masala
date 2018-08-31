@@ -122,6 +122,9 @@ This Plugin is still in early development. Reality might be in movement.
 
 ## Changelog ##
 
+0.1.3
+- compatible with Gutenberg v3.7.0 and WordPress v4.9.8;
+
 0.1.2
 - compatible with Gutenberg v3.6.2 and WordPress v4.9.8
 - fix: lazy load script on frontend. only if el .wp-block-geom-map exist;

@@ -5,7 +5,7 @@
   "uri": "https://github.com/jhotadhari/geo-masala",
   "textDomain": "geo-masala",
   "domainPath": "/languages",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Highly customizable Map Block for Gutenberg, based on Leaflet",
   "main": "index.js",
   "scripts": {

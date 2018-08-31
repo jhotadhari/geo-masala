@@ -132,7 +132,7 @@ class Geom_Block_Map {
 			Geom_Geo_masala::plugin_dir_url() . '/js/backbone.memento.min.js',
 			array(
 				'wp-backbone',
-				),
+			),
 			false,
 			true
 		);
@@ -157,7 +157,7 @@ class Geom_Block_Map {
 				'wp-backbone',
 				'wp-api',
 				'utils',
-				),
+			),
 			filemtime( Geom_Geo_masala::plugin_dir_path() . 'js/' . $handle . '.min.js' )
 		);
 
@@ -188,6 +188,7 @@ class Geom_Block_Map {
 			array(
 				'wp-blocks',
 				'wp-i18n',
+				'wp-api',
 				'wp-element',
 				'backform',
 				'backbone-memento',
