@@ -7,8 +7,7 @@ import Backform from 'Backform';
  * WordPress dependencies
  */
 const { __ } = wp.i18n;
-// wp.utils.keycodes isFinite depracted since gb 3.4 use wp.keycodes instead
-const { F10, ESCAPE, ALT } = wp.utils.keycodes || wp.keycodes;
+const { F10, ESCAPE, ALT } = wp.keycodes;
 
 import deviceIs 				from '../functions/deviceIs';
 import mcefilePickerCallback 	from '../functions/mcefilePickerCallback';

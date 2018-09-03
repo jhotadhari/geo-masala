@@ -156,7 +156,6 @@ class Geom_Block_Map {
 			array(
 				'wp-backbone',
 				'wp-api',
-				'utils',
 			),
 			filemtime( Geom_Geo_masala::plugin_dir_path() . 'js/' . $handle . '.min.js' )
 		);

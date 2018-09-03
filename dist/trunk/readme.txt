@@ -122,6 +122,9 @@ This Plugin is still in early development. Reality might be in movement.
 
 == Changelog ==
 
+0.1.4
+- fixed an error. Removed all calls to wp.utils
+
 0.1.3
 - compatible with Gutenberg v3.7.0 and WordPress v4.9.8;
 

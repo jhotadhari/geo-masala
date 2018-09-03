@@ -3,7 +3,7 @@
 Plugin Name: Geo Masala
 Plugin URI: https://github.com/jhotadhari/geo-masala
 Description: Highly customizable Map Block for Gutenberg, based on Leaflet
-Version: 0.1.3
+Version: 0.1.4
 Author: jhotadhari
 Author URI: https://waterproof-webdesign.info
 License: GNU General Public License v2 or later
@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Geom_Geo_masala {
 
 	protected static $instance = null;
-	const VERSION = '0.1.3';
+	const VERSION = '0.1.4';
 	const DB_VERSION = 0;			// int	increase the number if the database needs an update
 	const PLUGIN_SLUG = 'geo-masala';
 	const PLUGIN_NAME = 'Geo Masala';
