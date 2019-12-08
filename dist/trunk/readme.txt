@@ -14,6 +14,12 @@ Highly customizable Map Block for Gutenberg, based on Leaflet
 
 == Description ==
 
+* ## Deprecated
+* This project is no longer active and not recommended for use.
+* It works with WordPress version < 5.0 and the gutenberg plugin. But it doesn't work with any current version!
+* It is left here for reference
+
+
 Highly customizable Map Block for Gutenberg, based on Leaflet
 
 * Customize the Map and its Features directly from within the **Gutenberg Block**
